@@ -326,8 +326,6 @@
       '<section class="section cinema reveal" style="animation-delay:' + delay + 'ms">' +
         sectionHead(num, '文与影', '小说 · 戏剧 · 电影') +
         '<div class="posters">' + list.map(function (c, i) { return renderPoster(c, i, themeId); }).join('') + '</div>' +
-        '<p class="posters-note">海报依作品名程序生成，不是官方剧照——剧照有版权，这里用几何与配色替它说话。' +
-          '同一部作品永远得到同一张。</p>' +
       '</section>';
   }
 

@@ -46,7 +46,7 @@ window.WISDOM.themes.push(
       { r: "中·战国", k: "典籍", t: "行有不得者，皆反求诸己。", s: "《孟子·离娄上》", n: "孟子说得更硬：只要没做到，就回头查自己——不是查心情，是查做法。" },
       { r: "中·战国", k: "典籍", t: "爱人不亲，反其仁；治人不治，反其智；礼人不答，反其敬。", s: "《孟子·离娄上》", n: "三句话三个「反」：别人不回应，先查自己给出的东西够不够。" },
       { r: "希腊·前1世纪", k: "语录", t: "有些事在我们能力之内，有些不在。困扰人的不是事情本身，而是他们对事情的看法。", s: "爱比克泰德《手册》第 1、5 条", n: "他把世界劈成两半，然后说：你的力气只在前一半。" , oEn: "Some things are in our control and others not. Men are disturbed not by things, but by the views which they take of them."},
-      { r: "英·19世纪", k: "散文", t: "相信你自己的思想，相信你内心深处认为对的东西。", s: "爱默生《自立》", n: "他不谈该责怪谁，只谈一件事：把判断的来源从别人那里收回来。" , oEn: "Trust thyself: every heart vibrates to that iron string."}
+      { r: "英·19世纪", k: "散文", t: "相信你自己的思想，相信你内心深处认为对的东西。", s: "爱默生《自立》", n: "他不谈该责怪谁，只谈一件事：把判断的来源从别人那里收回来。" , o: "Trust thyself: every heart vibrates to that iron string."}
     ],
     history: {
       stance: "model",
@@ -77,7 +77,7 @@ window.WISDOM.themes.push(
       { r: "中·春秋", k: "语录", t: "未知生，焉知死？", s: "《论语·先进》记子路问事鬼神，孔子答", n: "他把问题挡回去，不是回避，是说：先把活着这件事弄明白。" },
       { r: "罗马·前1世纪", k: "哲学", t: "哲学的全部，就是学习死亡。", s: "西塞罗《图斯库卢姆辩论集》第一卷（转述苏格拉底）", n: "罗马人把「想到死」当成一种训练，不是禁忌。" , o: "Tota philosophorum vita commentatio mortis est."},
       { r: "罗马·2世纪", k: "随笔", t: "不要像你还能活一万年那样行事。", s: "马可·奥勒留《沉思录》第四卷", n: "这句话不是让人悲观，是让人排出先后——把「以后再说」从清单上划掉。" , oEn: "Do not act as if thou wert going to live ten thousand years."},
-      { r: "英·17世纪", k: "诗", t: "死神，别得意，虽然有人叫你「强大而可怕」。", s: "约翰·邓恩《神圣十四行诗》第 10 首", n: "他给死亡写了一封驳论：你不过是短暂的睡眠，之后还有更长的醒。" , oEn: "Death be not proud, though some have called thee / Mighty and dreadful, for thou art not so."},
+      { r: "英·17世纪", k: "诗", t: "死神，别得意，虽然有人叫你「强大而可怕」。", s: "约翰·邓恩《神圣十四行诗》第 10 首", n: "他给死亡写了一封驳论：你不过是短暂的睡眠，之后还有更长的醒。" , o: "Death be not proud, though some have called thee / Mighty and dreadful, for thou art not so."},
       { r: "中·东晋", k: "诗", t: "纵浪大化中，不喜亦不惧。", s: "陶渊明《形影神·神释》", n: "九个字，没有一句安慰——他只是把「怕」和「贪」一起放下了。" }
     ],
     history: {

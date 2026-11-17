@@ -90,7 +90,7 @@ window.WISDOM.themes.push(
       { r: "美·1995", k: "电影", t: "他们可以拿走我们的生命，但永远不能夺走我们的自由。", s: "《勇敢的心》华莱士语", n: "同样要说明：这是电影台词，不是史料。",
         o: "They may take our lives, but they will never take our freedom!",
         poster: { med: "film", title: "勇敢的心", en: "Braveheart", by: "梅尔·吉布森 导演", year: 1995 } },
-      { r: "英·1854", k: "散文", t: "大多数人都过着静默的绝望的生活。", s: "梭罗《瓦尔登湖》", n: "梭罗不是要人逃离社会，是提醒：你可能正在用一生换一堆并不需要的东西。" , oEn: "The mass of men lead lives of quiet desperation."}
+      { r: "英·1854", k: "散文", t: "大多数人都过着静默的绝望的生活。", s: "梭罗《瓦尔登湖》", n: "梭罗不是要人逃离社会，是提醒：你可能正在用一生换一堆并不需要的东西。" , o: "The mass of men lead lives of quiet desperation."}
     ],
     history: {
       stance: "model",
@@ -125,7 +125,7 @@ window.WISDOM.themes.push(
       { r: "奥·1915", k: "小说", t: "格里高尔·萨姆沙一觉醒来，发现自己变成了一只巨大的甲虫。他最先想到的不是害怕，是「别误了火车」。", s: "卡夫卡《变形记》", n: "全家人从惊慌到嫌弃，最后盼他死。最孤独的不是变形，是没人再把他当人。",
         o: "Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheuren Ungeziefer verwandelt.",
         poster: { med: "book", title: "变形记", en: "Die Verwandlung", by: "弗兰茨·卡夫卡", year: 1915 } },
-      { r: "英·1845", k: "散文", t: "我到林中去，是因为我想从容地生活，只面对生活的基本事实。", s: "梭罗《瓦尔登湖》", n: "他一个人住了两年，不是一辈子。独处是一次实验，不是一种判决。" , oEn: "I went to the woods because I wished to live deliberately, to front only the essential facts of life."}
+      { r: "英·1845", k: "散文", t: "我到林中去，是因为我想从容地生活，只面对生活的基本事实。", s: "梭罗《瓦尔登湖》", n: "他一个人住了两年，不是一辈子。独处是一次实验，不是一种判决。" , o: "I went to the woods because I wished to live deliberately, to front only the essential facts of life."}
     ],
     history: {
       stance: "model",

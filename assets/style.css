@@ -1255,13 +1255,6 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   color: var(--ink-2);
 }
 
-.posters-note {
-  margin: 22px 0 0;
-  font-size: 11.5px;
-  line-height: 1.85;
-  color: var(--ink-3);
-  letter-spacing: .02em;
-}
 
 /* ---------- 打印 ---------- */
 

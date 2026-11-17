@@ -247,7 +247,7 @@ window.WISDOM = {
       canon: [
         { r: "中·战国", k: "典籍", t: "千丈之堤，以蝼蚁之穴溃。", s: "《韩非子·喻老》", n: "堤不是被洪水冲垮的，是被一个它没理会的小洞。" },
         { r: "中·先秦", k: "典籍", t: "积善之家，必有余庆；积不善之家，必有余殃。", s: "《周易·坤·文言》", n: "它讲的不是报应，是累积——好与坏都按复利走。" },
-        { r: "英·传统", k: "民谣", t: "少了一颗钉子，丢了一只马蹄铁；少了一只马蹄铁，丢了一匹马；少了一匹马，丢了一个骑士……最终丢了整个王国。", s: "英国传统民谣《少了一颗钉子》", n: "这首童谣传了几百年，不是为了讲童话，是为了讲系统。" , oEn: "For want of a nail the shoe was lost; for want of a shoe the horse was lost; for want of a horse the rider was lost; for want of a rider the battle was lost; for want of a battle the kingdom was lost."},
+        { r: "英·传统", k: "民谣", t: "少了一颗钉子，丢了一只马蹄铁；少了一只马蹄铁，丢了一匹马；少了一匹马，丢了一个骑士……最终丢了整个王国。", s: "英国传统民谣《少了一颗钉子》", n: "这首童谣传了几百年，不是为了讲童话，是为了讲系统。" , o: "For want of a nail the shoe was lost; for want of a shoe the horse was lost; for want of a horse the rider was lost; for want of a rider the battle was lost; for want of a battle the kingdom was lost."},
         { r: "罗马·前1世纪", k: "诗", t: "Principiis obsta；sero medicina paratur.（趁早抵挡；等病成了，药就备得太迟了）", s: "奥维德《爱的疗法》第91行", n: "「一开始就挡住」是最便宜的一步，也是唯一在你越来越需要它时不必加价的一步。" },
         { r: "中·汉", k: "典籍", t: "患生于所忽，祸起于细微。", s: "刘向《说苑·敬慎》", n: "祸不敲门，它顺着你忽略的那条缝进来。" }
       ],
