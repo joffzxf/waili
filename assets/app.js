@@ -77,6 +77,9 @@
           '</div>' +
           '<p class="canon-text">' + esc(c.t) + '</p>' +
           '<cite class="canon-source">' + esc(c.s) + '</cite>' +
+          ((c.o || c.oEn) ? '<p class="canon-orig" lang="und">' +
+            (c.oEn && !c.o ? '<span class="orig-tag">英译</span>' : '') +
+            esc(c.o || c.oEn) + '</p>' : '') +
           '<p class="canon-note">' + esc(c.n) + '</p>' +
         '</article>';
     }).join('');
@@ -302,7 +305,7 @@
           '<div class="poster-fg">' +
             '<span class="poster-no" aria-hidden="true">' + no + '</span>' +
             '<blockquote class="poster-quote">' + esc(quote) + '</blockquote>' +
-            (c.o ? '<p class="poster-orig" lang="und">' + esc(c.o) + '</p>' : '') +
+            ((c.o || c.oEn) ? '<p class="poster-orig" lang="und">' + (c.oEn && !c.o ? '<span class="poster-en-tag">英译</span>' : '') + esc(c.o || c.oEn) + '</p>' : '') +
             '<p class="poster-meta">' +
               '<span class="poster-kind">' + med + '</span>' +
               '<span class="poster-book">' + esc(p.title) + '</span>' +

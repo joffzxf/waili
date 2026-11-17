@@ -508,6 +508,31 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
 }
 .canon-source::before { content: "—— "; }
 
+.canon-orig {
+  margin: 0 0 10px;
+  padding: 7px 10px;
+  border-left: 2px solid var(--rule);
+  background: rgba(0, 0, 0, .022);
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  font-style: italic;
+  letter-spacing: .005em;
+}
+.orig-tag {
+  display: inline-block;
+  margin-right: 7px;
+  padding: 0 5px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+  vertical-align: 1px;
+}
+
 .canon-note {
   margin: 0;
   padding-top: 11px;

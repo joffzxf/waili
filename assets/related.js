@@ -24,5 +24,7 @@ window.QJY_RING = [
   'xiwang', 'buqu', 'yongqi', 'ziyou', 'gudu', 'jiyi',
   /* 科学与心理学这一批接在「记忆」之后：
      记忆 → 认知偏差 → 无助 → 峰终 → 成长，再绕回「欲速则不达」。 */
-  'dake', 'wuzhu', 'fengzhong', 'chengzhang'
+  'dake', 'wuzhu', 'fengzhong', 'chengzhang',
+  /* 生活四题接在「成长」之后：钱的取舍 → 身体的账 → 关系的边界 → 代际，再绕回「欲速则不达」 */
+  'jinqian', 'shenti', 'bianjie', 'daiji'
 ];

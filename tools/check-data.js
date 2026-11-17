@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -231,7 +231,12 @@ const CASES = [
   ['我总是高估自己', 'dake'],
   ['我做什么都没用', 'wuzhu'],
   ['我对这次经历印象很差', 'fengzhong'],
-  ['我学不会', 'chengzhang']
+  ['我学不会', 'chengzhang'],
+  // 第七批（主题 41—44，生活四题）
+  ['怎么赚钱', 'jinqian'],
+  ['不会拒绝别人', 'bianjie'],
+  ['父母年纪大了', 'daiji'],
+  ['总是熬夜', 'shenti']
 ];
 
 let hitCount = 0;
@@ -370,7 +375,7 @@ console.log('  环上 ' + RING.length + ' 条，每条有 2 个相邻主题');
  * 就必须给 o（原文）或 noOrig（说明为什么没有原文）。
  * 海报上的条目是硬约束——那是读者第一眼看到的东西；
  * 其余条目先做统计，逐步补齐。 */
-const LATIN = /[A-Za-zÀ-ÿĀ-ſ\u0370-\u03FF\u0400-\u04FF]/;
+const LATIN = /[A-Za-zÀ-ÿĀ-ſ\u0370-\u03FF\u0400-\u04FF\u0590-\u05FF\u0600-\u06FF\u0900-\u097F\u3040-\u30FF\uAC00-\uD7AF]/;
 let origHave = 0, origSoft = [], posterMissing = 0;
 
 THEMES.forEach(function (t) {
@@ -378,22 +383,21 @@ THEMES.forEach(function (t) {
     if (String(c.r).charAt(0) === '中') return;          // 中文原典，无需外文原文
     const tag = t.id + ' canon[' + i + ']';
     const hasInline = LATIN.test(c.t);
-    if (c.o) { origHave++; return; }
+    if (c.o || c.oEn) { origHave++; return; }
     if (c.noOrig) { origHave++; return; }                 // 已显式声明无原句
     if (hasInline) { origHave++; return; }                // 原句已内嵌在 t 里
 
-    if (c.poster) {
-      posterMissing++;
-      ok(false, '海报条目必须附原文或声明无原句：' + tag, c.t.slice(0, 20));
-    } else {
-      origSoft.push(t.id + '/' + c.k);
-    }
+    /* 覆盖已达 100%，此处由软提醒升级为硬约束：
+       新增译文条目若只有中文，构建直接失败 */
+    if (c.poster) posterMissing++;
+    else origSoft.push(t.id + '/' + c.k);
+    ok(false, '译文必须附原文(o)／英译(oEn) 或声明无原句(noOrig)：' + tag, c.t.slice(0, 20));
   });
 });
 
 ok(posterMissing === 0, '文与影的海报条目都应带外文原文', String(posterMissing) + ' 条缺失');
-console.log('  译文原文覆盖：' + origHave + ' 条已具备；其余 ' + origSoft.length +
-  ' 条纯中译条目待补（不阻断构建，见 docs/行动指引.md）');
+ok(origSoft.length === 0, '所有译文条目都应附原文或声明无原句', origSoft.length ? origSoft.join('、') : '');
+console.log('  译文原文覆盖：' + origHave + ' 条已具备，缺口 ' + origSoft.length + ' 条（缺一条即构建失败）');
 
 /* ---------- 7. 文与影 ---------- */
 section('【7】文与影 · 海报');
