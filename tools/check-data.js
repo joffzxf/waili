@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -443,6 +443,38 @@ if (POSTER && POSTER.art) {
   ok(a1.indexOf('url(#pg') !== -1, '渐变引用带唯一前缀，多张海报同页不会串色');
   ok(a1.indexOf('unsafe-inline') === -1, '不应包含内联脚本');
   console.log('  海报生成已校验：确定性、唯一性、体裁差异');
+}
+
+/* ---------- 8. 册子逻辑 ---------- */
+section('【8】册子（收藏）逻辑');
+
+const SH = sandbox.window.QJY_SHELF;
+ok(!!SH && typeof SH.toggle === 'function', 'shelf.js 已加载且暴露 toggle()');
+
+if (SH) {
+  ok(SH.has([], 'a', 0) === false, '空册子不含任何条目');
+
+  var one = SH.toggle([], 'a', 0, { text: 'x', src: 'y' });
+  ok(one.length === 1 && SH.has(one, 'a', 0), '收藏后应存在');
+
+  var back = SH.toggle(one, 'a', 0);
+  ok(back.length === 0, '再次切换应移出');
+  ok(one.length === 1, '切换不应修改入参数组（否则界面状态会错乱）');
+
+  var m = SH.toggle([], 'b', 3, { text: 't' });
+  var round = SH.deserialize(SH.serialize(m));
+  ok(round.length === 1 && round[0].t === 'b' && round[0].i === 3, '导出再导入应保持一致');
+
+  ok(SH.deserialize('这不是 JSON').length === 0, '坏 JSON 不应抛错');
+  ok(SH.deserialize(JSON.stringify([{ t: 'c', i: 1 }, { t: 'c', i: 1 }])).length === 1, '导入应去重');
+  ok(SH.deserialize(JSON.stringify({ items: [{ t: 'x' }, { t: 'y', i: -1 }, { t: 'z', i: 0 }] })).length === 1,
+    '非法条目（缺下标或下标为负）应被过滤');
+
+  var grouped = SH.group(SH.toggle(SH.toggle([], 'a', 1), 'b', 2),
+    [{ id: 'a', name: '甲' }, { id: 'b', name: '乙' }]);
+  ok(grouped.length === 2 && grouped[0].theme.name === '甲', '分组应按主题聚合且取到主题名');
+
+  console.log('  册子逻辑：切换、去重、往返、分组均已校验');
 }
 
 /* ---------- 汇总 ---------- */

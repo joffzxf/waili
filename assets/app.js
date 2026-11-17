@@ -15,7 +15,8 @@
     acts: 'qjy.acts.',
     last: 'qjy.last',
     journal: 'qjy.journal',     // 勾选过的行动（用于下次回访）
-    outcome: 'qjy.outcome'      // 回访结果 done / missed
+    outcome: 'qjy.outcome',     // 回访结果 done / missed
+    fav: 'qjy.fav'              // 册子（收藏）
   };
   var lastQuery = '';
 
@@ -66,8 +67,26 @@
       '<div class="section-rule"></div>';
   }
 
-  function renderCanon(list) {
-    return list.map(function (c, i) {
+  /* 卡片级动作：动作贴在动机旁边，而不是全部堆到页尾 */
+  function entryActions(themeId, idx, c) {
+    var star = QJY_SHELF.has(favRead(), themeId, idx);
+    return '' +
+      '<div class="card-acts">' +
+        '<button type="button" class="act-btn' + (star ? ' on' : '') + '" ' +
+          'data-act="fav" data-t="' + esc(themeId) + '" data-i="' + idx + '" ' +
+          'aria-pressed="' + (star ? 'true' : 'false') + '" title="收进册子">' +
+          (star ? '★ 已收' : '☆ 收藏') +
+        '</button>' +
+        '<button type="button" class="act-btn" data-act="copy-one" ' +
+          'data-t="' + esc(themeId) + '" data-i="' + idx + '" title="复制这一条">' +
+          '复制' +
+        '</button>' +
+      '</div>';
+  }
+
+  function renderCanon(items) {
+    return items.map(function (it, i) {
+      var c = it.c, idx = it.idx;
       var isCn = String(c.r).charAt(0) === '中';
       return '' +
         '<article class="canon reveal" data-cn="' + (isCn ? 1 : 0) + '" style="animation-delay:' + (i * 55) + 'ms">' +
@@ -81,6 +100,7 @@
             (c.oEn && !c.o ? '<span class="orig-tag">英译</span>' : '') +
             esc(c.o || c.oEn) + '</p>' : '') +
           '<p class="canon-note">' + esc(c.n) + '</p>' +
+          entryActions(it.themeId, idx, c) +
         '</article>';
     }).join('');
   }
@@ -276,7 +296,8 @@
   var NUM = ['壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌'];
 
   /* 海报：主角是那句台词，不是书名。版式按主题+序号轮换，保证一组里不重样 */
-  function renderPoster(c, i, themeId) {
+  function renderPoster(item, i, themeId) {
+    var c = item.c, idx = item.idx;
     var p = c.poster;
     var quote = c.t || '';
     var seedH = window.QJY_POSTER.hash((themeId || '') + '|' + p.title);
@@ -316,6 +337,14 @@
         '<figcaption class="poster-label">' +
           '<span class="poster-src">' + esc(c.s) + '</span>' +
           '<span class="poster-note">' + esc(c.n) + '</span>' +
+          '<span class="poster-acts">' +
+            '<button type="button" class="act-btn" data-act="save-png" data-t="' + esc(themeId) +
+              '" data-i="' + idx + '" data-ratio="poster">存图 3:4</button>' +
+            '<button type="button" class="act-btn" data-act="save-png" data-t="' + esc(themeId) +
+              '" data-i="' + idx + '" data-ratio="square">方图 1:1</button>' +
+            '<button type="button" class="act-btn" data-act="save-png" data-t="' + esc(themeId) +
+              '" data-i="' + idx + '" data-ratio="story">壁纸 9:16</button>' +
+          '</span>' +
         '</figcaption>' +
       '</figure>';
   }
@@ -325,7 +354,7 @@
     return '' +
       '<section class="section cinema reveal" style="animation-delay:' + delay + 'ms">' +
         sectionHead(num, '文与影', '小说 · 戏剧 · 电影') +
-        '<div class="posters">' + list.map(function (c, i) { return renderPoster(c, i, themeId); }).join('') + '</div>' +
+        '<div class="posters">' + list.map(function (it, i) { return renderPoster(it, i, themeId); }).join('') + '</div>' +
       '</section>';
   }
 
@@ -341,8 +370,9 @@
     var q = lastQuery || '';
 
     /* canon 分两路：带 poster 的去「文与影」，其余留在「同此一念」 */
-    var media = t.canon.filter(function (c) { return c.poster; });
-    var classic = t.canon.filter(function (c) { return !c.poster; });
+    var all = t.canon.map(function (c, idx) { return { c: c, idx: idx, themeId: t.id }; });
+    var media = all.filter(function (x) { return x.c.poster; });
+    var classic = all.filter(function (x) { return !x.c.poster; });
 
     var k = 0;
     var nClassic = NUM[k++];
@@ -451,6 +481,24 @@
 
   /* ---------------- 视图：未收录 ---------------- */
 
+  /* ---------- 册子（收藏） ---------- */
+  var SHELF = window.QJY_SHELF;
+
+  function favRead() {
+    var v = lsGet(KEY.fav, []);
+    return Array.isArray(v) ? v : [];
+  }
+  function favWrite(list) {
+    lsSet(KEY.fav, list);
+    updateFavBadge();
+  }
+  function updateFavBadge() {
+    var el = document.getElementById('btn-shelf');
+    if (!el) return;
+    var n = favRead().length;
+    el.innerHTML = '册子' + (n ? '<span class="nav-count">' + n + '</span>' : '');
+  }
+
   function themeById(id) {
     for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === id) return THEMES[i];
     return null;
@@ -528,6 +576,160 @@
   }
 
   /* ---------------- 视图：万理一览 ---------------- */
+
+  /* ---------------- 卡片级动作 ---------------- */
+
+  function entryByRef(themeId, idx) {
+    var t = themeById(themeId);
+    if (!t || !t.canon || !t.canon[idx]) return null;
+    return { theme: t, c: t.canon[idx], idx: idx };
+  }
+
+  function oneLineText(theme, c) {
+    var out = ['「' + c.t + '」', '—— ' + c.s + '（' + c.r + ' · ' + c.k + '）'];
+    if (c.o) out.push(c.o);
+    else if (c.oEn) out.push('英译：' + c.oEn);
+    out.push('', theme.name + ' · 千江月');
+    out.push(location.origin + location.pathname + '#/t/' + theme.id);
+    return out.join('\n');
+  }
+
+  function bindCardActions() {
+    if (bindCardActions.done) return;
+    bindCardActions.done = true;
+
+    document.addEventListener('click', function (e) {
+      var btn = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+      if (!btn) return;
+      var act = btn.getAttribute('data-act');
+      var themeId = btn.getAttribute('data-t');
+      var idx = parseInt(btn.getAttribute('data-i'), 10);
+      var ref = entryByRef(themeId, idx);
+      if (!ref) return;
+
+      if (act === 'fav') {
+        var next = SHELF.toggle(favRead(), themeId, idx, { text: ref.c.t, src: ref.c.s });
+        favWrite(next);
+        var on = SHELF.has(next, themeId, idx);
+        btn.classList.toggle('on', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.textContent = on ? '★ 已收' : '☆ 收藏';
+        showTip(on ? '已收进册子' : '已移出册子');
+        return;
+      }
+
+      if (act === 'copy-one') {
+        copyText(oneLineText(ref.theme, ref.c));
+        return;
+      }
+
+      if (act === 'save-png') {
+        var p = ref.c.poster;
+        if (!p || !window.QJY_SHARE) { showTip('这一条没有海报'); return; }
+        var ratio = btn.getAttribute('data-ratio') || 'poster';
+        btn.disabled = true;
+        showTip('正在生成…');
+        window.QJY_SHARE.render({
+          ratio: ratio,
+          art: window.QJY_POSTER.art(p.title + '|' + p.year, p.med),
+          quote: ref.c.t,
+          orig: ref.c.o || (ref.c.oEn ? '英译 · ' + ref.c.oEn : ''),
+          source: ref.c.s,
+          med: p.med,
+          year: p.year
+        }).then(function (blob) {
+          var tag = ratio === 'square' ? '1x1' : (ratio === 'story' ? '9x16' : '3x4');
+          window.QJY_SHARE.download(blob, '千江月-' + p.title + '-' + tag + '.png');
+          showTip('已保存图片');
+        })['catch'](function (err) {
+          showTip('导出失败：' + (err && err.message ? err.message : '未知错误'));
+        }).then(function () { btn.disabled = false; });
+      }
+    });
+  }
+
+  /* ---------------- 视图：我的册子 ---------------- */
+
+  function renderShelf() {
+    var list = favRead();
+    var groups = SHELF.group(list, THEMES);
+
+    var body = groups.length
+      ? groups.map(function (g) {
+          return '' +
+            '<section class="shelf-group">' +
+              '<h2 class="shelf-group-title">' +
+                '<a href="#/t/' + encodeURIComponent(g.theme.id) + '">' + esc(g.theme.name) + '</a>' +
+                '<span class="shelf-group-n">' + g.items.length + '</span>' +
+              '</h2>' +
+              g.items.map(function (it) {
+                var c = g.theme.canon && g.theme.canon[it.i];
+                if (!c) return '';
+                return '' +
+                  '<article class="shelf-item">' +
+                    '<p class="shelf-quote">' + esc(c.t) + '</p>' +
+                    '<p class="shelf-src">' + esc(c.s) +
+                      '<button type="button" class="act-btn" data-act="fav" data-t="' +
+                        esc(g.theme.id) + '" data-i="' + it.i + '">移出</button>' +
+                    '</p>' +
+                  '</article>';
+              }).join('') +
+            '</section>';
+        }).join('')
+      : '<div class="notice">册子还是空的。看到想留的那一句，点它右下角的「☆ 收藏」。</div>';
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>我 的 册 子</h1>' +
+        '<p>' + (list.length ? '已收 ' + list.length + ' 条 · ' + groups.length + ' 个主题' : '还没有开始') + '</p>' +
+      '</header>' +
+      '<div class="shelf-body">' + body + '</div>' +
+      '<div class="toolbar">' +
+        '<button type="button" class="btn btn-ghost" id="shelf-export">导出 JSON</button>' +
+        '<button type="button" class="btn btn-ghost" id="shelf-import">导入 JSON</button>' +
+        '<button type="button" class="btn btn-ghost" id="shelf-all">万理一览</button>' +
+      '</div>';
+
+    document.getElementById('shelf-export').addEventListener('click', function () {
+      downloadText('千江月-册子.json', SHELF.serialize(favRead()));
+      showTip('已导出');
+    });
+    document.getElementById('shelf-import').addEventListener('click', function () {
+      var ta = document.createElement('textarea');
+      ta.placeholder = '把导出的 JSON 粘在这里，然后按 Ctrl+Enter';
+      ta.className = 'shelf-import-area';
+      var wrap = document.createElement('div');
+      wrap.className = 'shelf-import-wrap';
+      wrap.appendChild(ta);
+      document.body.appendChild(wrap);
+      ta.focus();
+      function commit() {
+        var merged = SHELF.deserialize(ta.value);
+        if (!merged.length) { showTip('没读到有效内容'); return; }
+        var existing = favRead();
+        var map = {};
+        existing.concat(merged).forEach(function (x) { map[SHELF.key(x.t, x.i)] = x; });
+        var out = existing.slice();
+        merged.forEach(function (x) {
+          if (!SHELF.has(out, x.t, x.i)) out.push(x);
+        });
+        favWrite(out);
+        document.body.removeChild(wrap);
+        route();
+        showTip('已导入');
+      }
+      ta.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); commit(); }
+        if (e.key === 'Escape') document.body.removeChild(wrap);
+      });
+      ta.addEventListener('blur', function () {
+        setTimeout(function () {
+          if (document.body.contains(wrap) && !ta.value.trim()) document.body.removeChild(wrap);
+        }, 200);
+      });
+    });
+    document.getElementById('shelf-all').addEventListener('click', function () { navigate('#/all'); });
+  }
 
   function renderAll() {
     app.innerHTML = '' +
@@ -756,6 +958,8 @@
       renderHome();
     } else if (h === '/all') {
       renderAll();
+    } else if (h === '/shelf') {
+      renderShelf();
     } else if (h.indexOf('/t/') === 0) {
       renderTheme(decodeURIComponent(h.slice(3)));
     } else if (h.indexOf('/miss/') === 0) {
@@ -780,6 +984,10 @@
 
   document.getElementById('btn-random').addEventListener('click', goRandom);
   document.getElementById('btn-all').addEventListener('click', function () { navigate('#/all'); });
+  var shelfBtn = document.getElementById('btn-shelf');
+  if (shelfBtn) shelfBtn.addEventListener('click', function () { navigate('#/shelf'); });
+  bindCardActions();
+  updateFavBadge();
   document.getElementById('btn-mode').addEventListener('click', toggleMode);
 
   document.addEventListener('keydown', function (e) {
