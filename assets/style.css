@@ -887,6 +887,174 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   * { transition: none !important; }
 }
 
+/* ---------- 行动回访 ---------- */
+
+.returner {
+  margin: 0 0 30px;
+  padding: 20px 22px 18px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--zhu);
+}
+.returner-kicker {
+  margin: 0 0 14px;
+  font-size: 11px;
+  letter-spacing: .28em;
+  color: var(--zhu);
+  text-indent: .28em;
+}
+.returner-list { margin: 0; padding: 0; list-style: none; }
+
+.returner-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px dashed var(--rule-soft);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.9;
+  flex-wrap: wrap;
+}
+.returner-item:last-child { border-bottom: 0; }
+.returner-item.answered { opacity: .72; }
+.returner-text { flex: 1 1 16em; }
+.returner-day {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: .06em;
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.returner-btns { display: flex; gap: 6px; flex: 0 0 auto; }
+.returner-thanks {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  letter-spacing: .04em;
+}
+
+.mini {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: var(--ink-2);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all .16s;
+}
+.mini:hover { color: var(--zhu); border-color: rgba(166, 58, 46, .45); background: var(--zhu-soft); }
+
+.returner-foot {
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: var(--ink-3);
+  letter-spacing: .03em;
+}
+
+/* ---------- 相通的另两条 ---------- */
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+.related-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--paper-2);
+  border: 1px solid var(--rule-soft);
+  border-left: 2px solid var(--rule);
+  padding: 18px 20px 16px;
+  transition: all .2s;
+}
+.related-card:hover {
+  border-left-color: var(--zhu);
+  transform: translateX(2px);
+  background: var(--paper-3);
+}
+.related-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  margin-bottom: 7px;
+}
+.related-gist {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--ink-3);
+}
+
+/* ---------- 打印 ---------- */
+
+@page { size: A4; margin: 9mm 10mm; }
+
+@media print {
+  .topbar, .topnav, .toolbar, .site-foot, .ask, .examples,
+  .paper-grain, .copied-tip, .returner, .crumb { display: none !important; }
+  body { background: #fff; color: #000; font-size: 9.5pt; line-height: 1.5; }
+  main { max-width: none; padding: 0; }
+
+  .result { padding-top: 0; }
+  .result-head { padding: 0 0 4pt; }
+  .result-title { font-size: 15pt; margin-bottom: 4pt; }
+  .result-gist { font-size: 9pt; padding-top: 5pt; max-width: none; border-top: 0; }
+  .result-input { font-size: 8.5pt; margin-bottom: 4pt; }
+
+  .section { margin-top: 9pt; }
+  .section-head { margin-bottom: 5pt; gap: 6pt; }
+  .section-num { width: 13pt; height: 13pt; font-size: 8pt; border-color: #a63a2e; }
+  .section-title { font-size: 10pt; letter-spacing: .1em; }
+  .section-note { display: none; }
+  .section-rule { display: none; }
+
+  /* 一页纸：压缩引证，隐去按语，只留原文与出处 */
+  .canon-list { gap: 0; }
+  .canon {
+    padding: 3.5pt 6pt 3pt;
+    border: 0;
+    border-bottom: .5pt solid #ddd;
+    border-left: 1.5pt solid #c9b8ad;
+    background: #fff;
+  }
+  .canon:last-child { border-bottom: 0; }
+  .canon-meta { margin-bottom: 1.5pt; font-size: 7pt; gap: 5pt; }
+  .canon-kind { padding: 0 3pt; }
+  .canon-text { font-size: 9pt; line-height: 1.5; margin-bottom: 1pt; }
+  .canon-source { font-size: 7.5pt; margin-bottom: 0; }
+  .canon-note { display: none; }
+
+  .history { padding: 6pt 8pt 6pt; background: #fff; border: .5pt solid #999; }
+  .history-head { margin-bottom: 3pt; }
+  .history-title { font-size: 10pt; }
+  .history-era { font-size: 7pt; }
+  .stance { font-size: 7pt; padding: 1pt 4pt; }
+  .history-body { font-size: 8.5pt; line-height: 1.55; margin-top: 3pt; }
+  .history-lesson { font-size: 8.5pt; line-height: 1.5; padding: 4pt 6pt; margin-top: 5pt; background: #f6f2e8; }
+  .history::after { display: none; }
+
+  .questions { display: grid; grid-template-columns: 1fr; }
+  .questions li { font-size: 8.5pt; line-height: 1.5; padding: 3pt 0 3pt 16pt; }
+  .questions li::before { width: 10pt; height: 10pt; font-size: 6.5pt; top: 4pt; }
+
+  .actions-list { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10pt; }
+  .act { font-size: 8.5pt; line-height: 1.45; padding: 3pt 4pt; background: #fff; border: 0; border-bottom: .5pt dotted #ddd; margin-bottom: 0; gap: 5pt; }
+  .act input { width: 8pt; height: 8pt; }
+  .act-progress, .related, .toolbar { display: none; }
+
+  .canon, .history, .act { break-inside: avoid; box-shadow: none; }
+  .reveal { animation: none; }
+  a { text-decoration: none; color: #000; }
+}
+
 /* ---------- 响应式 ---------- */
 
 @media (max-width: 680px) {
@@ -899,6 +1067,9 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   .mirrors { grid-template-columns: 1fr; margin-top: 44px; }
   .grid { grid-template-columns: 1fr; }
   .featured-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: 1fr; }
+  .returner { padding: 16px 16px 14px; }
+  .returner-item { font-size: 14px; }
   .section { margin-top: 48px; }
   .section-num { width: 30px; height: 30px; font-size: 14px; }
   .section-title { font-size: 15.5px; letter-spacing: .12em; }
@@ -915,12 +1086,4 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   .history::after { font-size: 88px; top: -12px; }
 }
 
-/* ---------- 打印 ---------- */
 
-@media print {
-  .topbar, .topnav, .toolbar, .site-foot, .ask, .examples, .paper-grain, .copied-tip { display: none !important; }
-  body { background: #fff; }
-  main { max-width: none; padding: 0; }
-  .canon, .history, .act { break-inside: avoid; box-shadow: none; }
-  .reveal { animation: none; }
-}

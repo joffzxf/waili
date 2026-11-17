@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/related.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -209,7 +209,16 @@ const CASES = [
   ['井底之蛙', 'jingwa'],
   ['格局太小', 'jingwa'],
   ['学而不思则罔', 'xuesi'],
-  ['死记硬背', 'xuesi']
+  ['死记硬背', 'xuesi'],
+  // 第四批（主题 24—30）
+  ['以直报怨', 'baoyuan'],
+  ['放不下怨恨', 'baoyuan'],
+  ['总爱抱怨别人', 'qiuzhuji'],
+  ['怕死', 'sisheng'],
+  ['总是分心', 'zhuanzhu'],
+  ['戒掉坏习惯', 'xiguan'],
+  ['不懂装懂', 'buxiawen'],
+  ['不知道怎么教孩子', 'qifa']
 ];
 
 let hitCount = 0;
@@ -310,6 +319,38 @@ ok(stampInfo.synced, 'index.html 构建指纹已与资源同步（改完资源�
 ok(stampInfo.versions.length >= STAMP.ASSETS.length, 'index.html 每个资源都带了 ?v=',
   '只找到 ' + stampInfo.versions.length + ' 处，应为 ' + STAMP.ASSETS.length);
 console.log('  资源指纹 ' + stampInfo.build + ' · 引用 ' + stampInfo.versions.length + ' 处 ?v=');
+
+/* 语料是纯文本，渲染时统一转义；夹带 Markdown 会原样显示成星号。
+ * 曾经有一条按语写成 **限制**，页面上就真的出现了四个星号。 */
+THEMES.forEach(function (t) {
+  const fields = [t.name, t.gist, t.history.title, t.history.era, t.history.body, t.history.lesson]
+    .concat(t.questions || [], t.actions || [])
+    .concat((t.canon || []).map(function (c) { return c.t + c.s + c.n; }));
+  fields.forEach(function (s) {
+    ok(!/\*\*|\[[^\]]+\]\([^)]+\)/.test(String(s)), '语料不应夹带 Markdown 标记：' +
+      String(s).slice(0, 26) + '…');
+  });
+});
+
+/* ---------- 6. 主题之环 ---------- */
+section('【6】主题之环');
+
+/* 30 条道理串成一个环，每条与左右相邻的两条相通。
+ * 环必须恰好覆盖所有主题一次，否则「相通的另两条」会出现空位或指向不存在的主题。 */
+const RING = sandbox.window.QJY_RING || [];
+ok(Array.isArray(RING) && RING.length === THEMES.length,
+  '环的长度应等于主题数', RING.length + ' vs ' + THEMES.length);
+
+const ringSet = new Set();
+RING.forEach(function (id) {
+  ok(THEMES.some(function (t) { return t.id === id; }), '环里的主题存在：' + id);
+  ok(!ringSet.has(id), '环里没有重复：' + id);
+  ringSet.add(id);
+});
+THEMES.forEach(function (t) {
+  ok(ringSet.has(t.id), '每个主题都在环里：' + t.id);
+});
+console.log('  环上 ' + RING.length + ' 条，每条有 2 个相邻主题');
 
 /* ---------- 汇总 ---------- */
 console.log('\n' + '─'.repeat(52));

@@ -10,8 +10,27 @@
   var GENERIC = DATA.generic;
   var app = document.getElementById('app');
 
-  var KEY = { mode: 'qjy.mode', acts: 'qjy.acts.', last: 'qjy.last' };
+  var KEY = {
+    mode: 'qjy.mode',
+    acts: 'qjy.acts.',
+    last: 'qjy.last',
+    journal: 'qjy.journal',     // 勾选过的行动（用于下次回访）
+    outcome: 'qjy.outcome'      // 回访结果 done / missed
+  };
   var lastQuery = '';
+
+  /* 主题之环：每条道理与左右相邻的两条相通 */
+  var RING = window.QJY_RING || [];
+  function neighbours(id) {
+    var i = RING.indexOf(id);
+    if (i === -1 || RING.length < 3) return [];
+    var out = [];
+    var a = RING[(i - 1 + RING.length) % RING.length];
+    var b = RING[(i + 1) % RING.length];
+    if (themeById(a)) out.push(themeById(a));
+    if (themeById(b) && b !== a) out.push(themeById(b));
+    return out;
+  }
 
   /* ---------------- 基础工具 ---------------- */
 
@@ -125,6 +144,7 @@
 
   function renderHome() {
     app.innerHTML = '' +
+      renderReturner() +
       '<section class="hero reveal">' +
         '<p class="hero-kicker">千 江 有 水 千 江 月</p>' +
         '<h1 class="hero-title">你想表达<span class="em">什么道理</span>？</h1>' +
@@ -191,6 +211,7 @@
     });
 
     setTimeout(function () { input.focus({ preventScroll: true }); }, 120);
+    bindReturner();
   }
 
   /* 首页底部：三条入门主题 */
@@ -289,9 +310,13 @@
           renderActions(t.id, t.actions) +
         '</section>' +
 
+        relatedSection(t) +
+
         '<div class="toolbar">' +
           '<button type="button" class="btn btn-ghost" id="btn-copy">复制这一段</button>' +
           '<button type="button" class="btn btn-ghost" id="btn-share">复制分享链接</button>' +
+          '<button type="button" class="btn btn-ghost" id="btn-md">下载 Markdown</button>' +
+          '<button type="button" class="btn btn-ghost" id="btn-print">打印一页</button>' +
           '<button type="button" class="btn btn-ghost" id="btn-rand2">再取一理</button>' +
         '</div>' +
       '</div>';
@@ -305,7 +330,49 @@
     document.getElementById('btn-share').addEventListener('click', function () {
       copyText(location.origin + location.pathname + '#/t/' + encodeURIComponent(t.id));
     });
+    document.getElementById('btn-md').addEventListener('click', function () {
+      downloadText(t.name + '.md', buildShareText(t, q).replace(/^/gm, ''));
+      showTip('已下载 Markdown');
+    });
+    document.getElementById('btn-print').addEventListener('click', function () {
+      window.print();
+    });
     document.getElementById('btn-rand2').addEventListener('click', goRandom);
+  }
+
+  /* 相通的另两条：由主题之环推出 */
+  function relatedSection(t) {
+    var near = neighbours(t.id);
+    if (!near.length) return '';
+
+    return '' +
+      '<section class="section related reveal" style="animation-delay:240ms">' +
+        sectionHead('伍', '相通的另两条', '三十理成环') +
+        '<div class="related-grid">' +
+          near.map(function (x) {
+            return '<a class="related-card" href="#/t/' + encodeURIComponent(x.id) + '">' +
+              '<span class="related-name">' + esc(x.name) + '</span>' +
+              '<span class="related-gist">' + esc(x.gist) + '</span>' +
+            '</a>';
+          }).join('') +
+        '</div>' +
+      '</section>';
+  }
+
+  function downloadText(filename, text) {
+    try {
+      var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    } catch (e) {
+      copyText(text);
+    }
   }
 
   /* ---------------- 视图：未收录 ---------------- */
@@ -427,6 +494,89 @@
       if (!box.checked && at !== -1) state.splice(at, 1);
       lsSet(KEY.acts + id, state);
       updateProgress(id, list);
+      journalToggle(id, idx, list[idx], box.checked);
+    });
+  }
+
+  /* ---------- 行动回访 ----------
+   * 勾选即记账，下次打开时问一句「做到了吗」。
+   * 全部存在本地，不上传；记满 60 条自动裁掉最旧的。 */
+  function journalRead() {
+    var j = lsGet(KEY.journal, []);
+    return Array.isArray(j) ? j : [];
+  }
+  function journalWrite(list) {
+    lsSet(KEY.journal, list.slice(-60));
+  }
+  function journalToggle(themeId, idx, text, on) {
+    var j = journalRead();
+    var key = themeId + ':' + idx;
+    var at = -1;
+    for (var i = 0; i < j.length; i++) if (j[i].k === key) { at = i; break; }
+    if (on && at === -1) {
+      j.push({ k: key, t: themeId, i: idx, text: String(text || ''), at: new Date().toISOString() });
+    } else if (!on && at !== -1) {
+      j.splice(at, 1);
+    }
+    journalWrite(j);
+  }
+  function outcomeRead() {
+    var o = lsGet(KEY.outcome, {});
+    return (o && typeof o === 'object') ? o : {};
+  }
+
+  /* 挑出「上次留的、还没回访的、且不是今天的」三条 */
+  function pendingActions() {
+    var today = new Date().toISOString().slice(0, 10);
+    var o = outcomeRead();
+    return journalRead().filter(function (e) {
+      if (o[e.k]) return false;                      // 已回访
+      if ((e.at || '').slice(0, 10) === today) return false; // 今天刚勾的不催
+      return true;
+    }).slice(-3).reverse();
+  }
+
+  function renderReturner() {
+    var pending = pendingActions();
+    if (!pending.length) return '';
+
+    return '' +
+      '<section class="returner reveal" style="animation-delay:120ms">' +
+        '<p class="returner-kicker">上 次 你 给 自 己 留 了 几 件 事</p>' +
+        '<ul class="returner-list">' +
+          pending.map(function (e) {
+            var day = (e.at || '').slice(5, 10).replace('-', '/');
+            return '<li class="returner-item" data-k="' + esc(e.k) + '">' +
+              '<span class="returner-text">' + esc(e.text) + '</span>' +
+              '<span class="returner-day">' + esc(day) + '</span>' +
+              '<span class="returner-btns">' +
+                '<button type="button" class="mini" data-out="done">做到了</button>' +
+                '<button type="button" class="mini" data-out="missed">没做到</button>' +
+              '</span>' +
+            '</li>';
+          }).join('') +
+        '</ul>' +
+        '<p class="returner-foot">回答只记在这台设备的浏览器里。没做到也没关系，记下来就是一次真实的复盘。</p>' +
+      '</section>';
+  }
+
+  function bindReturner() {
+    var box = document.querySelector('.returner');
+    if (!box) return;
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('[data-out]') : null;
+      if (!btn) return;
+      var li = btn.closest('.returner-item');
+      if (!li) return;
+      var k = li.getAttribute('data-k');
+      var o = outcomeRead();
+      o[k] = { r: btn.getAttribute('data-out'), at: new Date().toISOString() };
+      lsSet(KEY.outcome, o);
+      li.classList.add('answered');
+      btn.parentNode.innerHTML = '<span class="returner-thanks">' +
+        (btn.getAttribute('data-out') === 'done' ? '记下了 —— 这件事算落地了。' : '记下了 —— 下次换个更小的做法。') +
+        '</span>';
+      showTip('已记录');
     });
   }
 
