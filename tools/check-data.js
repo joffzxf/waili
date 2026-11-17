@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -226,7 +226,12 @@ const CASES = [
   ['想要自由', 'ziyou'],
   ['一个人很孤单', 'gudu'],
   ['忘记过去', 'jiyi'],
-  ['不敢开口', 'yongqi']
+  ['不敢开口', 'yongqi'],
+  // 第六批（主题 37—40，科学与心理学）
+  ['我总是高估自己', 'dake'],
+  ['我做什么都没用', 'wuzhu'],
+  ['我对这次经历印象很差', 'fengzhong'],
+  ['我学不会', 'chengzhang']
 ];
 
 let hitCount = 0;

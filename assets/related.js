@@ -21,5 +21,8 @@ window.QJY_RING = [
   /* 文学与电影这一批接在「生死」之后：
      生死 → 希望 → 不屈 → 勇气 → 自由 → 孤独 → 记忆，再绕回「欲速则不达」。
      环必然会有一个接缝（记忆 → 欲速），它只是循环的切口，不代表语义最弱的一环。 */
-  'xiwang', 'buqu', 'yongqi', 'ziyou', 'gudu', 'jiyi'
+  'xiwang', 'buqu', 'yongqi', 'ziyou', 'gudu', 'jiyi',
+  /* 科学与心理学这一批接在「记忆」之后：
+     记忆 → 认知偏差 → 无助 → 峰终 → 成长，再绕回「欲速则不达」。 */
+  'dake', 'wuzhu', 'fengzhong', 'chengzhang'
 ];
