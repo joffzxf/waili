@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/related.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/related.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -218,7 +218,15 @@ const CASES = [
   ['总是分心', 'zhuanzhu'],
   ['戒掉坏习惯', 'xiguan'],
   ['不懂装懂', 'buxiawen'],
-  ['不知道怎么教孩子', 'qifa']
+  ['不知道怎么教孩子', 'qifa'],
+  // 第五批（主题 31—36，文学与电影）
+  ['看不到希望', 'xiwang'],
+  ['撑下去', 'xiwang'],
+  ['我认输了', 'buqu'],
+  ['想要自由', 'ziyou'],
+  ['一个人很孤单', 'gudu'],
+  ['忘记过去', 'jiyi'],
+  ['不敢开口', 'yongqi']
 ];
 
 let hitCount = 0;

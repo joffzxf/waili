@@ -26,6 +26,7 @@ const ASSETS = [
   'assets/data-2.js',
   'assets/data-3.js',
   'assets/data-4.js',
+  'assets/data-5.js',
   'assets/related.js',
   'assets/match.js',
   'assets/app.js'

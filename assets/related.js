@@ -17,5 +17,9 @@ window.QJY_RING = [
   'qiuzhuji', 'jisuo', 'baoyuan', 'zhinu', 'shenyan', 'yixue',
   'jinzhu', 'heertong', 'liuyibu', 'ruoshui', 'huoxi', 'yuhuan',
   'zhizu', 'manzhao', 'zizhi', 'jingwa', 'jinxin', 'xuesi',
-  'zhixing', 'qifa', 'buxiawen', 'qianshi', 'xishi', 'sisheng'
+  'zhixing', 'qifa', 'buxiawen', 'qianshi', 'xishi', 'sisheng',
+  /* 文学与电影这一批接在「生死」之后：
+     生死 → 希望 → 不屈 → 勇气 → 自由 → 孤独 → 记忆，再绕回「欲速则不达」。
+     环必然会有一个接缝（记忆 → 欲速），它只是循环的切口，不代表语义最弱的一环。 */
+  'xiwang', 'buqu', 'yongqi', 'ziyou', 'gudu', 'jiyi'
 ];
