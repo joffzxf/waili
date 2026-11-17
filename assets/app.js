@@ -547,6 +547,13 @@
   initMode();
   lastQuery = lsGet(KEY.last, '') || '';
 
+  /* 页脚印构建指纹，方便一眼判断自己看的是不是缓存里的旧版 */
+  (function stampFooter() {
+    var build = document.documentElement.getAttribute('data-build');
+    var el = document.getElementById('build-id');
+    if (el && build) el.textContent = build;
+  })();
+
   document.getElementById('btn-random').addEventListener('click', goRandom);
   document.getElementById('btn-all').addEventListener('click', function () { navigate('#/all'); });
   document.getElementById('btn-mode').addEventListener('click', toggleMode);

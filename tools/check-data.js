@@ -263,6 +263,19 @@ COMPOSITE.forEach(function (c) {
   }
 });
 
+/* ---------- 5. 构建指纹 ---------- */
+section('【5】构建指纹');
+
+/* GitHub Pages 发 Cache-Control: max-age=600，浏览器可能拿「新 HTML + 旧 JS」。
+ * 指纹变了 ?v= 才会变。改了资源却忘了跑 stamp.js，这里必须报错。 */
+const STAMP = require('./stamp.js');
+const stampInfo = STAMP.inspect();
+ok(stampInfo.synced, 'index.html 构建指纹已与资源同步（改完资源要跑 node tools/stamp.js）',
+  '资源指纹 ' + stampInfo.build + '，页内记录 ' + (stampInfo.stored || '(无)'));
+ok(stampInfo.versions.length >= STAMP.ASSETS.length, 'index.html 每个资源都带了 ?v=',
+  '只找到 ' + stampInfo.versions.length + ' 处，应为 ' + STAMP.ASSETS.length);
+console.log('  资源指纹 ' + stampInfo.build + ' · 引用 ' + stampInfo.versions.length + ' 处 ?v=');
+
 /* ---------- 汇总 ---------- */
 console.log('\n' + '─'.repeat(52));
 if (fails === 0) {

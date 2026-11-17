@@ -860,6 +860,16 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
 .site-foot p { margin: 0; }
 .site-foot .sep { margin: 0 8px; opacity: .6; }
 .foot-sub { margin-top: 6px; opacity: .75; letter-spacing: .1em; }
+.foot-build {
+  margin-top: 10px;
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  opacity: .45;
+}
+.foot-build code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 10.5px;
+}
 
 /* ---------- 入场动效 ---------- */
 
