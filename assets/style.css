@@ -993,12 +993,13 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   color: var(--ink-3);
 }
 
-/* ---------- 文与影 · 海报 ---------- */
+/* ---------- 文与影 · 海报（三版：引文即海报） ---------- */
 
+/* 两列而不是三列——海报要大到能读，引文才有当主角的资格 */
 .posters {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px 14px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 16px;
 }
 
 .poster-fig { margin: 0; }
@@ -1008,111 +1009,229 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 2px;
-  background: #15130f;
-  color: #f2ebdc;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .22), 0 16px 32px -20px rgba(0, 0, 0, .65);
-  transition: transform .3s cubic-bezier(.22, .61, .36, 1), box-shadow .3s;
+  background: #14120e;
+  color: #f3ecdd;
+  font-family: var(--serif);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .22), 0 18px 36px -22px rgba(0, 0, 0, .68);
+  transition: transform .32s cubic-bezier(.22, .61, .36, 1), box-shadow .32s;
 }
 .poster:hover {
   transform: translateY(-3px);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .26), 0 24px 42px -20px rgba(0, 0, 0, .7);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .26), 0 26px 48px -22px rgba(0, 0, 0, .74);
 }
 
 .poster-art { position: absolute; inset: 0; }
 .poster-art svg { display: block; width: 100%; height: 100%; }
 
-/* 压一层暗角，保证任何配色下文字都读得出来 */
 .poster::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(180deg,
-    rgba(8, 7, 6, .38) 0%,
-    rgba(8, 7, 6, .04) 34%,
-    rgba(8, 7, 6, .30) 62%,
-    rgba(8, 7, 6, .78) 100%);
+    rgba(8, 7, 6, .46) 0%,
+    rgba(8, 7, 6, .04) 38%,
+    rgba(8, 7, 6, .30) 66%,
+    rgba(8, 7, 6, .84) 100%);
 }
 
-.poster-body {
+.poster-fg {
   position: absolute;
   inset: 0;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 13px 13px 12px;
+  padding: 22px 22px 20px;
 }
 
-.poster-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 9px;
-  letter-spacing: .26em;
-  opacity: .74;
-}
-
-.poster-core { text-align: center; padding: 0 2px; }
-.poster-title {
-  font-family: var(--serif);
-  font-size: clamp(17px, 2.05vw, 23px);
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-indent: .14em;
-  line-height: 1.36;
-  margin: 0;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, .6);
-}
-.poster-en {
-  margin: 6px 0 0;
-  font-size: 9.5px;
-  line-height: 1.5;
-  letter-spacing: .06em;
-  font-style: italic;
-  opacity: .72;
-}
-
-.poster-foot {
-  border-top: 1px solid rgba(244, 239, 228, .22);
-  padding-top: 8px;
-}
+/* 引文：全篇最大的字 */
 .poster-quote {
   margin: 0;
-  font-family: var(--serif);
-  font-size: 10.5px;
-  line-height: 1.75;
-  opacity: .93;
+  font-size: 18px;
+  line-height: 1.9;
+  letter-spacing: .035em;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, .62);
+  overflow: hidden;
+}
+.poster--long .poster-quote { font-size: 14.5px; line-height: 1.85; }
+.poster--short .poster-quote { font-size: 23px; line-height: 1.66; letter-spacing: .08em; }
+
+.poster-orig {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.62;
+  letter-spacing: .005em;
+  font-style: italic;
+  opacity: .66;
+  writing-mode: horizontal-tb;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.poster-by {
-  margin: 6px 0 0;
-  font-size: 9px;
-  letter-spacing: .1em;
-  opacity: .62;
-  text-align: right;
+
+.poster-no {
+  display: none;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: .3em;
+  opacity: .55;
 }
 
-.poster-label { display: block; margin-top: 10px; }
+.poster-meta {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 19px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--sans);
+  font-size: 9.5px;
+  line-height: 1.55;
+  letter-spacing: .16em;
+  opacity: .74;
+}
+.poster-kind { opacity: .95; }
+.poster-book { letter-spacing: .06em; }
+.poster-credit { opacity: .68; }
+
+/* v0 · 居中大引文 */
+.poster--v0 .poster-fg { display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.poster--v0 .poster-quote { font-size: 19px; }
+.poster--v0.poster--long .poster-quote { font-size: 15px; }
+.poster--v0 .poster-orig { text-align: center; }
+.poster--v0 .poster-meta { align-items: center; }
+
+/* v1 · 竖排：只派给短引文，整段自上而下压在右侧 */
+.poster--v1 .poster-fg { padding: 20px 20px 18px; }
+.poster--v1 .poster-quote {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  bottom: 96px;
+  width: auto;
+  max-height: none;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 21px;
+  line-height: 1.6;
+  letter-spacing: .2em;
+}
+.poster--v1 .poster-orig {
+  position: absolute;
+  left: 20px;
+  bottom: 74px;
+  right: 56px;
+  margin: 0;
+  -webkit-line-clamp: 2;
+}
+.poster--v1 .poster-meta { bottom: 18px; }
+
+/* v2 · 上下分栏：引文在上、一条细线、原文在下 */
+.poster--v2 .poster-fg { display: flex; flex-direction: column; padding-bottom: 104px; }
+.poster--v2 .poster-quote { padding-bottom: 16px; border-bottom: 1px solid rgba(243, 236, 221, .24); }
+.poster--v2 .poster-orig { margin-top: 14px; }
+
+/* v3 · 左下角块：右上留白，序号退到角落 */
+.poster--v3 .poster-quote {
+  position: absolute;
+  left: 22px;
+  right: 40px;
+  bottom: 92px;
+  max-height: 58%;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+}
+.poster--v3 .poster-orig {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 46px;
+  margin: 0;
+  -webkit-line-clamp: 2;
+}
+.poster--v3 .poster-no { display: block; position: absolute; top: 20px; right: 22px; font-size: 11px; }
+
+/* v4 · 斜置：整段引文轻微旋转 */
+.poster--v4 .poster-fg { display: flex; align-items: center; padding-bottom: 108px; }
+.poster--v4 .poster-quote { width: 100%; transform: rotate(-5deg); text-align: center; }
+.poster--v4 .poster-orig { position: absolute; left: 22px; right: 22px; bottom: 74px; }
+
+/* v5 · 窄栏：长引文放松行距，居中成一块文字 */
+.poster--v5 .poster-fg { display: flex; flex-direction: column; justify-content: center; padding-bottom: 100px; }
+.poster--v5 .poster-quote {
+  max-width: 88%;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 2.05;
+  letter-spacing: .05em;
+}
+.poster--v5 .poster-orig { text-align: center; }
+
+/* v6 · 索引：大号序号领起，引文右下对齐 */
+.poster--v6 .poster-fg { padding-bottom: 96px; }
+.poster--v6 .poster-no {
+  display: block;
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  font-family: var(--serif);
+  font-size: 54px;
+  letter-spacing: 0;
+  line-height: 1;
+  opacity: .2;
+}
+.poster--v6 .poster-quote {
+  position: absolute;
+  left: 30%;
+  right: 22px;
+  top: 42%;
+  text-align: right;
+  max-height: 42%;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+.poster--v6 .poster-orig {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 76px;
+  margin: 0;
+  -webkit-line-clamp: 2;
+}
+
+/* v7 · 截句：只放最狠的那半句 */
+.poster--v7 .poster-fg { display: flex; flex-direction: column; justify-content: center; padding-bottom: 104px; }
+.poster--v7 .poster-quote {
+  font-size: 26px;
+  line-height: 1.46;
+  letter-spacing: .07em;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.poster--v7 .poster-orig { position: absolute; left: 22px; right: 22px; bottom: 78px; }
+
+/* 海报下方的出处与按语 */
+.poster-label { display: block; margin-top: 11px; }
 .poster-src {
   display: block;
-  font-size: 10.5px;
+  font-size: 11px;
   color: var(--ink-3);
   letter-spacing: .02em;
   margin-bottom: 4px;
 }
 .poster-note {
   display: block;
-  font-size: 11.5px;
-  line-height: 1.72;
+  font-size: 12px;
+  line-height: 1.75;
   color: var(--ink-2);
 }
 
 .posters-note {
-  margin: 20px 0 0;
+  margin: 22px 0 0;
   font-size: 11.5px;
   line-height: 1.85;
   color: var(--ink-3);
@@ -1194,7 +1313,8 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   .grid { grid-template-columns: 1fr; }
   .featured-grid { grid-template-columns: 1fr; }
   .related-grid { grid-template-columns: 1fr; }
-  .posters { grid-template-columns: repeat(2, 1fr); gap: 16px 10px; }
+  .posters { grid-template-columns: 1fr; gap: 22px; }
+  .poster-fg { padding: 20px 20px 18px; }
   .poster-label { margin-top: 8px; }
   .returner { padding: 16px 16px 14px; }
   .returner-item { font-size: 14px; }

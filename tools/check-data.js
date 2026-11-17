@@ -365,6 +365,36 @@ THEMES.forEach(function (t) {
 });
 console.log('  环上 ' + RING.length + ' 条，每条有 2 个相邻主题');
 
+/* 译文必须附原文。
+ * 判据：境外条目若 t 是纯中文（不含拉丁/希腊/西里尔字母），
+ * 就必须给 o（原文）或 noOrig（说明为什么没有原文）。
+ * 海报上的条目是硬约束——那是读者第一眼看到的东西；
+ * 其余条目先做统计，逐步补齐。 */
+const LATIN = /[A-Za-zÀ-ÿĀ-ſ\u0370-\u03FF\u0400-\u04FF]/;
+let origHave = 0, origSoft = [], posterMissing = 0;
+
+THEMES.forEach(function (t) {
+  t.canon.forEach(function (c, i) {
+    if (String(c.r).charAt(0) === '中') return;          // 中文原典，无需外文原文
+    const tag = t.id + ' canon[' + i + ']';
+    const hasInline = LATIN.test(c.t);
+    if (c.o) { origHave++; return; }
+    if (c.noOrig) { origHave++; return; }                 // 已显式声明无原句
+    if (hasInline) { origHave++; return; }                // 原句已内嵌在 t 里
+
+    if (c.poster) {
+      posterMissing++;
+      ok(false, '海报条目必须附原文或声明无原句：' + tag, c.t.slice(0, 20));
+    } else {
+      origSoft.push(t.id + '/' + c.k);
+    }
+  });
+});
+
+ok(posterMissing === 0, '文与影的海报条目都应带外文原文', String(posterMissing) + ' 条缺失');
+console.log('  译文原文覆盖：' + origHave + ' 条已具备；其余 ' + origSoft.length +
+  ' 条纯中译条目待补（不阻断构建，见 docs/行动指引.md）');
+
 /* ---------- 7. 文与影 ---------- */
 section('【7】文与影 · 海报');
 

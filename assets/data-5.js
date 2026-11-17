@@ -18,6 +18,7 @@ window.WISDOM.themes.push(
       { r: "中·现代", k: "小说", t: "我想：希望是本无所谓有，无所谓无的。这正如地上的路；其实地上本没有路，走的人多了，也便成了路。", s: "鲁迅《故乡》（1921）", n: "他把「希望有没有」换成了「走不走」——问题一换，就没有绝望的答案了。",
         poster: { med: "book", title: "故乡", by: "鲁迅", year: 1921 } },
       { r: "法·19世纪", k: "小说", t: "人类的全部智慧就包含在这两个词里面：等待和希望。", s: "大仲马《基督山伯爵》末章（法文原文作 deux mots：attendre et espérer）", n: "法文说的是「两个词」，中译常作「五个字」。这是一句被翻译改过形状的话。",
+        o: "Toute la sagesse humaine est dans ces deux mots : attendre et espérer.",
         poster: { med: "book", title: "基督山伯爵", en: "Le Comte de Monte-Cristo", by: "大仲马", year: 1844 } },
       { r: "美·1994", k: "电影", t: "Hope is a good thing, maybe the best of things, and no good thing ever dies.（希望是好事，也许是人间至善，而美好的事永不消逝）", s: "《肖申克的救赎》安迪写给瑞德的信", n: "说这句话的人，正在越狱。",
         poster: { med: "film", title: "肖申克的救赎", en: "The Shawshank Redemption", by: "弗兰克·达拉邦特 导演", year: 1994 } },
@@ -87,6 +88,7 @@ window.WISDOM.themes.push(
       { r: "法·18世纪", k: "哲学", t: "人是生而自由的，却无往不在枷锁之中。", s: "卢梭《社会契约论》第一章开篇", n: "紧接着一句更硬的：那些自以为是他人的主人的人，其实比他们更不自由。" },
       { r: "中·战国", k: "典籍", t: "若夫乘天地之正，而御六气之辩，以游无穷者，彼且恶乎待哉？", s: "《庄子·逍遥游》", n: "庄子的自由不靠松绑，靠「无所待」——不依赖任何外物，才叫游。" },
       { r: "美·1995", k: "电影", t: "他们可以拿走我们的生命，但永远不能夺走我们的自由。", s: "《勇敢的心》华莱士语", n: "同样要说明：这是电影台词，不是史料。",
+        o: "They may take our lives, but they will never take our freedom!",
         poster: { med: "film", title: "勇敢的心", en: "Braveheart", by: "梅尔·吉布森 导演", year: 1995 } },
       { r: "英·1854", k: "散文", t: "大多数人都过着静默的绝望的生活。", s: "梭罗《瓦尔登湖》", n: "梭罗不是要人逃离社会，是提醒：你可能正在用一生换一堆并不需要的东西。" }
     ],
@@ -116,10 +118,12 @@ window.WISDOM.themes.push(
     keywords: ["孤独", "一个人", "寂寞", "孤单", "合群", "社交", "无人可说话", "冷清"],
     canon: [
       { r: "哥·1967", k: "小说", t: "多年以后，面对行刑队，奥雷里亚诺·布恩迪亚上校将会回想起父亲带他去见识冰块的那个遥远的下午。", s: "马尔克斯《百年孤独》开篇", n: "一个家族一百年，最后被一阵风抹掉。它写的既是孤独，也是「没人真正记得你」。",
+        o: "Muchos años después, frente al pelotón de fusilamiento, el coronel Aureliano Buendía había de recordar aquella tarde remota en que su padre lo llevó a conocer el hielo.",
         poster: { med: "book", title: "百年孤独", en: "Cien años de soledad", by: "加西亚·马尔克斯", year: 1967 } },
       { r: "德·1903", k: "书信", t: "Liebe besteht darin, dass zwei Einsamkeiten einander schützen, begrenzen und grüßen.（爱，是两个孤独彼此守护、彼此划界、彼此致意）", s: "里尔克《给一个青年诗人的信》第七封", n: "他的意思是：先能独自待着，才谈得上相爱。" },
       { r: "中·唐", k: "诗", t: "千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。", s: "柳宗元《江雪》", n: "二十个字，人一层层退到最后只剩一个。他不喊，只是钓。" },
       { r: "奥·1915", k: "小说", t: "格里高尔·萨姆沙一觉醒来，发现自己变成了一只巨大的甲虫。他最先想到的不是害怕，是「别误了火车」。", s: "卡夫卡《变形记》", n: "全家人从惊慌到嫌弃，最后盼他死。最孤独的不是变形，是没人再把他当人。",
+        o: "Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheuren Ungeziefer verwandelt.",
         poster: { med: "book", title: "变形记", en: "Die Verwandlung", by: "弗兰茨·卡夫卡", year: 1915 } },
       { r: "英·1845", k: "散文", t: "我到林中去，是因为我想从容地生活，只面对生活的基本事实。", s: "梭罗《瓦尔登湖》", n: "他一个人住了两年，不是一辈子。独处是一次实验，不是一种判决。" }
     ],
@@ -149,11 +153,14 @@ window.WISDOM.themes.push(
     keywords: ["记忆", "遗忘", "回忆", "忘记", "怀念", "过去", "往事", "想不起来"],
     canon: [
       { r: "法·20世纪", k: "小说", t: "真正的发现之旅，不在于寻找新的风景，而在于拥有新的眼睛。", s: "普鲁斯特《追忆似水年华·女囚》", n: "他用了三百万字讲一件事：过去不在旧地方，在你现在的感知里。",
+        o: "Le véritable voyage de découverte ne consiste pas à chercher de nouveaux paysages, mais à avoir de nouveaux yeux.",
         poster: { med: "book", title: "追忆似水年华", en: "À la recherche du temps perdu", by: "马塞尔·普鲁斯特", year: 1913 } },
       { r: "阿·1942", k: "小说", t: "富内斯记得每一件发生过的事——每一片叶子的形状，每一次阴影的轮廓，却几乎不会思考。他记得所有，因此无法概括。", s: "博尔赫斯《博闻强记的富内斯》", n: "博尔赫斯用一个人证明：记忆如果不遗忘，就没法思考。",
+        o: "Pensar es olvidar diferencias, es generalizar, abstraer.",
         poster: { med: "book", title: "博闻强记的富内斯", en: "Funes el memorioso", by: "豪尔赫·路易斯·博尔赫斯", year: 1942 } },
       { r: "中·宋", k: "词", t: "十年生死两茫茫，不思量，自难忘。", s: "苏轼《江城子·乙卯正月二十日夜记梦》", n: "最好的记忆是不用提醒的——真要提醒才想起的，多半已经不是记忆，是清单。" },
       { r: "美·2004", k: "电影", t: "乔尔和克莱门汀分手后，各自去「忘情诊所」删掉了关于对方的记忆；删到一半，乔尔反悔了，开始在记忆里拉着她东躲西藏。", s: "《暖暖内含光》（Eternal Sunshine of the Spotless Mind）", n: "电影给的答案是：痛苦的那部分，也是你想留的那部分。",
+        noOrig: "本条目是情节概述，影片没有对应的单一台词",
         poster: { med: "film", title: "暖暖内含光", en: "Eternal Sunshine of the Spotless Mind", by: "米歇尔·贡德里 导演", year: 2004 } },
       { r: "中·春秋", k: "语录", t: "成事不说，遂事不谏，既往不咎。", s: "《论语·八佾》", n: "三句话一个方向：已经发生的，别再反复拿出来审。" },
       { r: "中·唐", k: "诗", t: "此情可待成追忆，只是当时已惘然。", s: "李商隐《锦瑟》", n: "他把遗憾写成了时差：不是忘了，是当时没看懂。" }
@@ -187,6 +194,7 @@ window.WISDOM.themes.push(
       { r: "英·1601", k: "戏剧", t: "To be, or not to be: that is the question.（生存还是毁灭，这是个问题）", s: "莎士比亚《哈姆雷特》第三幕第一场", n: "常被当成犹豫的代名词。其实他是在算账：活着要忍什么，死了会失去什么。",
         poster: { med: "stage", title: "哈姆雷特", en: "Hamlet", by: "威廉·莎士比亚", year: 1601 } },
       { r: "美·1957", k: "电影", t: "十二个陪审员里，只有八号投了「无罪」。他没有证据，只说：我不知道，我只是觉得，我们不能在五分钟里决定一个人的生死。", s: "《十二怒汉》（12 Angry Men）", n: "他的勇气不是确信自己对，是承认自己不知道，还不肯跟着走。",
+        noOrig: "本条目是情节概述，影片没有对应的单一台词",
         poster: { med: "film", title: "十二怒汉", en: "12 Angry Men", by: "西德尼·吕美特 导演", year: 1957 } },
       { r: "希伯来·前10世纪以降", k: "典籍", t: "你当刚强壮胆，不要惧怕，也不要惊惶。", s: "《约书亚记》1:9", n: "古人的办法很实用：把「别怕」当命令，反复说给要上场的人听。" },
       { r: "中·宋", k: "散文", t: "古之立大事者，不惟有超世之才，亦必有坚忍不拔之志。", s: "苏轼《晁错论》", n: "苏轼写的是「坚忍」，不是「勇敢」——他更看重扛得住多久。" }

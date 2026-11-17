@@ -272,31 +272,44 @@
 
   var NUM = ['壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌'];
 
-  /* 海报：美术由 assets/poster.js 依作品名生成，非官方剧照 */
-  function renderPoster(c, i) {
+  /* 海报：主角是那句台词，不是书名。版式按主题+序号轮换，保证一组里不重样 */
+  function renderPoster(c, i, themeId) {
     var p = c.poster;
-    var med = p.med === 'film' ? '电　影' : p.med === 'stage' ? '戏　剧' : '小　说';
+    var quote = c.t || '';
+    var seedH = window.QJY_POSTER.hash((themeId || '') + '|' + p.title);
+    var v = (seedH + i) % 8;
+    /* 竖排（v1）只派给短引文——长句竖排一定会溢出，这一类必须让位 */
+    if (v === 1 && quote.length > 26) v = 3;
+    if (v === 7 && quote.length > 40) v = 0;
+
+    var lenClass = quote.length > 46 ? ' poster--long' : (quote.length <= 18 ? ' poster--short' : '');
+    var med = p.med === 'film' ? '电影' : p.med === 'stage' ? '戏剧' : '小说';
+    var no = ('0' + (i + 1)).slice(-2);
+
+    /* v7 只放最狠的那半句：截到第一个句号，其余用省略号收掉 */
+    if (v === 7) {
+      var m = quote.match(/^[^。！？!?]*[。！？!?]/);
+      if (m && m[0].length < quote.length) quote = m[0] + '……';
+      else if (!m && quote.length > 18) quote = quote.slice(0, 18) + '……';
+    }
+
     return '' +
       '<figure class="poster-fig reveal" style="animation-delay:' + (i * 70) + 'ms">' +
-        '<div class="poster">' +
+        '<article class="poster poster--v' + v + lenClass + '" data-med="' + p.med + '">' +
           '<div class="poster-art" aria-hidden="true">' +
             window.QJY_POSTER.art(p.title + '|' + p.year, p.med) +
           '</div>' +
-          '<div class="poster-body">' +
-            '<div class="poster-head">' +
-              '<span class="poster-med">' + med + '</span>' +
-              '<span class="poster-year">' + esc(String(p.year)) + '</span>' +
-            '</div>' +
-            '<div class="poster-core">' +
-              '<h3 class="poster-title">' + esc(p.title) + '</h3>' +
-              (p.en ? '<p class="poster-en">' + esc(p.en) + '</p>' : '') +
-            '</div>' +
-            '<div class="poster-foot">' +
-              '<p class="poster-quote">' + esc(c.t) + '</p>' +
-              '<p class="poster-by">' + esc(p.by) + '</p>' +
-            '</div>' +
+          '<div class="poster-fg">' +
+            '<span class="poster-no" aria-hidden="true">' + no + '</span>' +
+            '<blockquote class="poster-quote">' + esc(quote) + '</blockquote>' +
+            (c.o ? '<p class="poster-orig" lang="und">' + esc(c.o) + '</p>' : '') +
+            '<p class="poster-meta">' +
+              '<span class="poster-kind">' + med + '</span>' +
+              '<span class="poster-book">' + esc(p.title) + '</span>' +
+              '<span class="poster-credit">' + esc(p.by) + ' · ' + p.year + '</span>' +
+            '</p>' +
           '</div>' +
-        '</div>' +
+        '</article>' +
         '<figcaption class="poster-label">' +
           '<span class="poster-src">' + esc(c.s) + '</span>' +
           '<span class="poster-note">' + esc(c.n) + '</span>' +
@@ -304,12 +317,12 @@
       '</figure>';
   }
 
-  function mediaSection(list, num, delay) {
+  function mediaSection(list, num, delay, themeId) {
     if (!list.length) return '';
     return '' +
       '<section class="section cinema reveal" style="animation-delay:' + delay + 'ms">' +
         sectionHead(num, '文与影', '小说 · 戏剧 · 电影') +
-        '<div class="posters">' + list.map(renderPoster).join('') + '</div>' +
+        '<div class="posters">' + list.map(function (c, i) { return renderPoster(c, i, themeId); }).join('') + '</div>' +
         '<p class="posters-note">海报依作品名程序生成，不是官方剧照——剧照有版权，这里用几何与配色替它说话。' +
           '同一部作品永远得到同一张。</p>' +
       '</section>';
@@ -353,7 +366,7 @@
           '<div class="canon-list">' + renderCanon(classic) + '</div>' +
         '</section>' +
 
-        mediaSection(media, nMedia, 120) +
+        mediaSection(media, nMedia, 120, t.id) +
 
         '<section class="section reveal" style="animation-delay:160ms">' +
           sectionHead(nHistory, '以史为镜', '有人验证过它') +
