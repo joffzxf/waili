@@ -24,6 +24,7 @@ const ASSETS = [
   'assets/style.css',
   'assets/data.js',
   'assets/data-2.js',
+  'assets/data-3.js',
   'assets/match.js',
   'assets/app.js'
 ];

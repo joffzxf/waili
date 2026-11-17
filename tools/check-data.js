@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -123,6 +123,25 @@ THEMES.forEach(function (t) {
   });
 });
 
+/* 关键词跨主题重复 = 词面磁铁。同一个词只应有一个主人，
+ * 否则「我总在拖延」这类输入会被两个主题同时认领，谁赢全看分数上那点巧合。
+ * 这条规则是被一次真实冲突逼出来的：拖延同时属于「惜时」和「知行合一」。 */
+const kwOwner = new Map();
+THEMES.forEach(function (t) {
+  const seenInTheme = new Set();
+  (t.keywords || []).forEach(function (k) {
+    const n = QJY.norm(k);
+    if (!n || seenInTheme.has(n)) return;
+    seenInTheme.add(n);
+    if (kwOwner.has(n)) {
+      ok(false, '关键词「' + k + '」被 ' + kwOwner.get(n) + ' 与 ' + t.id + ' 同时占用',
+        '一个词只能有一个主人');
+    } else {
+      kwOwner.set(n, t.id);
+    }
+  });
+});
+
 /* ---------- 3. 匹配准确率 ---------- */
 section('【3】匹配准确率');
 
@@ -174,7 +193,23 @@ const CASES = [
   ['要善于总结经验', 'qianshi'],
   ['凡事要留有余地', 'liuyibu'],
   ['他太傲慢了', 'manzhao'],
-  ['说话要算数', 'yinuo']
+  ['说话要算数', 'yinuo'],
+  // 第三批（主题 17—23）
+  ['珍惜时间', 'xishi'],
+  ['时间就是金钱', 'xishi'],
+  ['我总在拖延', 'zhixing'],
+  ['知足常乐', 'zhizu'],
+  ['我总想要更多', 'zhizu'],
+  ['言多必失', 'shenyan'],
+  ['我说话太多', 'shenyan'],
+  ['近朱者赤', 'jinzhu'],
+  ['朋友影响很大', 'jinzhu'],
+  ['控制不住发脾气', 'zhinu'],
+  ['容易生气', 'zhinu'],
+  ['井底之蛙', 'jingwa'],
+  ['格局太小', 'jingwa'],
+  ['学而不思则罔', 'xuesi'],
+  ['死记硬背', 'xuesi']
 ];
 
 let hitCount = 0;
