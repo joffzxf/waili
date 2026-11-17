@@ -164,7 +164,17 @@ const CASES = [
   ['团队里有不同意见怎么办', 'heertong'],
   ['君子和而不同', 'heertong'],
   ['没人看见的时候', 'shendu'],
-  ['自律很难', 'shendu']
+  ['自律很难', 'shendu'],
+  // 2026-11 新增：不盲从经验 / 尽信书
+  ['不要盲从经验', 'jinxin'],
+  ['尽信书不如无书', 'jinxin'],
+  ['不要照搬老办法', 'jinxin'],
+  ['经验主义害死人', 'jinxin'],
+  ['要学会独立思考', 'jinxin'],
+  ['要善于总结经验', 'qianshi'],
+  ['凡事要留有余地', 'liuyibu'],
+  ['他太傲慢了', 'manzhao'],
+  ['说话要算数', 'yinuo']
 ];
 
 let hitCount = 0;
@@ -187,13 +197,71 @@ CHIPS.forEach(function (c) {
 });
 
 // 无关输入不应硬凑一个主题
-const NEG = ['今天天气怎么样', '帮我写一段 python 代码', '明天开会吗'];
+const NEG = ['今天天气怎么样', '帮我写一段 python 代码', '明天开会吗',
+  '我很快乐', '这条路很快', '他慢慢走了'];
 NEG.forEach(function (q) {
   const r = QJY.match(q, THEMES);
   ok(!r.hit, '无关输入「' + q + '」不应命中', '误命中 ' + (r.hit && r.hit.id));
 });
 
 console.log('  匹配用例 ' + hitCount + ' / ' + CASES.length + ' 命中预期');
+
+/* ---------- 4. 反向语义：不能把意思听反 ---------- */
+section('【4】反向语义');
+
+/* 这些用例记录过一次真实事故：「不要盲从经验」被匹配到「前事不忘，后事之师」
+ * ——那是「要从经验里学」的道理，方向正好相反。
+ * 结构为 [输入, 必须命中, 绝不可命中]。
+ * 根因是「经验」这类中性领域名词被当成关键词，会朝任意方向吸附。 */
+const POLARITY = [
+  ['不要盲从经验', 'jinxin', 'qianshi'],
+  ['不要照搬书本上的经验', 'jinxin', 'qianshi'],
+  ['经验未必可靠', 'jinxin', 'qianshi'],
+  ['前人经验不能全信', 'jinxin', 'qianshi'],
+  ['要从前人的失败中学习', 'qianshi', 'jinxin'],
+  ['总结经验教训很重要', 'qianshi', 'jinxin']
+];
+
+POLARITY.forEach(function (c) {
+  const q = c[0], want = c[1], forbid = c[2];
+  const r = QJY.match(q, THEMES);
+  const got = r.hit ? r.hit.id : '(未命中)';
+  ok(got === want, '反向「' + q + '」应命中 ' + want, '实得 ' + got);
+  ok(got !== forbid, '反向「' + q + '」绝不可命中 ' + forbid, '误命中 ' + forbid);
+});
+
+/* 中性领域名词不应作为关键词：它们能朝任意方向吸附。
+ * 这里做一道软性提醒——把只用了一个字的关键词列出来供人工复核，
+ * 单词关键词最容易造成「沾到字就算命中」。 */
+const singleChar = [];
+THEMES.forEach(function (t) {
+  (t.keywords || []).forEach(function (k) {
+    if (QJY.norm(k).length === 1) singleChar.push(t.id + ':' + k);
+  });
+});
+if (singleChar.length) {
+  console.log('  · 单字关键词（需人工确认不会误吸附）：' + singleChar.join('、'));
+}
+
+/* 「快乐」里的「快」曾把「我希望快乐」吸到「欲速则不达」，
+ * 这里断言一批常见复合词不会被拆开误命中。 */
+const COMPOSITE = [
+  ['傲慢', 'manzhao'],   // 复合词应命中它自己的主题
+  ['快乐', null],        // 不应被单字「快」吸到 yusu
+  ['慢慢', null],
+  ['曲子', null],
+  ['习惯成自然', null]
+];
+COMPOSITE.forEach(function (c) {
+  const w = c[0], want = c[1];
+  const r = QJY.match(w, THEMES);
+  const got = r.hit ? r.hit.id : null;
+  if (want) {
+    ok(got === want, '复合词「' + w + '」应命中 ' + want, '实得 ' + (got || '(未命中)'));
+  } else {
+    ok(got !== 'yusu', '复合词「' + w + '」不应被拆字吸到 yusu', '误命中 ' + got);
+  }
+});
 
 /* ---------- 汇总 ---------- */
 console.log('\n' + '─'.repeat(52));

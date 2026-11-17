@@ -310,10 +310,31 @@
 
   /* ---------------- 视图：未收录 ---------------- */
 
+  function themeById(id) {
+    for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === id) return THEMES[i];
+    return null;
+  }
+
   function renderMiss(rawVal) {
     var q = decodeURIComponent(rawVal || '');
     var r = match(q);
-    var near = (r ? r.ranked : []).slice(0, 3);
+
+    /* 只有真的算出分来，才配叫「相近」。全部 0 分时排名毫无意义，
+     * 那只是数组顺序——宁可老实说「不妨先看这几条」，也不要假装相关。 */
+    var scored = (r ? r.ranked : []).filter(function (x) { return x.score > 0; });
+    var near = scored.slice(0, 3);
+
+    if (near.length < 3) {
+      STARTERS.forEach(function (id) {
+        if (near.length >= 3) return;
+        var t = themeById(id);
+        if (!t) return;
+        for (var i = 0; i < near.length; i++) if (near[i].theme.id === id) return;
+        near.push({ theme: t, score: 0 });
+      });
+    }
+
+    var hasSignal = scored.length > 0;
 
     app.innerHTML = '' +
       '<div class="result">' +
@@ -327,7 +348,7 @@
         '</header>' +
 
         '<div class="nearest">' +
-          '<h3>可 能 相 近 的 三 条</h3>' +
+          '<h3>' + (hasSignal ? '可 能 相 近 的 三 条' : '不 妨 从 这 几 条 看 起') + '</h3>' +
           '<div class="nearest-list">' +
             near.map(function (x) {
               return '<a class="nearest-item reveal" href="#/t/' + encodeURIComponent(x.theme.id) + '">' +
