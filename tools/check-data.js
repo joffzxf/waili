@@ -1,0 +1,206 @@
+#!/usr/bin/env node
+/* 千江月 · 语料与匹配自检
+ * 用法：node tools/check-data.js
+ * 退出码 0 = 全部通过；1 = 有失败项
+ */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+
+const ROOT = path.join(__dirname, '..');
+
+/* ---------- 载入浏览器脚本 ---------- */
+const sandbox = { console };
+sandbox.window = sandbox;
+sandbox.globalThis = sandbox;
+vm.createContext(sandbox);
+
+['assets/data.js', 'assets/data-2.js', 'assets/match.js'].forEach(function (f) {
+  const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  vm.runInContext(src, sandbox, { filename: f });
+});
+
+const WISDOM = sandbox.window.WISDOM;
+const QJY = sandbox.window.QJY;
+const THEMES = WISDOM.themes;
+
+let fails = 0;
+let checks = 0;
+
+function ok(cond, label, extra) {
+  checks++;
+  if (!cond) {
+    fails++;
+    console.log('  ✗ ' + label + (extra ? '  → ' + extra : ''));
+  }
+}
+function section(name) { console.log('\n' + name); }
+
+/* ---------- 1. 结构完整性 ---------- */
+section('【1】结构完整性');
+
+const ids = new Set();
+let totalCanon = 0;
+
+THEMES.forEach(function (t, idx) {
+  const tag = '主题#' + (idx + 1) + ' ' + (t.id || '(无 id)');
+  ok(typeof t.id === 'string' && t.id.length > 0, tag + ' id');
+  ok(!ids.has(t.id), tag + ' id 唯一', '重复: ' + t.id);
+  ids.add(t.id);
+
+  ok(typeof t.name === 'string' && t.name.length > 0, tag + ' name');
+  ok(typeof t.gist === 'string' && t.gist.length >= 8, tag + ' gist');
+  ok(Array.isArray(t.keywords) && t.keywords.length >= 5, tag + ' keywords>=5',
+    '实际 ' + (t.keywords || []).length);
+
+  ok(Array.isArray(t.canon) && t.canon.length >= 5, tag + ' canon>=5',
+    '实际 ' + (t.canon || []).length);
+  (t.canon || []).forEach(function (c, i) {
+    const ct = tag + ' canon[' + i + ']';
+    ['r', 'k', 't', 's', 'n'].forEach(function (f) {
+      ok(typeof c[f] === 'string' && c[f].trim().length > 0, ct + '.' + f);
+    });
+    ok(c.t && c.t.length >= 6, ct + ' 原文过短');
+    ok(c.s && /[《〔（(]|谚语|铭文|民谣|残篇|存疑/.test(c.s), ct + ' 出处格式可疑', c.s);
+    totalCanon++;
+  });
+
+  const h = t.history || {};
+  ok(h.stance === 'model' || h.stance === 'contrast', tag + ' history.stance', h.stance);
+  ok(typeof h.title === 'string' && h.title.length > 0, tag + ' history.title');
+  ok(typeof h.era === 'string' && h.era.length > 0, tag + ' history.era');
+  ok(typeof h.body === 'string' && h.body.length >= 80, tag + ' history.body 过短',
+    (h.body || '').length + ' 字');
+  ok(typeof h.lesson === 'string' && h.lesson.length >= 20, tag + ' history.lesson 过短');
+
+  ok(Array.isArray(t.questions) && t.questions.length >= 3, tag + ' questions>=3');
+  ok(Array.isArray(t.actions) && t.actions.length >= 2, tag + ' actions>=2');
+
+  // 每主题应有中外双向引证
+  const cn = t.canon.filter(function (c) { return String(c.r).charAt(0) === '中'; }).length;
+  const other = t.canon.length - cn;
+  ok(cn >= 1, tag + ' 缺中国引证');
+  ok(other >= 2, tag + ' 缺域外引证', '域外仅 ' + other + ' 条');
+
+  // 正面范例与反面教训都要有（全库层面检查）
+});
+
+const stances = THEMES.map(function (t) { return t.history.stance; });
+ok(stances.indexOf('model') !== -1, '全库含正面范例');
+ok(stances.indexOf('contrast') !== -1, '全库含反面教训');
+
+ok(THEMES.length >= 12, '主题数量 >= 12', '实际 ' + THEMES.length);
+ok(Array.isArray(WISDOM.generic.questions) && WISDOM.generic.questions.length >= 3, 'generic.questions');
+ok(Array.isArray(WISDOM.generic.actions) && WISDOM.generic.actions.length >= 2, 'generic.actions');
+
+console.log('  主题 ' + THEMES.length + ' 条 · 引证 ' + totalCanon + ' 条 · 史案 ' + THEMES.length + ' 则');
+
+/* ---------- 2. 引文防伪 ---------- */
+section('【2】引文防伪');
+
+// 同一句原文不应出现在多个主题里（避免占位式复制）
+const seen = new Map();
+THEMES.forEach(function (t) {
+  t.canon.forEach(function (c) {
+    const key = c.t.replace(/\s/g, '');
+    if (seen.has(key)) {
+      ok(false, '引文重复出现', '「' + c.t.slice(0, 18) + '…」同时见于 ' +
+        seen.get(key) + ' 与 ' + t.id);
+    } else {
+      seen.set(key, t.id);
+    }
+  });
+});
+
+// 标为「存疑」的条目必须自己说明了出处可疑，不能伪装成确证
+THEMES.forEach(function (t) {
+  t.canon.forEach(function (c) {
+    if (c.k === '存疑') {
+      ok(/存疑|不确|误植|归于|概括/.test(c.s + c.n), t.id + ' 存疑条目须注明', c.s);
+    }
+  });
+});
+
+/* ---------- 3. 匹配准确率 ---------- */
+section('【3】匹配准确率');
+
+QJY.prepare(THEMES);
+
+const CASES = [
+  // 用户可能怎么问 → 期望主题
+  ['欲速则不达', 'yusu'],
+  ['不要急功近利', 'yusu'],
+  ['我太着急了', 'yusu'],
+  ['揠苗助长', 'yusu'],
+  ['坚持就是胜利', 'jibu'],
+  ['每天进步一点点', 'jibu'],
+  ['水滴石穿', 'jibu'],
+  ['人不能骄傲', 'manzhao'],
+  ['太得意会出事', 'manzhao'],
+  ['居安思危', 'yuhuan'],
+  ['生于忧患死于安乐', 'yuhuan'],
+  ['认清自己', 'zizhi'],
+  ['要经常反省自己', 'zizhi'],
+  ['看清自己很难', 'zizhi'],
+  ['知道很多道理，仍然过不好', 'zhixing'],
+  ['纸上谈兵', 'zhixing'],
+  ['道理都懂就是做不到', 'zhixing'],
+  ['以柔克刚', 'ruoshui'],
+  ['硬碰硬没有用', 'ruoshui'],
+  ['千里之堤溃于蚁穴', 'yixue'],
+  ['细节决定成败', 'yixue'],
+  ['己所不欲，勿施于人', 'jisuo'],
+  ['要懂得换位思考', 'jisuo'],
+  ['倒霉的事可能是好事', 'huoxi'],
+  ['塞翁失马', 'huoxi'],
+  ['说话要留有余地', 'liuyibu'],
+  ['过犹不及', 'liuyibu'],
+  ['怎么才能记住教训', 'qianshi'],
+  ['以史为镜', 'qianshi'],
+  ['答应别人的事要做到', 'yinuo'],
+  ['做人要讲信用', 'yinuo'],
+  ['团队里有不同意见怎么办', 'heertong'],
+  ['君子和而不同', 'heertong'],
+  ['没人看见的时候', 'shendu'],
+  ['自律很难', 'shendu']
+];
+
+let hitCount = 0;
+CASES.forEach(function (pair) {
+  const q = pair[0], want = pair[1];
+  const r = QJY.match(q, THEMES);
+  const got = r.hit ? r.hit.id : '(未命中)';
+  const pass = got === want;
+  if (pass) hitCount++;
+  ok(pass, '「' + q + '」→ ' + want, '实得 ' + got +
+    (r.ranked && r.ranked[0] ? ' (最高分 ' + r.ranked[0].score.toFixed(1) + ')' : ''));
+});
+
+// 首页示例 chip 必须都能命中
+const CHIPS = ['欲速则不达', '知道很多道理，仍然过不好', '太骄傲会出事',
+  '己所不欲，勿施于人', '怎么才能记住教训', '没人看见的时候'];
+CHIPS.forEach(function (c) {
+  const r = QJY.match(c, THEMES);
+  ok(!!r.hit, '首页示例「' + c + '」必须命中', '未命中');
+});
+
+// 无关输入不应硬凑一个主题
+const NEG = ['今天天气怎么样', '帮我写一段 python 代码', '明天开会吗'];
+NEG.forEach(function (q) {
+  const r = QJY.match(q, THEMES);
+  ok(!r.hit, '无关输入「' + q + '」不应命中', '误命中 ' + (r.hit && r.hit.id));
+});
+
+console.log('  匹配用例 ' + hitCount + ' / ' + CASES.length + ' 命中预期');
+
+/* ---------- 汇总 ---------- */
+console.log('\n' + '─'.repeat(52));
+if (fails === 0) {
+  console.log('✓ 全部通过（' + checks + ' 项检查）');
+  process.exit(0);
+} else {
+  console.log('✗ 失败 ' + fails + ' 项 / 共 ' + checks + ' 项检查');
+  process.exit(1);
+}

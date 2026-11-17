@@ -7,6 +7,9 @@ miniprogram_npm/
 project.private.config.json
 .wechatide/
 
+# 本地冒烟测试产物（截图、DOM dump、排版探针）
+.tmp-smoke/
+
 # 构建产物
 dist/
 build/
