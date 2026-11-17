@@ -10,7 +10,8 @@
   function norm(list) {
     if (!Array.isArray(list)) return [];
     return list.filter(function (x) {
-      return x && typeof x.t === 'string' && x.t && typeof x.i === 'number' && x.i >= 0;
+      /* i = -1 表示收藏的是整条主题（不是某一句引证） */
+      return x && typeof x.t === 'string' && x.t && typeof x.i === 'number' && x.i >= -1;
     });
   }
 

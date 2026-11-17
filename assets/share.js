@@ -197,5 +197,110 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
   }
 
-  root.QJY_SHARE = { render: render, download: download, SIZES: SIZES };
+  /* 三观坐标图：四根轴 + 亲近的文明 + 一句你最认同的话 */
+  function renderProfile(opts) {
+    opts = opts || {};
+    var W = 1080, H = 1440;
+    var pad = Math.round(W * 0.1);
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+
+    return svgToImage(opts.art || '').then(function (img) {
+      var ir = img.width / img.height, cr = W / H, dw, dh;
+      if (ir > cr) { dh = H; dw = H * ir; } else { dw = W; dh = W / ir; }
+      ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+
+      var g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, 'rgba(8,7,6,.55)');
+      g.addColorStop(0.5, 'rgba(8,7,6,.28)');
+      g.addColorStop(1, 'rgba(8,7,6,.88)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+
+      var ink = '#f3ecdd';
+      ctx.textBaseline = 'top';
+
+      ctx.fillStyle = 'rgba(243,236,221,.6)';
+      ctx.font = '500 ' + Math.round(W * 0.024) + 'px ' + FONT_SANS;
+      ctx.fillText('千　江　月', pad, pad);
+
+      ctx.fillStyle = ink;
+      ctx.font = '600 ' + Math.round(W * 0.072) + 'px ' + FONT_SERIF;
+      ctx.fillText('三观坐标', pad, H * 0.13);
+
+      ctx.fillStyle = 'rgba(243,236,221,.6)';
+      ctx.font = Math.round(W * 0.026) + 'px ' + FONT_SANS;
+      ctx.fillText('由 12 句话算出 · 不是心理测量，是一面镜子', pad, H * 0.13 + W * 0.1);
+
+      /* 四轴 */
+      var axes = opts.axes || [];
+      var scores = opts.scores || {};
+      var top = H * 0.30;
+      var rowH = H * 0.105;
+      var barW = W - pad * 2;
+
+      axes.forEach(function (a, i) {
+        var y = top + i * rowH;
+        var v = Math.max(-100, Math.min(100, scores[a.id] || 0));
+
+        ctx.fillStyle = 'rgba(243,236,221,.82)';
+        ctx.font = Math.round(W * 0.025) + 'px ' + FONT_SANS;
+        ctx.textAlign = 'left';
+        ctx.fillText(a.neg, pad, y);
+        ctx.textAlign = 'right';
+        ctx.fillText(a.pos, W - pad, y);
+        ctx.textAlign = 'left';
+
+        var trackY = y + W * 0.042;
+        ctx.fillStyle = 'rgba(243,236,221,.18)';
+        ctx.fillRect(pad, trackY, barW, 3);
+        ctx.fillStyle = 'rgba(243,236,221,.45)';
+        ctx.fillRect(pad + barW / 2 - 1, trackY - 5, 2, 13);
+
+        var half = barW / 2;
+        var x = pad + half + (v / 100) * half;
+        ctx.fillStyle = v >= 0 ? '#c8563f' : '#7fb3b8';
+        ctx.fillRect(Math.min(pad + half, x), trackY - 4, Math.abs(x - (pad + half)), 11);
+        ctx.beginPath();
+        ctx.arc(x, trackY + 1.5, 7, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      /* 亲近的文明 */
+      var ty = top + axes.length * rowH + H * 0.03;
+      ctx.fillStyle = 'rgba(243,236,221,.55)';
+      ctx.font = Math.round(W * 0.021) + 'px ' + FONT_SANS;
+      ctx.fillText('最亲近的文明', pad, ty);
+      ctx.fillStyle = ink;
+      ctx.font = '600 ' + Math.round(W * 0.038) + 'px ' + FONT_SERIF;
+      ctx.fillText((opts.traditions || []).join('　·　') || '没有明显偏向', pad, ty + W * 0.04);
+
+      /* 最认同的一句 */
+      if (opts.line) {
+        var ly = ty + W * 0.13;
+        ctx.fillStyle = 'rgba(243,236,221,.55)';
+        ctx.font = Math.round(W * 0.021) + 'px ' + FONT_SANS;
+        ctx.fillText('最认同的一句', pad, ly);
+        var f = fitText(ctx, opts.line, barW, 3, Math.round(W * 0.036), Math.round(W * 0.026), '600');
+        ctx.fillStyle = ink;
+        ctx.font = '600 ' + f.size + 'px ' + FONT_SERIF;
+        f.lines.forEach(function (line, i) {
+          ctx.fillText(line, pad, ly + W * 0.04 + i * f.size * 1.6);
+        });
+      }
+
+      ctx.fillStyle = 'rgba(243,236,221,.4)';
+      ctx.font = Math.round(W * 0.019) + 'px ' + FONT_SANS;
+      ctx.fillText('千江月 · 一句道理，千江映月', pad, H - pad);
+
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (blob) {
+          if (blob) resolve(blob); else reject(new Error('toBlob 失败'));
+        }, 'image/png');
+      });
+    });
+  }
+
+  root.QJY_SHARE = { render: render, renderProfile: renderProfile, download: download, SIZES: SIZES };
 })(typeof window !== 'undefined' ? window : globalThis);

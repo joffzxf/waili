@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -467,14 +467,77 @@ if (SH) {
 
   ok(SH.deserialize('这不是 JSON').length === 0, '坏 JSON 不应抛错');
   ok(SH.deserialize(JSON.stringify([{ t: 'c', i: 1 }, { t: 'c', i: 1 }])).length === 1, '导入应去重');
-  ok(SH.deserialize(JSON.stringify({ items: [{ t: 'x' }, { t: 'y', i: -1 }, { t: 'z', i: 0 }] })).length === 1,
-    '非法条目（缺下标或下标为负）应被过滤');
+  /* i = -1 是合法值：表示收藏整条主题；-2 及更小才是非法 */
+  ok(SH.deserialize(JSON.stringify({ items: [{ t: 'x' }, { t: 'y', i: -2 }, { t: 'z', i: 0 }] })).length === 1,
+    '非法条目（缺下标或下标小于 -1）应被过滤');
+  ok(SH.deserialize(JSON.stringify({ items: [{ t: 'w', i: -1 }] })).length === 1,
+    '-1 应作为「整条主题」被接受');
 
   var grouped = SH.group(SH.toggle(SH.toggle([], 'a', 1), 'b', 2),
     [{ id: 'a', name: '甲' }, { id: 'b', name: '乙' }]);
   ok(grouped.length === 2 && grouped[0].theme.name === '甲', '分组应按主题聚合且取到主题名');
 
   console.log('  册子逻辑：切换、去重、往返、分组均已校验');
+}
+
+/* ---------- 9. 三观坐标（12 题） ---------- */
+section('【9】三观坐标');
+
+const QZ = sandbox.window.QJY_QUIZ;
+ok(!!QZ && Array.isArray(QZ.ITEMS), 'quiz.js 已加载');
+
+if (QZ) {
+  ok(QZ.ITEMS.length === 12, '题量应为 12', String(QZ.ITEMS.length));
+
+  /* 每轴恰好 3 题，且正反都有——否则某一轴会被同向堆叠拉偏 */
+  QZ.AXES.forEach(function (a) {
+    const mine = QZ.ITEMS.filter(function (it) { return it.axis === a.id; });
+    ok(mine.length === 3, '轴 ' + a.id + ' 应有 3 题', String(mine.length));
+    ok(mine.some(function (it) { return it.dir > 0; }), '轴 ' + a.id + ' 缺正向题');
+    ok(mine.some(function (it) { return it.dir < 0; }), '轴 ' + a.id + ' 缺反向题');
+  });
+
+  /* 每题都要挂到一条真实存在的道理上，结果页才能链回去 */
+  QZ.ITEMS.forEach(function (it) {
+    ok(THEMES.some(function (t) { return t.id === it.theme; }),
+      '题 ' + it.id + ' 指向的主题应存在：' + it.theme);
+    ok(typeof it.text === 'string' && it.text.length >= 8, '题 ' + it.id + ' 应有完整断言');
+  });
+
+  /* 全选「同意」不应给出清一色的结果——那说明题目同向堆叠了 */
+  const allAgree = QZ.score([4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]);
+  const vals = QZ.AXES.map(function (a) { return allAgree[a.id]; });
+  ok(vals.some(function (v) { return v > 0; }) && vals.some(function (v) { return v < 0; }),
+    '全选「同意」时四轴应正负并存', vals.join(','));
+  ok(vals.every(function (v) { return Math.abs(v) <= 100; }), '轴分应落在 -100..100');
+
+  /* 全选中立 → 四轴全 0 */
+  const neutral = QZ.score([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]);
+  ok(QZ.AXES.every(function (a) { return neutral[a.id] === 0; }), '全选中立时四轴应为 0');
+
+  /* 编码往返 */
+  const sample = [4, 3, 2, 1, 0, 4, 2, 2, 3, 1, 0, 4];
+  const code = QZ.encode(sample);
+  const back = QZ.decode(code);
+  ok(!!back && back.join(',') === sample.join(','), '编码解码应无损');
+  ok(code.length === 14 && code.slice(0, 2) === 'q1', '编码应为 q1 + 12 位');
+  ok(QZ.decode('q1') === null, '长度不对应返回 null');
+  ok(QZ.decode('q199999999999') === null, '含非法字符应返回 null');
+  ok(QZ.decode('') === null, '空编码应返回 null');
+
+  /* 文明亲和度 */
+  const tr = QZ.traditions(sample, THEMES);
+  ok(Array.isArray(tr.top) && tr.ranked.length === QZ.GROUPS.length, '应返回完整的分组排名');
+  ok(tr.top.length <= 3, '最亲近的文明最多 3 个');
+  tr.top.forEach(function (x) {
+    ok(typeof x.name === 'string' && x.name.length > 0, '分组应有中文名');
+  });
+
+  /* 「保留态度」计数 */
+  ok(QZ.reservedCount([3, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]) === 2, '部分同意/部分不同意应计入保留');
+
+  console.log('  四轴 ' + QZ.AXES.length + ' · 题目 ' + QZ.ITEMS.length +
+    ' · 文明分组 ' + QZ.GROUPS.length + ' · 编解码与计分已校验');
 }
 
 /* ---------- 汇总 ---------- */

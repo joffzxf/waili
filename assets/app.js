@@ -16,7 +16,8 @@
     last: 'qjy.last',
     journal: 'qjy.journal',     // 勾选过的行动（用于下次回访）
     outcome: 'qjy.outcome',     // 回访结果 done / missed
-    fav: 'qjy.fav'              // 册子（收藏）
+    fav: 'qjy.fav',             // 册子（收藏）
+    quiz: 'qjy.quiz'            // 三观坐标的作答
   };
   var lastQuery = '';
 
@@ -663,6 +664,16 @@
                 '<span class="shelf-group-n">' + g.items.length + '</span>' +
               '</h2>' +
               g.items.map(function (it) {
+                if (it.i === -1) {
+                  return '' +
+                    '<article class="shelf-item">' +
+                      '<p class="shelf-quote">' + esc(g.theme.name) + '</p>' +
+                      '<p class="shelf-src">' + esc(g.theme.gist || '') +
+                        '<button type="button" class="act-btn" data-act="fav" data-t="' +
+                          esc(g.theme.id) + '" data-i="-1">移出</button>' +
+                      '</p>' +
+                    '</article>';
+                }
                 var c = g.theme.canon && g.theme.canon[it.i];
                 if (!c) return '';
                 return '' +
@@ -729,6 +740,194 @@
       });
     });
     document.getElementById('shelf-all').addEventListener('click', function () { navigate('#/all'); });
+  }
+
+  /* ---------------- 视图：三观坐标 ---------------- */
+
+  function renderQuiz() {
+    var Q = window.QJY_QUIZ;
+    var saved = lsGet(KEY.quiz, null);
+    var answers = (Array.isArray(saved) && saved.length === Q.ITEMS.length)
+      ? saved.slice() : Q.ITEMS.map(function () { return null; });
+
+    var items = Q.ITEMS.map(function (it, i) {
+      return '' +
+        '<li class="q-item" data-i="' + i + '">' +
+          '<p class="q-text"><span class="q-no">' + (i + 1) + '</span>' + esc(it.text) + '</p>' +
+          '<div class="q-scale" role="group" aria-label="第 ' + (i + 1) + ' 题">' +
+            Q.LABELS.map(function (lb, v) {
+              return '<button type="button" class="q-opt" data-q="' + i + '" data-v="' + v + '" ' +
+                'aria-pressed="' + (answers[i] === v ? 'true' : 'false') + '"' +
+                (answers[i] === v ? ' class="q-opt on"' : '') + '>' + lb + '</button>';
+            }).join('') +
+          '</div>' +
+        '</li>';
+    }).join('');
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>三 观 坐 标</h1>' +
+        '<p>12 句话 · 没有对的答案 · 只在照见你怎么看</p>' +
+      '</header>' +
+      '<p class="quiz-intro reveal">' +
+        '这些都是可以被反对的话。同意也好，反对也好，' +
+        '选中间也可以——但「部分同意」和「中立」不是一回事，请尽量区分。' +
+      '</p>' +
+      '<ol class="q-list reveal">' + items + '</ol>' +
+      '<div class="quiz-bar">' +
+        '<span class="quiz-progress" id="quiz-progress">0 / 12</span>' +
+        '<button type="button" class="btn btn-primary" id="quiz-go" disabled>看 我 的 坐 标</button>' +
+      '</div>';
+
+    function refresh() {
+      var done = answers.filter(function (a) { return a !== null; }).length;
+      document.getElementById('quiz-progress').textContent = done + ' / ' + Q.ITEMS.length;
+      var go = document.getElementById('quiz-go');
+      go.disabled = done < Q.ITEMS.length;
+      go.textContent = done < Q.ITEMS.length ? '还差 ' + (Q.ITEMS.length - done) + ' 题' : '看 我 的 坐 标';
+    }
+    refresh();
+
+    app.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.q-opt') : null;
+      if (!b) return;
+      var i = parseInt(b.getAttribute('data-q'), 10);
+      var v = parseInt(b.getAttribute('data-v'), 10);
+      answers[i] = v;
+      lsSet(KEY.quiz, answers);
+      var row = b.parentNode;
+      Array.prototype.forEach.call(row.children, function (c) {
+        c.classList.remove('on');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      b.classList.add('on');
+      b.setAttribute('aria-pressed', 'true');
+      refresh();
+    });
+
+    document.getElementById('quiz-go').addEventListener('click', function () {
+      if (answers.indexOf(null) !== -1) return;
+      lsSet(KEY.quiz, answers);
+      navigate('#/quiz/r/' + Q.encode(answers));
+    });
+  }
+
+  function renderQuizResult(code) {
+    var Q = window.QJY_QUIZ;
+    var answers = Q.decode(code);
+    if (!answers) {
+      app.innerHTML = '<section class="result"><p class="notice">这份坐标读不出来，可能是链接被截断了。' +
+        '<a href="#/quiz">重新做一次</a></p></section>';
+      return;
+    }
+
+    var scores = Q.score(answers);
+    var lines = Q.summary(scores);
+    var trad = Q.traditions(answers, THEMES);
+    var reserved = Q.reservedCount(answers);
+
+    var bars = lines.map(function (ln) {
+      var v = ln.value;
+      var pct = Math.abs(v) / 2;               /* 0..50 的半宽百分比 */
+      var style = v >= 0
+        ? 'left:50%;width:' + pct + '%;background:var(--zhu)'
+        : 'left:' + (50 - pct) + '%;width:' + pct + '%;background:var(--dai)';
+      return '' +
+        '<div class="axis">' +
+          '<div class="axis-head">' +
+            '<span class="axis-neg">' + esc(Q.AXES.filter(function (a) { return a.id === ln.axis; })[0].neg) + '</span>' +
+            '<span class="axis-val">' + (v > 0 ? '+' : '') + v + '</span>' +
+            '<span class="axis-pos">' + esc(Q.AXES.filter(function (a) { return a.id === ln.axis; })[0].pos) + '</span>' +
+          '</div>' +
+          '<div class="axis-track"><span class="axis-mid"></span><span class="axis-fill" style="' + style + '"></span></div>' +
+          '<p class="axis-desc">' + esc(ln.text) + '</p>' +
+        '</div>';
+    }).join('');
+
+    var tradLine = trad.top.length
+      ? trad.top.map(function (x) { return '<a href="#/all" class="trad-chip">' + esc(x.name) + '</a>'; }).join('')
+      : '<span class="trad-none">没有明显偏向</span>';
+
+    /* 最认同 / 最不认同 各一条，链回它的九文明 */
+    var ranked = Q.ITEMS.map(function (it, i) {
+      return { it: it, i: i, v: Number(answers[i]) };
+    }).sort(function (a, b) { return b.v - a.v; });
+    var top = ranked[0], bottom = ranked[ranked.length - 1];
+    function refLine(x, word) {
+      var t = themeById(x.it.theme);
+      return '' +
+        '<p class="pick">' +
+          '<span class="pick-tag">' + word + '</span>' +
+          esc(x.it.text) +
+          (t ? ' <a href="#/t/' + encodeURIComponent(t.id) + '">读这一条 →</a>' : '') +
+        '</p>';
+    }
+
+    var agreeThemes = ranked.filter(function (x) { return x.v >= 3; }).slice(0, 3).map(function (x) { return x.it.theme; });
+    var favCount = 0;
+    agreeThemes.forEach(function (id) {
+      if (!themeById(id)) return;
+      if (!SHELF.has(favRead(), id, -1)) favCount++;
+    });
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>你 的 三 观 坐 标</h1>' +
+        '<p>由 12 句话算出 · 这不是心理测量，是一面镜子</p>' +
+      '</header>' +
+
+      '<section class="axes reveal">' + bars + '</section>' +
+
+      '<section class="trads reveal">' +
+        '<h2 class="side-title">与你最亲近的文明</h2>' +
+        '<div class="trad-row">' + tradLine + '</div>' +
+        (trad.bottom ? '<p class="trad-bottom">最不亲近：' + esc(trad.bottom.name) + '</p>' : '') +
+        '<p class="trad-note">这个判断来自你同意的条目所对应的道理，而每条道理本身的引证跨哪些文明——用的是语料自带的出处字段，不是另编的标签。</p>' +
+      '</section>' +
+
+      '<section class="picks reveal">' +
+        refLine(top, '最认同') +
+        refLine(bottom, '最反对') +
+        (reserved ? '<p class="pick-note">有 ' + reserved + ' 题你选了「部分同意／部分不同意」，说明你在这些地方留了余地。</p>' : '') +
+      '</section>' +
+
+      '<div class="toolbar">' +
+        '<button type="button" class="btn btn-ghost" id="quiz-share">复制我的链接</button>' +
+        '<button type="button" class="btn btn-ghost" id="quiz-poster">保存坐标图</button>' +
+        '<button type="button" class="btn btn-ghost" id="quiz-shelf">把最认同的收进册子</button>' +
+        '<button type="button" class="btn btn-ghost" id="quiz-again">重做</button>' +
+      '</div>';
+
+    document.getElementById('quiz-share').addEventListener('click', function () {
+      copyText(location.origin + location.pathname + '#/quiz/r/' + code);
+    });
+    document.getElementById('quiz-again').addEventListener('click', function () { navigate('#/quiz'); });
+
+    document.getElementById('quiz-shelf').addEventListener('click', function () {
+      var list = favRead();
+      var added = 0;
+      agreeThemes.forEach(function (id) {
+        if (!themeById(id)) return;
+        if (SHELF.has(list, id, -1)) return;
+        list = SHELF.toggle(list, id, -1, { text: themeById(id).name });
+        added++;
+      });
+      favWrite(list);
+      showTip(added ? '已收进 ' + added + ' 条' : '这几条已经在册子里了');
+    });
+
+    document.getElementById('quiz-poster').addEventListener('click', function () {
+      if (!window.QJY_SHARE || !window.QJY_SHARE.renderProfile) { showTip('暂不可用'); return; }
+      window.QJY_SHARE.renderProfile({
+        scores: scores,
+        axes: Q.AXES,
+        traditions: trad.top.map(function (x) { return x.name; }),
+        line: top.it.text
+      }).then(function (blob) {
+        window.QJY_SHARE.download(blob, '千江月-三观坐标.png');
+        showTip('已保存');
+      })['catch'](function () { showTip('保存失败'); });
+    });
   }
 
   function renderAll() {
@@ -960,6 +1159,10 @@
       renderAll();
     } else if (h === '/shelf') {
       renderShelf();
+    } else if (h === '/quiz') {
+      renderQuiz();
+    } else if (h.indexOf('/quiz/r/') === 0) {
+      renderQuizResult(decodeURIComponent(h.slice(8)));
     } else if (h.indexOf('/t/') === 0) {
       renderTheme(decodeURIComponent(h.slice(3)));
     } else if (h.indexOf('/miss/') === 0) {
@@ -984,6 +1187,8 @@
 
   document.getElementById('btn-random').addEventListener('click', goRandom);
   document.getElementById('btn-all').addEventListener('click', function () { navigate('#/all'); });
+  var quizBtn = document.getElementById('btn-quiz');
+  if (quizBtn) quizBtn.addEventListener('click', function () { navigate('#/quiz'); });
   var shelfBtn = document.getElementById('btn-shelf');
   if (shelfBtn) shelfBtn.addEventListener('click', function () { navigate('#/shelf'); });
   bindCardActions();

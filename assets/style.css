@@ -1256,6 +1256,195 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
 }
 
 
+/* ---------- 三观坐标 ---------- */
+
+.quiz-intro {
+  max-width: 34em;
+  margin: 18px auto 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--ink-3);
+}
+
+.q-list { margin: 36px 0 0; padding: 0; list-style: none; }
+
+.q-item {
+  padding: 22px 0 20px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.q-item:last-child { border-bottom: 0; }
+
+.q-text {
+  margin: 0 0 14px;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.85;
+  letter-spacing: .01em;
+}
+.q-no {
+  display: inline-block;
+  width: 1.9em;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: .1em;
+  vertical-align: 2px;
+}
+
+.q-scale { display: flex; gap: 6px; flex-wrap: wrap; padding-left: 1.9em; }
+
+.q-opt {
+  appearance: none;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: .04em;
+  padding: 6px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all .16s;
+}
+.q-opt:hover { border-color: rgba(166, 58, 46, .4); color: var(--zhu); }
+.q-opt.on {
+  background: var(--zhu);
+  border-color: var(--zhu);
+  color: #fff9f0;
+}
+.q-opt:focus-visible { outline: 2px solid var(--zhu); outline-offset: 1px; }
+
+.quiz-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 26px;
+  padding: 14px 16px;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  box-shadow: 0 -8px 24px -18px rgba(0, 0, 0, .5);
+}
+.quiz-progress {
+  font-size: 12px;
+  letter-spacing: .14em;
+  color: var(--ink-3);
+}
+
+/* 结果页 */
+.axes { margin: 40px 0 0; }
+.axis { padding: 18px 0; border-bottom: 1px dashed var(--rule-soft); }
+.axis:last-child { border-bottom: 0; }
+
+.axis-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+  margin-bottom: 9px;
+}
+.axis-pos { color: var(--zhu); }
+.axis-val {
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0;
+}
+
+.axis-track {
+  position: relative;
+  height: 1px;
+  margin: 8px 0 6px;
+  background: var(--rule);
+}
+.axis-mid {
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 1px;
+  height: 11px;
+  background: var(--ink-3);
+  opacity: .45;
+}
+.axis-fill {
+  position: absolute;
+  top: -3.5px;
+  height: 8px;
+  border-radius: 2px;
+  opacity: .82;
+}
+
+.axis-desc {
+  margin: 12px 0 0;
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: var(--ink-2);
+}
+
+.trads { margin-top: 42px; }
+.side-title {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  color: var(--ink-2);
+  margin: 0 0 14px;
+}
+.trad-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.trad-chip {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid rgba(166, 58, 46, .35);
+  border-radius: 999px;
+  color: var(--zhu);
+  text-decoration: none;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: .04em;
+}
+.trad-chip:hover { background: var(--zhu-soft); }
+.trad-none { font-size: 13px; color: var(--ink-3); }
+.trad-bottom { margin: 12px 0 0; font-size: 12.5px; color: var(--ink-3); }
+.trad-note {
+  margin: 14px 0 0;
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: var(--ink-3);
+}
+
+.picks { margin-top: 40px; }
+.pick {
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  background: var(--paper-2);
+  border-left: 2px solid var(--zhu);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.9;
+}
+.pick-tag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 0 6px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+  vertical-align: 2px;
+}
+.pick a { color: var(--zhu); text-decoration: none; font-size: 13px; }
+.pick a:hover { text-decoration: underline; }
+.pick-note { margin: 6px 0 0; font-size: 12px; color: var(--ink-3); }
 /* ---------- 卡片级动作 / 册子 ---------- */
 
 .card-acts {
