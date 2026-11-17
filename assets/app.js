@@ -17,7 +17,9 @@
     journal: 'qjy.journal',     // 勾选过的行动（用于下次回访）
     outcome: 'qjy.outcome',     // 回访结果 done / missed
     fav: 'qjy.fav',             // 册子（收藏）
-    quiz: 'qjy.quiz'            // 三观坐标的作答
+    quiz: 'qjy.quiz',           // 三观坐标（12 题）作答
+    quizFull: 'qjy.quizFull',   // 三观坐标（44 题）作答
+    scheme: 'qjy.scheme'        // 册子的分类法（scene / subject / 空＝按主题）
   };
   var lastQuery = '';
 
@@ -653,53 +655,105 @@
 
   function renderShelf() {
     var list = favRead();
-    var groups = SHELF.group(list, THEMES);
+    var schemeId = lsGet(KEY.scheme, '') || '';
+    var SCH = window.QJY_SCHEMES;
+    var byScheme = schemeId && SCH ? SCH.arrange(list, THEMES, schemeId) : null;
 
-    var body = groups.length
-      ? groups.map(function (g) {
-          return '' +
-            '<section class="shelf-group">' +
-              '<h2 class="shelf-group-title">' +
-                '<a href="#/t/' + encodeURIComponent(g.theme.id) + '">' + esc(g.theme.name) + '</a>' +
-                '<span class="shelf-group-n">' + g.items.length + '</span>' +
-              '</h2>' +
-              g.items.map(function (it) {
-                if (it.i === -1) {
+    /* 两种视图：按主题（默认）／按分类法 */
+    var body;
+    if (!list.length) {
+      body = '<div class="notice">册子还是空的。看到想留的那一句，点它右下角的「☆ 收藏」。</div>';
+    } else if (byScheme) {
+      body = byScheme.length
+        ? byScheme.map(function (g) {
+            return '' +
+              '<section class="shelf-group">' +
+                '<h2 class="shelf-group-title">' + esc(g.name) +
+                  '<span class="shelf-group-n">' + g.items.length + '</span></h2>' +
+                g.items.map(function (it) {
+                  var t = themeById(it.t);
+                  if (!t) return '';
+                  var sub = it.i === -1 ? (t.gist || '') : ((t.canon[it.i] && t.canon[it.i].t) || '');
                   return '' +
                     '<article class="shelf-item">' +
-                      '<p class="shelf-quote">' + esc(g.theme.name) + '</p>' +
-                      '<p class="shelf-src">' + esc(g.theme.gist || '') +
+                      '<p class="shelf-quote"><a href="#/t/' + encodeURIComponent(t.id) + '">' +
+                        esc(t.name) + '</a></p>' +
+                      '<p class="shelf-src">' + esc(sub.slice(0, 48)) +
                         '<button type="button" class="act-btn" data-act="fav" data-t="' +
-                          esc(g.theme.id) + '" data-i="-1">移出</button>' +
+                          esc(t.id) + '" data-i="' + it.i + '">移出</button>' +
                       '</p>' +
                     '</article>';
-                }
-                var c = g.theme.canon && g.theme.canon[it.i];
-                if (!c) return '';
+                }).join('') +
+              '</section>';
+          }).join('')
+        : '<div class="notice">这套分类法下还没有条目。</div>';
+    } else {
+      body = SHELF.group(list, THEMES).map(function (g) {
+        return '' +
+          '<section class="shelf-group">' +
+            '<h2 class="shelf-group-title">' +
+              '<a href="#/t/' + encodeURIComponent(g.theme.id) + '">' + esc(g.theme.name) + '</a>' +
+              '<span class="shelf-group-n">' + g.items.length + '</span>' +
+            '</h2>' +
+            g.items.map(function (it) {
+              if (it.i === -1) {
                 return '' +
                   '<article class="shelf-item">' +
-                    '<p class="shelf-quote">' + esc(c.t) + '</p>' +
-                    '<p class="shelf-src">' + esc(c.s) +
+                    '<p class="shelf-quote">' + esc(g.theme.name) + '</p>' +
+                    '<p class="shelf-src">' + esc(g.theme.gist || '') +
                       '<button type="button" class="act-btn" data-act="fav" data-t="' +
-                        esc(g.theme.id) + '" data-i="' + it.i + '">移出</button>' +
+                        esc(g.theme.id) + '" data-i="-1">移出</button>' +
                     '</p>' +
                   '</article>';
-              }).join('') +
-            '</section>';
-        }).join('')
-      : '<div class="notice">册子还是空的。看到想留的那一句，点它右下角的「☆ 收藏」。</div>';
+              }
+              var c = g.theme.canon && g.theme.canon[it.i];
+              if (!c) return '';
+              return '' +
+                '<article class="shelf-item">' +
+                  '<p class="shelf-quote">' + esc(c.t) + '</p>' +
+                  '<p class="shelf-src">' + esc(c.s) +
+                    '<button type="button" class="act-btn" data-act="fav" data-t="' +
+                      esc(g.theme.id) + '" data-i="' + it.i + '">移出</button>' +
+                  '</p>' +
+                '</article>';
+            }).join('') +
+          '</section>';
+      }).join('');
+    }
+
+    var schemeBar = SCH && SCH.list.length
+      ? '<div class="scheme-bar">' +
+          '<button type="button" class="scheme-chip' + (schemeId ? '' : ' on') + '" data-scheme="">按主题</button>' +
+          SCH.list.map(function (s) {
+            return '<button type="button" class="scheme-chip' + (schemeId === s.id ? ' on' : '') +
+              '" data-scheme="' + s.id + '" title="' + esc(s.hint) + '">' + esc(s.name) + '</button>';
+          }).join('') +
+        '</div>'
+      : '';
+
+    var counts = byScheme
+      ? list.length + ' 条 · ' + byScheme.length + ' 组'
+      : list.length + ' 条 · ' + (list.length ? SHELF.group(list, THEMES).length : 0) + ' 个主题';
 
     app.innerHTML = '' +
       '<header class="all-head reveal">' +
         '<h1>我 的 册 子</h1>' +
-        '<p>' + (list.length ? '已收 ' + list.length + ' 条 · ' + groups.length + ' 个主题' : '还没有开始') + '</p>' +
+        '<p>' + (list.length ? counts : '还没有开始') + '</p>' +
       '</header>' +
+      schemeBar +
       '<div class="shelf-body">' + body + '</div>' +
       '<div class="toolbar">' +
         '<button type="button" class="btn btn-ghost" id="shelf-export">导出 JSON</button>' +
         '<button type="button" class="btn btn-ghost" id="shelf-import">导入 JSON</button>' +
         '<button type="button" class="btn btn-ghost" id="shelf-all">万理一览</button>' +
       '</div>';
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-scheme]'), function (b) {
+      b.addEventListener('click', function () {
+        lsSet(KEY.scheme, b.getAttribute('data-scheme'));
+        route();
+      });
+    });
 
     document.getElementById('shelf-export').addEventListener('click', function () {
       downloadText('千江月-册子.json', SHELF.serialize(favRead()));
@@ -777,7 +831,8 @@
       '<div class="quiz-bar">' +
         '<span class="quiz-progress" id="quiz-progress">0 / 12</span>' +
         '<button type="button" class="btn btn-primary" id="quiz-go" disabled>看 我 的 坐 标</button>' +
-      '</div>';
+      '</div>' +
+      '<p class="quiz-alt">想把每一根轴都量得更准？<a href="#/quiz/full">做 44 题全版诊断</a>（约 6 分钟）</p>';
 
     function refresh() {
       var done = answers.filter(function (a) { return a !== null; }).length;
@@ -927,6 +982,161 @@
         window.QJY_SHARE.download(blob, '千江月-三观坐标.png');
         showTip('已保存');
       })['catch'](function () { showTip('保存失败'); });
+    });
+  }
+
+  /* 44 题 · 诊断版 */
+  function renderQuizFull() {
+    var Q = window.QJY_QUIZ_FULL;
+    var saved = lsGet(KEY.quizFull, null);
+    var answers = (Array.isArray(saved) && saved.length === Q.ITEMS.length)
+      ? saved.slice() : Q.ITEMS.map(function () { return null; });
+
+    var items = Q.ITEMS.map(function (it, i) {
+      return '' +
+        '<li class="q-item" data-i="' + i + '">' +
+          '<p class="q-text"><span class="q-no">' + (i + 1) + '</span>' + esc(it.text) + '</p>' +
+          '<div class="q-scale" role="group" aria-label="第 ' + (i + 1) + ' 题">' +
+            Q.LABELS.map(function (lb, v) {
+              return '<button type="button" class="q-opt' + (answers[i] === v ? ' on' : '') + '" ' +
+                'data-q="' + i + '" data-v="' + v + '" aria-pressed="' + (answers[i] === v ? 'true' : 'false') + '">' +
+                lb + '</button>';
+            }).join('') +
+          '</div>' +
+        '</li>';
+    }).join('');
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>三 观 坐 标 · 全 版</h1>' +
+        '<p>44 句话 · 一条道理一题 · 给倾向强度</p>' +
+      '</header>' +
+      '<p class="quiz-intro reveal">' +
+        '这一版会比 12 题版更直接：先给你倾向的强度（强烈／明确／平缓），再给判断。' +
+        '不想要的题也可以选「中立」，但请尽量区分「部分同意」和「中立」。' +
+      '</p>' +
+      '<ol class="q-list reveal">' + items + '</ol>' +
+      '<div class="quiz-bar">' +
+        '<span class="quiz-progress" id="quiz-progress">0 / 44</span>' +
+        '<button type="button" class="btn btn-primary" id="quiz-go" disabled>看 诊 断</button>' +
+      '</div>';
+
+    function refresh() {
+      var done = answers.filter(function (a) { return a !== null; }).length;
+      document.getElementById('quiz-progress').textContent = done + ' / ' + Q.ITEMS.length;
+      var go = document.getElementById('quiz-go');
+      go.disabled = done < Q.ITEMS.length;
+      go.textContent = done < Q.ITEMS.length
+        ? '还差 ' + (Q.ITEMS.length - done) + ' 题'
+        : '看 诊 断';
+    }
+    refresh();
+
+    app.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.q-opt') : null;
+      if (!b) return;
+      var i = parseInt(b.getAttribute('data-q'), 10);
+      answers[i] = parseInt(b.getAttribute('data-v'), 10);
+      lsSet(KEY.quizFull, answers);
+      Array.prototype.forEach.call(b.parentNode.children, function (c) {
+        c.classList.remove('on');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      b.classList.add('on');
+      b.setAttribute('aria-pressed', 'true');
+      refresh();
+    });
+
+    document.getElementById('quiz-go').addEventListener('click', function () {
+      if (answers.indexOf(null) !== -1) return;
+      navigate('#/quiz/full/r/' + Q.encode(answers));
+    });
+  }
+
+  function renderQuizFullResult(code) {
+    var Q = window.QJY_QUIZ_FULL;
+    var answers = Q.decode(code);
+    if (!answers) {
+      app.innerHTML = '<section class="result"><p class="notice">这份诊断读不出来。' +
+        '<a href="#/quiz/full">重新做一次</a></p></section>';
+      return;
+    }
+
+    var scores = Q.score(answers);
+    var diag = Q.diagnose(scores);
+    var trad = Q.traditions(answers, THEMES);
+
+    var rows = diag.map(function (d) {
+      var v = d.value;
+      var pct = Math.abs(v) / 2;
+      var style = v >= 0
+        ? 'left:50%;width:' + pct + '%;background:var(--zhu)'
+        : 'left:' + (50 - pct) + '%;width:' + pct + '%;background:var(--dai)';
+      var ax = Q.AXES.filter(function (a) { return a.id === d.axis; })[0];
+      return '' +
+        '<div class="axis diag-' + d.tier + '">' +
+          '<div class="axis-head">' +
+            '<span class="axis-neg">' + esc(ax.neg) + '</span>' +
+            '<span class="tier-tag tier-' + d.tier + '">' + esc(d.tierName) + '</span>' +
+            '<span class="axis-val">' + (v > 0 ? '+' : '') + v + '</span>' +
+            '<span class="axis-pos">' + esc(ax.pos) + '</span>' +
+          '</div>' +
+          '<div class="axis-track"><span class="axis-mid"></span><span class="axis-fill" style="' + style + '"></span></div>' +
+          '<p class="axis-desc">' + esc(d.text) + '</p>' +
+        '</div>';
+    }).join('');
+
+    var ranked = Q.ITEMS.map(function (it, i) {
+      return { it: it, i: i, v: Number(answers[i]) };
+    }).sort(function (a, b) { return b.v - a.v; });
+    var top = ranked[0], bottom = ranked[ranked.length - 1];
+
+    function refLine(x, word) {
+      var t = themeById(x.it.theme);
+      return '<p class="pick"><span class="pick-tag">' + word + '</span>' + esc(x.it.text) +
+        (t ? ' <a href="#/t/' + encodeURIComponent(t.id) + '">读这一条 →</a>' : '') + '</p>';
+    }
+
+    var agreeThemes = ranked.filter(function (x) { return x.v >= 3; }).slice(0, 5).map(function (x) { return x.it.theme; });
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>三 观 诊 断</h1>' +
+        '<p>44 题全版 · 强度由作答的绝对幅度决定</p>' +
+      '</header>' +
+      '<section class="axes reveal">' + rows + '</section>' +
+      '<section class="trads reveal">' +
+        '<h2 class="side-title">与你最亲近的文明</h2>' +
+        '<div class="trad-row">' +
+          (trad.top.length
+            ? trad.top.map(function (x) { return '<span class="trad-chip">' + esc(x.name) + '</span>'; }).join('')
+            : '<span class="trad-none">没有明显偏向</span>') +
+        '</div>' +
+        (trad.bottom ? '<p class="trad-bottom">最不亲近：' + esc(trad.bottom.name) + '</p>' : '') +
+      '</section>' +
+      '<section class="picks reveal">' +
+        refLine(top, '最认同') + refLine(bottom, '最反对') +
+      '</section>' +
+      '<div class="toolbar">' +
+        '<button type="button" class="btn btn-ghost" id="qfull-share">复制诊断链接</button>' +
+        '<button type="button" class="btn btn-ghost" id="qfull-shelf">把最认同的收进册子</button>' +
+        '<button type="button" class="btn btn-ghost" id="qfull-again">重做</button>' +
+      '</div>';
+
+    document.getElementById('qfull-share').addEventListener('click', function () {
+      copyText(location.origin + location.pathname + '#/quiz/full/r/' + code);
+    });
+    document.getElementById('qfull-again').addEventListener('click', function () { navigate('#/quiz/full'); });
+    document.getElementById('qfull-shelf').addEventListener('click', function () {
+      var list = favRead(), added = 0;
+      agreeThemes.forEach(function (id) {
+        var t = themeById(id);
+        if (!t || SHELF.has(list, id, -1)) return;
+        list = SHELF.toggle(list, id, -1, { text: t.name });
+        added++;
+      });
+      favWrite(list);
+      showTip(added ? '已收进 ' + added + ' 条' : '这些已经在册子里了');
     });
   }
 
@@ -1163,6 +1373,10 @@
       renderQuiz();
     } else if (h.indexOf('/quiz/r/') === 0) {
       renderQuizResult(decodeURIComponent(h.slice(8)));
+    } else if (h === '/quiz/full') {
+      renderQuizFull();
+    } else if (h.indexOf('/quiz/full/r/') === 0) {
+      renderQuizFullResult(decodeURIComponent(h.slice(13)));
     } else if (h.indexOf('/t/') === 0) {
       renderTheme(decodeURIComponent(h.slice(3)));
     } else if (h.indexOf('/miss/') === 0) {

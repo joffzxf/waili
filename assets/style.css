@@ -1445,6 +1445,53 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
 .pick a { color: var(--zhu); text-decoration: none; font-size: 13px; }
 .pick a:hover { text-decoration: underline; }
 .pick-note { margin: 6px 0 0; font-size: 12px; color: var(--ink-3); }
+/* ---------- 分类法切换 / 诊断强度 ---------- */
+
+.scheme-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 26px 0 0;
+}
+.scheme-chip {
+  appearance: none;
+  font: inherit;
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  padding: 6px 15px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: all .16s;
+}
+.scheme-chip:hover { border-color: rgba(166, 58, 46, .4); color: var(--zhu); }
+.scheme-chip.on { background: var(--zhu); border-color: var(--zhu); color: #fff9f0; }
+
+.tier-tag {
+  margin-left: auto;
+  margin-right: 8px;
+  padding: 1px 7px;
+  border-radius: 2px;
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+.tier-strong { background: var(--zhu); color: #fff9f0; }
+.tier-clear { background: var(--zhu-soft); color: var(--zhu); }
+.tier-flat { background: transparent; color: var(--ink-3); border: 1px solid var(--rule); }
+
+.quiz-alt {
+  display: block;
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.quiz-alt a { color: var(--zhu); text-decoration: none; }
+.quiz-alt a:hover { text-decoration: underline; }
 /* ---------- 卡片级动作 / 册子 ---------- */
 
 .card-acts {

@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -538,6 +538,91 @@ if (QZ) {
 
   console.log('  四轴 ' + QZ.AXES.length + ' · 题目 ' + QZ.ITEMS.length +
     ' · 文明分组 ' + QZ.GROUPS.length + ' · 编解码与计分已校验');
+}
+
+/* ---------- 10. 三观坐标（44 题全版） ---------- */
+section('【10】三观诊断（44 题）');
+
+const QF = sandbox.window.QJY_QUIZ_FULL;
+ok(!!QF && Array.isArray(QF.ITEMS), 'quiz-full.js 已加载');
+
+if (QF) {
+  ok(QF.ITEMS.length === 44, '题量应为 44', String(QF.ITEMS.length));
+
+  QF.AXES.forEach(function (a) {
+    const mine = QF.ITEMS.filter(function (it) { return it.axis === a.id; });
+    ok(mine.length === 11, '轴 ' + a.id + ' 应有 11 题', String(mine.length));
+    ok(mine.some(function (it) { return it.dir > 0; }), '轴 ' + a.id + ' 缺正向题');
+    ok(mine.some(function (it) { return it.dir < 0; }), '轴 ' + a.id + ' 缺反向题');
+  });
+
+  /* 一条道理一题：44 条主题应被恰好覆盖一次 */
+  const used = QF.ITEMS.map(function (it) { return it.theme; });
+  const uniq = new Set(used);
+  ok(uniq.size === used.length, '同一主题不应被出两道题');
+  ok(uniq.size === THEMES.length, '应覆盖全部主题', uniq.size + ' / ' + THEMES.length);
+  THEMES.forEach(function (t) {
+    ok(uniq.has(t.id), '主题应在诊断题中出现：' + t.id);
+  });
+
+  /* 每轴 11 题只能是 6:5，方向不可能完全抵消——
+     所以判据不是「正负并存」，而是「一刀切同意不能得出极端分」 */
+  const agree = QF.score(new Array(44).fill(4));
+  const av = QF.AXES.map(function (a) { return agree[a.id]; });
+  ok(av.every(function (v) { return Math.abs(v) <= 15; }),
+    '全选同意时四轴应接近中性（|分| ≤ 15）', av.join(','));
+  ok(av.every(function (v) { return Math.abs(v) <= 100; }), '轴分应落在 -100..100');
+
+  /* 全选中立 → 全平缓 */
+  const neutral = QF.diagnose(QF.score(new Array(44).fill(2)));
+  ok(neutral.every(function (d) { return d.tier === 'flat'; }), '全选中立时四轴都应为「平缓」');
+
+  /* 强度分档 */
+  ok(QF.tier(80) === 'strong' && QF.tier(40) === 'clear' && QF.tier(5) === 'flat',
+    '强度分档阈值应为 60 / 25');
+
+  /* 编解码 */
+  const sampleFull = new Array(44).fill(0).map(function (_, i) { return i % 5; });
+  const c2 = QF.encode(sampleFull);
+  ok(c2.slice(0, 2) === 'q2' && c2.length === 46, '全版编码应为 q2 + 44 位');
+  ok((QF.decode(c2) || []).join(',') === sampleFull.join(','), '全版编码解码应无损');
+  ok(QF.decode(QZ.encode([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])) === null, '不应把快版编码当全版解');
+
+  console.log('  44 题覆盖 ' + uniq.size + ' 条道理 · 每轴 11 题 · 强度分档与编解码已校验');
+}
+
+/* ---------- 11. 预置分类法 ---------- */
+section('【11】预置分类法');
+
+const SCH = sandbox.window.QJY_SCHEMES;
+ok(!!SCH && Array.isArray(SCH.list) && SCH.list.length >= 2, 'schemes.js 已加载，且至少两套');
+
+if (SCH) {
+  SCH.list.forEach(function (s) {
+    ok(typeof s.name === 'string' && s.name.length > 0, '分类法应有名字：' + s.id);
+    ok(Array.isArray(s.groups) && s.groups.length >= 3, '分类法 ' + s.id + ' 至少 3 组');
+
+    const ids = [];
+    s.groups.forEach(function (g) {
+      ok(typeof g.name === 'string' && g.name.length > 0, '分组应有名字：' + s.id);
+      ok(Array.isArray(g.ids) && g.ids.length > 0, '分组不应为空：' + s.id + '/' + g.name);
+      g.ids.forEach(function (id) {
+        ids.push(id);
+        ok(THEMES.some(function (t) { return t.id === id; }),
+          '分类法 ' + s.id + ' 含未知主题：' + id);
+      });
+    });
+
+    /* 每套分类法都必须恰好覆盖 44 条主题各一次 */
+    const set = new Set(ids);
+    ok(set.size === ids.length, '分类法 ' + s.id + ' 有重复条目');
+    ok(set.size === THEMES.length, '分类法 ' + s.id + ' 应覆盖全部主题',
+      set.size + ' / ' + THEMES.length);
+    const missing = THEMES.filter(function (t) { return !set.has(t.id); }).map(function (t) { return t.id; });
+    ok(missing.length === 0, '分类法 ' + s.id + ' 漏了主题', missing.join('、'));
+
+    console.log('  ' + s.name + '：' + s.groups.length + ' 组，覆盖 ' + set.size + ' 条');
+  });
 }
 
 /* ---------- 汇总 ---------- */

@@ -34,6 +34,8 @@ const ASSETS = [
   'assets/shelf.js',
   'assets/share.js',
   'assets/quiz.js',
+  'assets/quiz-full.js',
+  'assets/schemes.js',
   'assets/match.js',
   'assets/app.js'
 ];
