@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/related.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/related.js', 'assets/poster.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -359,6 +359,52 @@ THEMES.forEach(function (t) {
   ok(ringSet.has(t.id), '每个主题都在环里：' + t.id);
 });
 console.log('  环上 ' + RING.length + ' 条，每条有 2 个相邻主题');
+
+/* ---------- 7. 文与影 ---------- */
+section('【7】文与影 · 海报');
+
+/* 带 poster 的条目会被搬到「文与影」分区。带来的风险是「同此一念」被抽空，
+ * 所以这里强制每个主题至少留 3 条非影视引证。 */
+const MED_OK = ['book', 'film', 'stage'];
+let mediaCount = 0;
+let mediaThemes = 0;
+
+THEMES.forEach(function (t) {
+  const media = (t.canon || []).filter(function (c) { return c.poster; });
+  const classic = (t.canon || []).filter(function (c) { return !c.poster; });
+  if (!media.length) return;
+
+  mediaThemes++;
+  mediaCount += media.length;
+  ok(classic.length >= 3, '「同此一念」至少保留 3 条非影视引证：' + t.id, '实际 ' + classic.length);
+
+  media.forEach(function (c, i) {
+    const p = c.poster || {};
+    const tag = t.id + ' poster[' + i + ']';
+    ok(MED_OK.indexOf(p.med) !== -1, tag + '.med 取 book/film/stage', String(p.med));
+    ok(typeof p.title === 'string' && p.title.length > 0, tag + '.title');
+    ok(typeof p.year === 'number' && p.year > 1000 && p.year < 2200, tag + '.year', String(p.year));
+    ok(typeof p.by === 'string' && p.by.length > 0, tag + '.by');
+  });
+});
+
+ok(mediaCount >= 8, '文与影条目数应 ≥ 8', '实际 ' + mediaCount);
+console.log('  文与影 ' + mediaCount + ' 条，分布在 ' + mediaThemes + ' 个主题');
+
+const POSTER = sandbox.window.QJY_POSTER;
+ok(!!POSTER && typeof POSTER.art === 'function', 'poster.js 已加载且暴露 art()');
+
+if (POSTER && POSTER.art) {
+  const a1 = POSTER.art('百年孤独|1967', 'book');
+  const a2 = POSTER.art('百年孤独|1967', 'book');
+  ok(a1 === a2, '同一作品两次生成必须完全一致（否则每次进页面都变样）');
+  ok(a1 !== POSTER.art('老人与海|1952', 'book'), '不同作品应得到不同海报');
+  ok(a1 !== POSTER.art('百年孤独|1967', 'film'), '电影与小说的体裁痕迹应不同');
+  ok(/^<svg[\s\S]*<\/svg>$/.test(a1), '返回完整 SVG 片段');
+  ok(a1.indexOf('url(#pg') !== -1, '渐变引用带唯一前缀，多张海报同页不会串色');
+  ok(a1.indexOf('unsafe-inline') === -1, '不应包含内联脚本');
+  console.log('  海报生成已校验：确定性、唯一性、体裁差异');
+}
 
 /* ---------- 汇总 ---------- */
 console.log('\n' + '─'.repeat(52));

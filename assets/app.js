@@ -66,8 +66,8 @@
       '<div class="section-rule"></div>';
   }
 
-  function renderCanon(t) {
-    return t.canon.map(function (c, i) {
+  function renderCanon(list) {
+    return list.map(function (c, i) {
       var isCn = String(c.r).charAt(0) === '中';
       return '' +
         '<article class="canon reveal" data-cn="' + (isCn ? 1 : 0) + '" style="animation-delay:' + (i * 55) + 'ms">' +
@@ -270,6 +270,51 @@
 
   /* ---------------- 视图：主题详情 ---------------- */
 
+  var NUM = ['壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌'];
+
+  /* 海报：美术由 assets/poster.js 依作品名生成，非官方剧照 */
+  function renderPoster(c, i) {
+    var p = c.poster;
+    var med = p.med === 'film' ? '电　影' : p.med === 'stage' ? '戏　剧' : '小　说';
+    return '' +
+      '<figure class="poster-fig reveal" style="animation-delay:' + (i * 70) + 'ms">' +
+        '<div class="poster">' +
+          '<div class="poster-art" aria-hidden="true">' +
+            window.QJY_POSTER.art(p.title + '|' + p.year, p.med) +
+          '</div>' +
+          '<div class="poster-body">' +
+            '<div class="poster-head">' +
+              '<span class="poster-med">' + med + '</span>' +
+              '<span class="poster-year">' + esc(String(p.year)) + '</span>' +
+            '</div>' +
+            '<div class="poster-core">' +
+              '<h3 class="poster-title">' + esc(p.title) + '</h3>' +
+              (p.en ? '<p class="poster-en">' + esc(p.en) + '</p>' : '') +
+            '</div>' +
+            '<div class="poster-foot">' +
+              '<p class="poster-quote">' + esc(c.t) + '</p>' +
+              '<p class="poster-by">' + esc(p.by) + '</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<figcaption class="poster-label">' +
+          '<span class="poster-src">' + esc(c.s) + '</span>' +
+          '<span class="poster-note">' + esc(c.n) + '</span>' +
+        '</figcaption>' +
+      '</figure>';
+  }
+
+  function mediaSection(list, num, delay) {
+    if (!list.length) return '';
+    return '' +
+      '<section class="section cinema reveal" style="animation-delay:' + delay + 'ms">' +
+        sectionHead(num, '文与影', '小说 · 戏剧 · 电影') +
+        '<div class="posters">' + list.map(renderPoster).join('') + '</div>' +
+        '<p class="posters-note">海报依作品名程序生成，不是官方剧照——剧照有版权，这里用几何与配色替它说话。' +
+          '同一部作品永远得到同一张。</p>' +
+      '</section>';
+  }
+
   function renderTheme(id) {
     var t = null;
     for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === id) { t = THEMES[i]; break; }
@@ -280,6 +325,19 @@
     }
 
     var q = lastQuery || '';
+
+    /* canon 分两路：带 poster 的去「文与影」，其余留在「同此一念」 */
+    var media = t.canon.filter(function (c) { return c.poster; });
+    var classic = t.canon.filter(function (c) { return !c.poster; });
+
+    var k = 0;
+    var nClassic = NUM[k++];
+    var nMedia = media.length ? NUM[k++] : '';
+    var nHistory = NUM[k++];
+    var nQuestions = NUM[k++];
+    var nActions = NUM[k++];
+    var nRelated = NUM[k++];
+
     app.innerHTML = '' +
       '<div class="result">' +
         '<p class="crumb"><a href="#/">← 另说一理</a>　<span>/</span>　<a href="#/all">万理一览</a></p>' +
@@ -291,26 +349,28 @@
         '</header>' +
 
         '<section class="section reveal" style="animation-delay:80ms">' +
-          sectionHead('壹', '同此一念', '跨越 ' + t.canon.length + ' 种表达') +
-          '<div class="canon-list">' + renderCanon(t) + '</div>' +
+          sectionHead(nClassic, '同此一念', '跨越 ' + classic.length + ' 种表达') +
+          '<div class="canon-list">' + renderCanon(classic) + '</div>' +
         '</section>' +
 
-        '<section class="section reveal" style="animation-delay:120ms">' +
-          sectionHead('贰', '以史为镜', '有人验证过它') +
+        mediaSection(media, nMedia, 120) +
+
+        '<section class="section reveal" style="animation-delay:160ms">' +
+          sectionHead(nHistory, '以史为镜', '有人验证过它') +
           renderHistory(t.history) +
         '</section>' +
 
-        '<section class="section reveal" style="animation-delay:160ms">' +
-          sectionHead('叁', '照见自己', '先别急着回答') +
+        '<section class="section reveal" style="animation-delay:200ms">' +
+          sectionHead(nQuestions, '照见自己', '先别急着回答') +
           renderQuestions(t.questions) +
         '</section>' +
 
-        '<section class="section reveal" style="animation-delay:200ms">' +
-          sectionHead('肆', '起而行之', '勾一下，就算开始') +
+        '<section class="section reveal" style="animation-delay:240ms">' +
+          sectionHead(nActions, '起而行之', '勾一下，就算开始') +
           renderActions(t.id, t.actions) +
         '</section>' +
 
-        relatedSection(t) +
+        relatedSection(t, nRelated) +
 
         '<div class="toolbar">' +
           '<button type="button" class="btn btn-ghost" id="btn-copy">复制这一段</button>' +
@@ -341,13 +401,13 @@
   }
 
   /* 相通的另两条：由主题之环推出 */
-  function relatedSection(t) {
+  function relatedSection(t, num) {
     var near = neighbours(t.id);
     if (!near.length) return '';
 
     return '' +
-      '<section class="section related reveal" style="animation-delay:240ms">' +
-        sectionHead('伍', '相通的另两条', '三十理成环') +
+      '<section class="section related reveal" style="animation-delay:280ms">' +
+        sectionHead(num || '陆', '相通的另两条', '三十六理成环') +
         '<div class="related-grid">' +
           near.map(function (x) {
             return '<a class="related-card" href="#/t/' + encodeURIComponent(x.id) + '">' +

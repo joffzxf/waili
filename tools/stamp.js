@@ -28,6 +28,7 @@ const ASSETS = [
   'assets/data-4.js',
   'assets/data-5.js',
   'assets/related.js',
+  'assets/poster.js',
   'assets/match.js',
   'assets/app.js'
 ];
