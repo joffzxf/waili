@@ -1,0 +1,50 @@
+{
+  "data": 11,
+  "scene": {
+    "qinyudai": "待人与相处",
+    "huannan": "待人与相处",
+    "xiaoburen": "对己与心性",
+    "gaiguan": "世事与得失",
+    "dadan": "做事与决断"
+  },
+  "subject": {
+    "qinyudai": "人与关系",
+    "huannan": "人与关系",
+    "xiaoburen": "伦理与修养",
+    "gaiguan": "处境与选择",
+    "dadan": "认识与方法"
+  },
+  "coords": {
+    "qinyudai": {
+      "v": [0, -2, 0, 0, -2, 0, 0, 1, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "daiji", "when": "父母还健在时：daiji 说怎么孝顺，qinyudai 说别等到来不及" },
+        { "with": "jinshixingle", "when": "想把好事留到以后：jinshixingle 说的是自己的享受，qinyudai 说的是别人的时间窗口" }
+      ]
+    },
+    "huannan": {
+      "v": [0, -1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jinzhu", "when": "该和谁走近：jinzhu 说看他们平时怎样，huannan 说看你落难时谁还在" }
+      ]
+    },
+    "xiaoburen": {
+      "v": [0, 0, 1, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "baoyuan", "when": "被人当面羞辱：baoyuan 说按直回一次，xiaoburen 说忍到更大的事做成" }
+      ]
+    },
+    "gaiguan": {
+      "v": [0, 0, 1, 0, 2, 0, 0, 0, -1, 0, 0, 0, 0],
+      "vs": [
+        { "with": "qiuming", "when": "在乎身后名：qiuming 说现在就要挣，gaiguan 说要等整段走完才能论定" }
+      ]
+    },
+    "dadan": {
+      "v": [1, 0, 0, 0, 0, 2, -2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jinxin", "when": "面对一个新想法：jinxin 说先怀疑它，dadan 说先大胆假设再小心求证" }
+      ]
+    }
+  }
+}

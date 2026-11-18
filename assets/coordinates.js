@@ -241,6 +241,28 @@
     /* 高价值空格：zeshan */
     zeshan: { v: [1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shuerbuzuo', when: '该跟谁学：shuerbuzuo 说守住一个传统读透，zeshan 说博采众家各取所长' }, { with: 'shiyandaojun', when: '求学的方式：shiyandaojun 说找一位老师跟到底，zeshan 说同时学好几家' }] }
+,
+
+    /* 批次 11：qinyudai */
+    qinyudai: { v: [0, -2, 0, 0, -2, 0, 0, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'daiji', when: '父母还健在时：daiji 说怎么孝顺，qinyudai 说别等到来不及' }, { with: 'jinshixingle', when: '想把好事留到以后：jinshixingle 说的是自己的享受，qinyudai 说的是别人的时间窗口' }] },
+
+    /* 批次 11：huannan */
+    huannan: { v: [0, -1, 1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jinzhu', when: '该和谁走近：jinzhu 说看他们平时怎样，huannan 说看你落难时谁还在' },
+                     { with: 'jisuo', when: '面对一个关系：jisuo 说要怎么对待对方，huannan 说先看对方值不值得这样对待' }] },
+
+    /* 批次 11：xiaoburen */
+    xiaoburen: { v: [0, 0, 1, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'baoyuan', when: '被人当面羞辱：baoyuan 说按直回一次，xiaoburen 说忍到更大的事做成' }] },
+
+    /* 批次 11：gaiguan */
+    gaiguan: { v: [0, 0, 1, 0, 2, 0, 0, 0, -1, 0, 0, 0, 0],
+                vs: [{ with: 'qiuming', when: '在乎身后名：qiuming 说现在就要挣，gaiguan 说要等整段走完才能论定' }] },
+
+    /* 批次 11：dadan */
+    dadan: { v: [1, 0, 0, 0, 0, 2, -2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jinxin', when: '面对一个新想法：jinxin 说先怀疑它，dadan 说先大胆假设再小心求证' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

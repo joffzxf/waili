@@ -31,5 +31,7 @@ window.QJY_RING = [
   'shuerbuzuo', 'bupingzemin', 'qiuming', 'qufahushang',
   'bingguishensu', 'jinshixingle', 'duliqingshen', 'jiangzaiwai',
   'shiyandaojun', 'zhichi', 'qiongzedushan', 'jiyulida', 'gongchengshentui', 'lianghaixiangquan',
-  'zhiqibuke', 'bushijie', 'buruhuxue', 'suiyueran', 'zeshan'
+  'zhiqibuke', 'bushijie', 'buruhuxue', 'suiyueran', 'zeshan',
+  /* 第三批：及时尽孝 → 患难 → 忍 → 身后名 → 假设与求证 */
+  'qinyudai', 'huannan', 'xiaoburen', 'gaiguan', 'dadan'
 ];
