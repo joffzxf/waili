@@ -1278,27 +1278,148 @@
   }
 
   function renderAll() {
+    var AX = window.QJY_AXES ? window.QJY_AXES.list : [];
+    var CO = window.QJY_COORD ? window.QJY_COORD.map : {};
+
+    var rows = AX.map(function (a, i) {
+      return '' +
+        '<div class="axis-row" data-i="' + i + '">' +
+          '<span class="ar-name">' + esc(a.name) + '</span>' +
+          '<span class="ar-pole ar-neg">' + esc(a.neg) + '</span>' +
+          '<input type="range" class="ar-range" min="-2" max="2" step="1" value="0" ' +
+            'data-i="' + i + '" aria-label="' + esc(a.name) + '">' +
+          '<span class="ar-pole ar-pos">' + esc(a.pos) + '</span>' +
+          '<span class="ar-val" data-i="' + i + '">·</span>' +
+        '</div>';
+    }).join('');
+
     app.innerHTML = '' +
       '<header class="all-head reveal">' +
         '<h1>万 理 一 览</h1>' +
-        '<p>共 ' + THEMES.length + ' 条主题 · ' +
-          THEMES.reduce(function (n, t) { return n + t.canon.length; }, 0) + ' 条引证 · ' +
-          THEMES.length + ' 则史案</p>' +
+        '<p>十三根轴 · 拨到哪儿，就站起来哪几条道理</p>' +
       '</header>' +
-      '<div class="grid">' +
-        THEMES.map(function (t, i) {
-          return '<a class="card reveal" href="#/t/' + encodeURIComponent(t.id) + '" ' +
-                  'style="animation-delay:' + (i * 35) + 'ms">' +
-            '<h2 class="card-name">' + esc(t.name) + '</h2>' +
-            '<p class="card-gist">' + esc(t.gist) + '</p>' +
-            '<div class="card-meta">' +
-              '<span>' + t.canon.length + ' 条引证</span>' +
-              '<span>中国 ' + t._cn + ' · 域外 ' + (t.canon.length - t._cn) + '</span>' +
-            '</div>' +
-          '</a>';
-        }).join('') +
-      '</div>';
+      '<p class="atlas-intro reveal">' +
+        '拨轴见理：每根轴从 −2 到 +2，0 是「这一根我不挑」。' +
+        '拨动的轴越多，站得住的道理越少——拨到你要的那个位置，看还有谁在那儿。' +
+      '</p>' +
+      '<section class="atlas reveal">' +
+        '<div class="atlas-axes">' + rows + '</div>' +
+        '<div class="atlas-bar">' +
+          '<button type="button" class="btn btn-ghost" id="atlas-reset">全部归零</button>' +
+          '<button type="button" class="btn btn-ghost" id="atlas-random">随手一格</button>' +
+          '<span class="atlas-hint" id="atlas-hint">还没有拨动任何一根轴</span>' +
+        '</div>' +
+      '</section>' +
+      '<section class="atlas-result" id="atlas-result"></section>' +
+      '<details class="atlas-all">' +
+        '<summary>查看全部 ' + THEMES.length + ' 条</summary>' +
+        '<div class="grid">' +
+          THEMES.map(function (t) {
+            return '<a class="card" href="#/t/' + encodeURIComponent(t.id) + '">' +
+              '<h2 class="card-name">' + esc(t.name) + '</h2>' +
+              '<p class="card-gist">' + esc(t.gist) + '</p>' +
+              '<div class="card-meta">' +
+                '<span>' + t.canon.length + ' 条引证</span>' +
+                '<span>中国 ' + t._cn + ' · 域外 ' + (t.canon.length - t._cn) + '</span>' +
+              '</div>' +
+            '</a>';
+          }).join('') +
+        '</div>' +
+      '</details>';
+
+    bindAtlas(AX, CO);
   }
+
+  /* 轴盘：拨动后即时重算，只重绘结果区 */
+  function bindAtlas(AX, CO) {
+    var vec = AX.map(function () { return 0; });
+    var ranges = Array.prototype.slice.call(document.querySelectorAll('.ar-range'));
+    var hint = document.getElementById('atlas-hint');
+    var out = document.getElementById('atlas-result');
+    if (!out || !ranges.length) return;
+
+    function mark(i, v) {
+      var el = document.querySelector('.ar-val[data-i="' + i + '"]');
+      var row = document.querySelector('.axis-row[data-i="' + i + '"]');
+      if (el) el.textContent = v === 0 ? '·' : (v > 0 ? '+' + v : String(v));
+      if (row) {
+        row.classList.toggle('on', v !== 0);
+        row.classList.toggle('neg', v < 0);
+        /* 从中心（0）到滑钮的一段淡墨：起点取小、终点取大 */
+        var pct = (v + 2) / 4 * 100;
+        row.style.setProperty('--a', Math.min(50, pct) + '%');
+        row.style.setProperty('--b', Math.max(50, pct) + '%');
+      }
+    }
+
+    function draw() {
+      var picked = window.QJY_ATLAS.describe(vec, AX);
+      hint.textContent = picked.length
+        ? '已选 ' + picked.length + ' 根：' + picked.join(' · ')
+        : '还没有拨动任何一根轴';
+
+      if (!picked.length) {
+        out.innerHTML = '<p class="atlas-empty">拨一根试试。比如把「归因」推向「人」，' +
+          '看还有哪些道理相信事在人为。</p>';
+        return;
+      }
+
+      var rows = window.QJY_ATLAS.rank(vec, THEMES, CO, AX, 6);
+      if (!rows.length) {
+        out.innerHTML = '<p class="atlas-empty">这个位置上一条都没有。</p>';
+        return;
+      }
+      var bestFit = rows[0].fit;
+      var head = bestFit === 1
+        ? '完全站在这个位置上的：'
+        : (bestFit > 0 ? '最接近这个位置的：' : '没有一条完全对上，最接近的是：');
+
+      out.innerHTML = '<p class="atlas-lead">' + esc(head) + '</p>' +
+        rows.map(function (r, i) {
+          var t = r.theme;
+          var pct = Math.round(r.fit * 100);
+          return '<a class="atlas-card" href="#/t/' + encodeURIComponent(t.id) + '" ' +
+              'style="animation-delay:' + (i * 45) + 'ms">' +
+            '<div class="ac-head">' +
+              '<span class="ac-name">' + esc(t.name) + '</span>' +
+              '<span class="ac-fit" title="拨动的轴里有 ' + r.overlap + ' 根与它一致">' + pct + '%</span>' +
+            '</div>' +
+            '<p class="ac-gist">' + esc(t.gist) + '</p>' +
+            '<span class="ac-bar"><span style="width:' + pct + '%"></span></span>' +
+          '</a>';
+        }).join('');
+    }
+
+    ranges.forEach(function (el) {
+      el.addEventListener('input', function () {
+        var i = parseInt(el.getAttribute('data-i'), 10);
+        vec[i] = parseInt(el.value, 10);
+        mark(i, vec[i]);
+        draw();
+      });
+    });
+
+    var reset = document.getElementById('atlas-reset');
+    if (reset) reset.addEventListener('click', function () {
+      ranges.forEach(function (el, i) { el.value = '0'; vec[i] = 0; mark(i, 0); });
+      draw();
+    });
+
+    var rnd = document.getElementById('atlas-random');
+    if (rnd) rnd.addEventListener('click', function () {
+      var t = THEMES[Math.floor(Math.random() * THEMES.length)];
+      var c = CO[t.id];
+      if (!c || !c.v) return;
+      ranges.forEach(function (el, i) {
+        /* 只拨它真有立场的那几根，0 的位置保持不动 */
+        if (c.v[i]) { vec[i] = c.v[i]; el.value = String(c.v[i]); mark(i, c.v[i]); }
+      });
+      draw();
+    });
+
+    draw();
+  }
+
 
   /* ---------------- 行为绑定 ---------------- */
 

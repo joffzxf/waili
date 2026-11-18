@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/data-21.js', 'assets/data-22.js', 'assets/data-23.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/data-21.js', 'assets/data-22.js', 'assets/data-23.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/atlas.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -806,6 +806,53 @@ if (Q3) {
   ok(adjacent === 0, '同轴题目不应相邻（会诱导作答惯性）', String(adjacent));
 
   console.log('  40 题，四轴各 5 正 5 反；全选同意/不同意均为 0');
+}
+
+/* ---------- 14. 轴盘（拨轴见理） ---------- */
+section('【14】轴盘匹配');
+
+const AT = sandbox.window.QJY_ATLAS;
+ok(!!AT && typeof AT.rank === 'function', 'atlas.js 已加载');
+
+if (AT && AX && CO) {
+  const N2 = AX.list.length;
+  const zero = new Array(N2).fill(0);
+
+  ok(AT.rank(zero, THEMES, CO.map, AX.list).length === 0, '一根轴都不拨时应返回空');
+
+  /* 只拨归因 = 人（+2） */
+  const v1 = zero.slice(); v1[0] = 2;
+  const r1 = AT.rank(v1, THEMES, CO.map, AX.list, 6);
+  ok(r1.length > 0, '拨一根轴应有结果');
+  ok(r1[0].fit === 1, '首位应完全吻合这根轴', String(r1[0].fit));
+  ok((CO.map[r1[0].theme.id].v[0] || 0) === 2, '首位在这根轴上应取 +2');
+
+  /* 排序：吻合度高的必须在前 */
+  let mono = true;
+  for (let i = 1; i < r1.length; i++) if (r1[i].fit > r1[i - 1].fit) mono = false;
+  ok(mono, '结果应按吻合度降序');
+
+  /* 不表态的条目要被罚，排在有明确立场的后面 */
+  const withStance = r1.filter(function (r) { return (CO.map[r.theme.id].v[0] || 0) !== 0; });
+  const noStance = r1.filter(function (r) { return (CO.map[r.theme.id].v[0] || 0) === 0; });
+  if (withStance.length && noStance.length) {
+    ok(withStance[0].dist <= noStance[0].dist,
+      '有明确立场的应优先于不表态的');
+  }
+
+  /* describe 的措辞 */
+  const v2 = zero.slice(); v2[0] = 2; v2[1] = -2;
+  const words = AT.describe(v2, AX.list);
+  ok(words.length === 2 && words[0] === AX.list[0].pos && words[1] === AX.list[1].neg,
+    'describe 应返回对应的极端标签', words.join('/'));
+
+  /* 拨得越多，对上的越少（除非语料里真有完全吻合的） */
+  const vAll = zero.slice();
+  for (let i = 0; i < N2; i++) vAll[i] = 1;
+  const rAll = AT.rank(vAll, THEMES, CO.map, AX.list);
+  ok(rAll.every(function (r) { return r.axes === N2; }), '十三根全拨时，每条都应按十三根计');
+
+  console.log('  轴盘：空拨、单轴、多轴、排序与不表态惩罚已校验');
 }
 
 /* ---------- 汇总 ---------- */
