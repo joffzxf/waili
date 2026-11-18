@@ -374,6 +374,23 @@
     /* 批次 16：boxue */
     boxue: { v: [0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 2, 0, 0],
                 vs: [{ with: 'zhixing', when: '学了做不到：zhixing 说先去做，boxue 说五步是一整条链，缺哪步补哪步' }] }
+,
+
+    /* 批次 17：zhongkou */
+    zhongkou: { v: [-1, 0, 0, 0, 0, 0, 0, -1, -2, 0, 0, 0, 0],
+                vs: [{ with: 'qiuming', when: '在乎别人怎么看你：qiuming 说名声值得主动去挣，zhongkou 说舆论既然能杀人也就不必当真' }] },
+
+    /* 批次 17：jinri */
+    jinri: { v: [1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 2, 0, 0],
+                vs: [{ with: 'daqiwancheng', when: '事情还早：daqiwancheng 说慢慢磨，jinri 说今天必须了结一件' }] },
+
+    /* 批次 17：ningming */
+    ningming: { v: [1, 0, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'bupingzemin', when: '有话要说：bupingzemin 说该把不平说出来，ningming 说宁可付出代价也不闭嘴' }] },
+
+    /* 批次 17：shizhiji */
+    shizhiji: { v: [1, 0, 1, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0],
+                vs: [{ with: 'yinuo', when: '为何守信：yinuo 说承诺本身要守，shizhiji 说因为那个人懂我' }, { with: 'zhichi', when: '对错的来源：zhichi 说做了会抬不起头，shizhiji 说怕对不起那个懂我的人' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

@@ -38,6 +38,7 @@ const ASSETS = [
   'assets/data-14.js',
   'assets/data-15.js',
   'assets/data-16.js',
+  'assets/data-17.js',
   'assets/related.js',
   'assets/poster.js',
   'assets/shelf.js',

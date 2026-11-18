@@ -1,0 +1,41 @@
+{
+  "data": 17,
+  "scene": {
+    "zhongkou": "待人与相处",
+    "jinri": "做事与决断",
+    "ningming": "对己与心性",
+    "shizhiji": "待人与相处"
+  },
+  "subject": {
+    "zhongkou": "人与关系",
+    "jinri": "行动与做事",
+    "ningming": "伦理与修养",
+    "shizhiji": "人与关系"
+  },
+  "coords": {
+    "zhongkou": {
+      "v": [-1, 0, 0, 0, 0, 0, 0, -1, -2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "qiuming", "when": "在乎别人怎么看你：qiuming 说名声值得主动去挣，zhongkou 说舆论既然能杀人也就不必当真" }
+      ]
+    },
+    "jinri": {
+      "v": [1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 2, 0, 0],
+      "vs": [
+        { "with": "daqiwancheng", "when": "事情还早：daqiwancheng 说慢慢磨，jinri 说今天必须了结一件" }
+      ]
+    },
+    "ningming": {
+      "v": [1, 0, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "bupingzemin", "when": "有话要说：bupingzemin 说该把不平说出来，ningming 说宁可付出代价也不闭嘴" }
+      ]
+    },
+    "shizhiji": {
+      "v": [1, 0, 1, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "yinuo", "when": "为何守信：yinuo 说承诺本身要守，shizhiji 说因为那个人懂我" }
+      ]
+    }
+  }
+}
