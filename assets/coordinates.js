@@ -331,6 +331,27 @@
     mingzhe: { v: [0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '局面明显不利：yongqi 说该上就上，mingzhe 说危邦不入' }],
                 cf: [{ with: 'yongqi', when: '局面不利时，是上还是避' }] }
+,
+
+    /* 批次 15：jiaoxue */
+    jiaoxue: { v: [0, -1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
+                vs: [{ with: 'zeshan', when: '学东西时：zeshan 说主动挑老师博采众长，jiaoxue 说讲给别人听才算学会' }, { with: 'xuesi', when: '读了很多还是不懂：xuesi 说停下来想，jiaoxue 说讲给别人听一遍就知道哪没懂' }] },
+
+    /* 批次 15：duxue */
+    duxue: { v: [-1, -2, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jinzhu', when: '身边没人可交流：jinzhu 说干脆换一批人，duxue 说至少得有个能抬杠的' }] },
+
+    /* 批次 15：jingye */
+    jingye: { v: [0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+                vs: [{ with: 'heertong', when: '团队里有人不行：heertong 说当面说清楚，jingye 说先把自己那份做到挑不出毛病' }, { with: 'daiji', when: '家里与工作在抢时间：daiji 说先顾家人，jingye 说手上这件正事不能敷衍' }, { with: 'chengrenzhimei', when: '同事做事：chengrenzhimei 说去帮他把事做成，jingye 说先把你自己那份做到挑不出毛病' }] },
+
+    /* 批次 15：shishiwu */
+    shishiwu: { v: [0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'liuyibu', when: '规矩和形势冲突：liuyibu 说按情况通融，shishiwu 说先看清时势再决定站不站' }] },
+
+    /* 批次 15：liangqin */
+    liangqin: { v: [0, 1, -1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+                vs: [{ with: 'jinzhu', when: '环境不好：jinzhu 说人是被身边人塑造的，liangqin 说那就换一棵树' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

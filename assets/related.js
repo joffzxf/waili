@@ -37,5 +37,6 @@ window.QJY_RING = [
   /* 第四批：自求 → 穷途 → 不动心 → 毁誉不动 → 见几 */
   'ziqiuduofu', 'qiongtu', 'buyiwuxi', 'shijufei', 'jianji',
   'junzibuli', 'buzaizhiwei', 'daqiwancheng', 'chengrenzhimei', 'xiannanzhihou',
-  'kuji', 'sizhi', 'weisheng', 'qingshan', 'mingzhe'
+  'kuji', 'sizhi', 'weisheng', 'qingshan', 'mingzhe',
+  'jiaoxue', 'duxue', 'jingye', 'shishiwu', 'liangqin'
 ];

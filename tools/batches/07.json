@@ -1,0 +1,49 @@
+{
+  "data": 15,
+  "scene": {
+    "jiaoxue": "做事与决断",
+    "duxue": "做事与决断",
+    "jingye": "做事与决断",
+    "shishiwu": "世事与得失",
+    "liangqin": "世事与得失"
+  },
+  "subject": {
+    "jiaoxue": "认识与方法",
+    "duxue": "认识与方法",
+    "jingye": "行动与做事",
+    "shishiwu": "处境与选择",
+    "liangqin": "处境与选择"
+  },
+  "coords": {
+    "jiaoxue": {
+      "v": [0, -1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
+      "vs": [
+        { "with": "zeshan", "when": "学东西时：zeshan 说主动挑老师博采众长，jiaoxue 说讲给别人听才算学会" }
+      ]
+    },
+    "duxue": {
+      "v": [-1, -2, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jinzhu", "when": "身边没人可交流：jinzhu 说干脆换一批人，duxue 说至少得有个能抬杠的" }
+      ]
+    },
+    "jingye": {
+      "v": [0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+      "vs": [
+        { "with": "heertong", "when": "团队里有人不行：heertong 说当面说清楚，jingye 说先把自己那份做到挑不出毛病" }
+      ]
+    },
+    "shishiwu": {
+      "v": [0, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "liuyibu", "when": "规矩和形势冲突：liuyibu 说按情况通融，shishiwu 说先看清时势再决定站不站" }
+      ]
+    },
+    "liangqin": {
+      "v": [0, 1, -1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
+      "vs": [
+        { "with": "jinzhu", "when": "环境不好：jinzhu 说人是被身边人塑造的，liangqin 说那就换一棵树" }
+      ]
+    }
+  }
+}
