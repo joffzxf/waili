@@ -1,0 +1,49 @@
+{
+  "data": 18,
+  "scene": {
+    "gupen": "对己与心性",
+    "lujian": "待人与相处",
+    "mianzi": "对己与心性",
+    "mianzhe": "待人与相处",
+    "daxing": "做事与决断"
+  },
+  "subject": {
+    "gupen": "伦理与修养",
+    "lujian": "伦理与修养",
+    "mianzi": "伦理与修养",
+    "mianzhe": "人与关系",
+    "daxing": "行动与做事"
+  },
+  "coords": {
+    "gupen": {
+      "v": [0, 0, -1, -1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "qiongtu", "when": "亲人去世：qiongtu 说走到尽头就放声哭，gupen 说看穿了就不必哭" }
+      ]
+    },
+    "lujian": {
+      "v": [0, -1, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "heertong", "when": "看到不对的事：heertong 说保持和气地表达不同，lujian 说直接出手" }
+      ]
+    },
+    "mianzi": {
+      "v": [0, -1, 0, 0, 0, 0, 0, 1, -2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "chengrenzhimei", "when": "在众人面前：chengrenzhimei 想的是帮人成事，mianzi 想的是自己别丢脸" }
+      ]
+    },
+    "mianzhe": {
+      "v": [0, 0, 1, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "ningming", "when": "有意见要说：ningming 说的是自己非说不可，mianzhe 说的是当着当事人的面说" }
+      ]
+    },
+    "daxing": {
+      "v": [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+      "vs": [
+        { "with": "jianji", "when": "要不要临时改主意：jianji 说看准苗头就动，daxing 说为了大事可以不守小节" }
+      ]
+    }
+  }
+}

@@ -14,9 +14,9 @@
       name: '按场景',
       hint: '我遇到的是什么事',
       groups: [
-        { name: '做事与决断', ids: ['yusu', 'jibu', 'zhuanzhu', 'xiguan', 'qianshi', 'xuesi', 'zhixing', 'qifa', 'buxiawen', 'jingwa', 'qufahushang', 'bingguishensu', 'jiangzaiwai', 'lianghaixiangquan', 'buruhuxue', 'zeshan', 'dadan', 'jianji', 'daqiwancheng', 'jiaoxue', 'duxue', 'jingye', 'weixue', 'boxue', 'jinri'] },
-        { name: '待人与相处', ids: ['jisuo', 'heertong', 'liuyibu', 'bianjie', 'jinzhu', 'daiji', 'yinuo', 'shenyan', 'bupingzemin', 'qiuming', 'jiyulida', 'qinyudai', 'huannan', 'buzaizhiwei', 'chengrenzhimei', 'weisheng', 'bufucong', 'zhongkou', 'shizhiji'] },
-        { name: '对己与心性', ids: ['qiuzhuji', 'manzhao', 'zizhi', 'shendu', 'gudu', 'jiyi', 'sisheng', 'buqu', 'ziyou', 'xiwang', 'yongqi', 'duliqingshen', 'shiyandaojun', 'zhichi', 'qiongzedushan', 'bushijie', 'xiaoburen', 'ziqiuduofu', 'qiongtu', 'buyiwuxi', 'shijufei', 'junzibuli', 'kuji', 'sizhi', 'mingzhe', 'kuaile', 'jingguishen', 'ningming'] },
+        { name: '做事与决断', ids: ['yusu', 'jibu', 'zhuanzhu', 'xiguan', 'qianshi', 'xuesi', 'zhixing', 'qifa', 'buxiawen', 'jingwa', 'qufahushang', 'bingguishensu', 'jiangzaiwai', 'lianghaixiangquan', 'buruhuxue', 'zeshan', 'dadan', 'jianji', 'daqiwancheng', 'jiaoxue', 'duxue', 'jingye', 'weixue', 'boxue', 'jinri', 'daxing'] },
+        { name: '待人与相处', ids: ['jisuo', 'heertong', 'liuyibu', 'bianjie', 'jinzhu', 'daiji', 'yinuo', 'shenyan', 'bupingzemin', 'qiuming', 'jiyulida', 'qinyudai', 'huannan', 'buzaizhiwei', 'chengrenzhimei', 'weisheng', 'bufucong', 'zhongkou', 'shizhiji', 'lujian', 'mianzhe'] },
+        { name: '对己与心性', ids: ['qiuzhuji', 'manzhao', 'zizhi', 'shendu', 'gudu', 'jiyi', 'sisheng', 'buqu', 'ziyou', 'xiwang', 'yongqi', 'duliqingshen', 'shiyandaojun', 'zhichi', 'qiongzedushan', 'bushijie', 'xiaoburen', 'ziqiuduofu', 'qiongtu', 'buyiwuxi', 'shijufei', 'junzibuli', 'kuji', 'sizhi', 'mingzhe', 'kuaile', 'jingguishen', 'ningming', 'gupen', 'mianzi'] },
         { name: '世事与得失', ids: ['yuhuan', 'huoxi', 'zhizu', 'jinqian', 'yixue', 'fengzhong', 'dake', 'wuzhu', 'chengzhang', 'jinxin', 'shenti', 'ruoshui', 'baoyuan', 'zhinu', 'xishi', 'shuerbuzuo', 'jinshixingle', 'gongchengshentui', 'zhiqibuke', 'suiyueran', 'gaiguan', 'xiannanzhihou', 'qingshan', 'shishiwu', 'liangqin'] }
       ]
     },
@@ -25,10 +25,10 @@
       name: '按学科',
       hint: '它属于哪一门',
       groups: [
-        { name: '伦理与修养', ids: ['jisuo', 'yinuo', 'manzhao', 'shendu', 'zizhi', 'buqu', 'bianjie', 'liuyibu', 'zhichi', 'bushijie', 'xiaoburen', 'buyiwuxi', 'shijufei', 'buzaizhiwei', 'xiannanzhihou', 'kuji', 'sizhi', 'weisheng', 'bufucong', 'kuaile', 'ningming'] },
+        { name: '伦理与修养', ids: ['jisuo', 'yinuo', 'manzhao', 'shendu', 'zizhi', 'buqu', 'bianjie', 'liuyibu', 'zhichi', 'bushijie', 'xiaoburen', 'buyiwuxi', 'shijufei', 'buzaizhiwei', 'xiannanzhihou', 'kuji', 'sizhi', 'weisheng', 'bufucong', 'kuaile', 'ningming', 'gupen', 'lujian', 'mianzi'] },
         { name: '认识与方法', ids: ['dake', 'jinxin', 'jingwa', 'xuesi', 'qifa', 'buxiawen', 'qianshi', 'jiyi', 'shuerbuzuo', 'shiyandaojun', 'zeshan', 'dadan', 'jiaoxue', 'duxue', 'jingguishen', 'weixue', 'boxue'] },
-        { name: '行动与做事', ids: ['zhixing', 'zhuanzhu', 'xiguan', 'jibu', 'yusu', 'yixue', 'xishi', 'fengzhong', 'bingguishensu', 'jiangzaiwai', 'buruhuxue', 'jianji', 'daqiwancheng', 'jingye', 'jinri'] },
-        { name: '人与关系', ids: ['heertong', 'jinzhu', 'daiji', 'gudu', 'shenyan', 'zhinu', 'jinqian', 'bupingzemin', 'duliqingshen', 'jiyulida', 'qinyudai', 'huannan', 'chengrenzhimei', 'zhongkou', 'shizhiji'] },
+        { name: '行动与做事', ids: ['zhixing', 'zhuanzhu', 'xiguan', 'jibu', 'yusu', 'yixue', 'xishi', 'fengzhong', 'bingguishensu', 'jiangzaiwai', 'buruhuxue', 'jianji', 'daqiwancheng', 'jingye', 'jinri', 'daxing'] },
+        { name: '人与关系', ids: ['heertong', 'jinzhu', 'daiji', 'gudu', 'shenyan', 'zhinu', 'jinqian', 'bupingzemin', 'duliqingshen', 'jiyulida', 'qinyudai', 'huannan', 'chengrenzhimei', 'zhongkou', 'shizhiji', 'mianzhe'] },
         { name: '处境与选择', ids: ['yuhuan', 'huoxi', 'zhizu', 'ruoshui', 'baoyuan', 'qiuzhuji', 'xiwang', 'sisheng', 'ziyou', 'yongqi', 'chengzhang', 'wuzhu', 'shenti', 'qiuming', 'qufahushang', 'jinshixingle', 'qiongzedushan', 'gongchengshentui', 'lianghaixiangquan', 'zhiqibuke', 'suiyueran', 'gaiguan', 'ziqiuduofu', 'qiongtu', 'junzibuli', 'qingshan', 'mingzhe', 'shishiwu', 'liangqin'] }
       ]
     }

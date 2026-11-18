@@ -386,11 +386,32 @@
 
     /* 批次 17：ningming */
     ningming: { v: [1, 0, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
-                vs: [{ with: 'bupingzemin', when: '有话要说：bupingzemin 说该把不平说出来，ningming 说宁可付出代价也不闭嘴' }] },
+                vs: [{ with: 'bupingzemin', when: '有话要说：bupingzemin 说该把不平说出来，ningming 说宁可付出代价也不闭嘴' }, { with: 'lujian', when: '看到不公：ningming 说的是自己非说不可，lujian 说的是为别人挡一下' }] },
 
     /* 批次 17：shizhiji */
     shizhiji: { v: [1, 0, 1, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0],
                 vs: [{ with: 'yinuo', when: '为何守信：yinuo 说承诺本身要守，shizhiji 说因为那个人懂我' }, { with: 'zhichi', when: '对错的来源：zhichi 说做了会抬不起头，shizhiji 说怕对不起那个懂我的人' }] }
+,
+
+    /* 批次 18：gupen */
+    gupen: { v: [0, 0, -1, -1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'qiongtu', when: '亲人去世：qiongtu 说走到尽头就放声哭，gupen 说看穿了就不必哭' }] },
+
+    /* 批次 18：lujian */
+    lujian: { v: [0, -1, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'heertong', when: '看到不对的事：heertong 说保持和气地表达不同，lujian 说直接出手' }, { with: 'bupingzemin', when: '看到不平：bupingzemin 说的是把不平说出来，lujian 说的是直接出手帮那个人' }, { with: 'mianzhe', when: '当众表达：mianzhe 是当面反对某个人的说法，lujian 是当场护住一个被欺负的人' }] },
+
+    /* 批次 18：mianzi */
+    mianzi: { v: [0, -1, 0, 0, 0, 0, 0, 1, -2, 0, 0, 0, 0],
+                vs: [{ with: 'chengrenzhimei', when: '在众人面前：chengrenzhimei 想的是帮人成事，mianzi 想的是自己别丢脸' }, { with: 'zhichi', when: '羞耻感的来源：zhichi 说做了会抬不起头（内在），mianzi 说怕别人看不起（外在）' }] },
+
+    /* 批次 18：mianzhe */
+    mianzhe: { v: [0, 0, 1, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'ningming', when: '有意见要说：ningming 说的是自己非说不可，mianzhe 说的是当着当事人的面说' }, { with: 'bupingzemin', when: '有意见：bupingzemin 说的是把情绪说出来，mianzhe 说的是当着当事人的面把道理摆出来' }] },
+
+    /* 批次 18：daxing */
+    daxing: { v: [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+                vs: [{ with: 'jianji', when: '要不要临时改主意：jianji 说看准苗头就动，daxing 说为了大事可以不守小节' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

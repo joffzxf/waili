@@ -40,5 +40,6 @@ window.QJY_RING = [
   'kuji', 'sizhi', 'weisheng', 'qingshan', 'mingzhe',
   'jiaoxue', 'duxue', 'jingye', 'shishiwu', 'liangqin',
   'bufucong', 'kuaile', 'jingguishen', 'weixue', 'boxue',
-  'zhongkou', 'jinri', 'ningming', 'shizhiji'
+  'zhongkou', 'jinri', 'ningming', 'shizhiji',
+  'gupen', 'lujian', 'mianzi', 'mianzhe', 'daxing'
 ];
