@@ -1817,12 +1817,119 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
   .axis-row { grid-template-columns: 2.9em 5em 1fr 5em 1.7em; gap: 6px; }
   .ar-pole { font-size: 9.5px; }
 }
+/* ---------- 视图切换 / 哲学门类 ---------- */
+
+.view-switch {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 22px 0 0;
+}
+.vs-btn {
+  appearance: none;
+  font: inherit;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: .18em;
+  padding: 9px 26px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: color .18s, background .18s, border-color .18s;
+}
+.vs-btn:first-child { border-radius: 2px 0 0 2px; }
+.vs-btn:last-child { border-left: 0; border-radius: 0 2px 2px 0; }
+.vs-btn:hover { color: var(--zhu); }
+.vs-btn.on { background: var(--zhu); border-color: var(--zhu); color: #fff9f0; }
+.vs-btn:focus-visible { outline: 2px solid var(--zhu); outline-offset: 2px; }
+
+.field-intro {
+  max-width: 34em;
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--ink-3);
+}
+
+.field-block { margin-top: 54px; }
+
+.field-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.field-num {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--zhu);
+  letter-spacing: .1em;
+}
+.field-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: .1em;
+}
+.field-en {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: .14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.field-count {
+  margin-left: auto;
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  color: var(--ink-3);
+}
+
+.field-ask {
+  margin: 14px 0 6px;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-2);
+  letter-spacing: .04em;
+}
+.field-lineage {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 2;
+  color: var(--ink-3);
+  letter-spacing: .02em;
+}
+.fl-tag {
+  display: inline-block;
+  margin: 0 6px 0 0;
+  padding: 0 5px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-size: 10px;
+  color: var(--ink-3);
+  vertical-align: 1px;
+}
+.field-lineage { margin-bottom: 22px; }
+.field-lineage .fl-tag + span { margin-right: 14px; }
+.field-note {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule-soft);
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--ink-3);
+}
 /* ---------- 打印 ---------- */
 
 @page { size: A4; margin: 9mm 10mm; }
 
 @media print {
   .topbar, .topnav, .toolbar, .site-foot, .ask, .examples,
+  .atlas, .atlas-bar, .atlas-result, .atlas-all, .atlas-intro, .scheme-bar, .view-switch,
   .paper-grain, .copied-tip, .returner, .crumb { display: none !important; }
   body { background: #fff; color: #000; font-size: 9.5pt; line-height: 1.5; }
   main { max-width: none; padding: 0; }
@@ -1914,3 +2021,29 @@ textarea.ask-input::placeholder { color: var(--ink-3); opacity: .75; }
 }
 
 
+/* 窄屏顶栏（680px 断点之后仍放不下：430px 时「册子」被切、明暗键出屏） */
+@media (max-width: 560px) {
+  .topbar { padding: 16px 14px 6px; gap: 8px; }
+  .brand { gap: 8px; }
+  .brand-seal { width: 32px; height: 32px; font-size: 18px; }
+  .brand-words strong { font-size: 16px; letter-spacing: .12em; }
+  .topnav { gap: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .topnav .link-btn { font-size: 12px; letter-spacing: .01em; padding: 6px 6px; }
+  .topnav .icon-btn { font-size: 14px; padding: 6px 4px; }
+  main { padding: 4px 14px 52px; }
+}
+
+@media (max-width: 380px) {
+  .topnav .link-btn { font-size: 11px; padding: 6px 4px; }
+  .brand-words strong { font-size: 15px; letter-spacing: .06em; }
+  .brand-seal { width: 28px; height: 28px; font-size: 16px; }
+}
+
+@media (max-width: 560px) {
+  /* 轴行在 430px 会撑出去：em 取的是容器字号（16px），不是标签的 10px */
+  .axis-row { grid-template-columns: 2.6em 4.2em minmax(0, 1fr) 4.2em 1.6em; gap: 4px; }
+  .ar-range { min-width: 0; }
+  .atlas { padding: 18px 14px 14px; }
+  .atlas-bar { gap: 8px; }
+  .topbar { flex-wrap: wrap; row-gap: 4px; }
+}

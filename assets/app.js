@@ -20,7 +20,8 @@
     quiz: 'qjy.quiz',           // 三观坐标（12 题）作答
     quizFull: 'qjy.quizFull',   // 三观坐标（44 题）作答
     scheme: 'qjy.scheme',       // 册子的分类法（scene / subject / 空＝按主题）
-    quizV2: 'qjy.quizV2'        // 三观坐标 v2（40 题）作答
+    quizV2: 'qjy.quizV2',       // 三观坐标 v2（40 题）作答
+    view: 'qjy.view'            // 万理一览的视图（atlas / field）
   };
   var lastQuery = '';
 
@@ -1281,23 +1282,80 @@
     var AX = window.QJY_AXES ? window.QJY_AXES.list : [];
     var CO = window.QJY_COORD ? window.QJY_COORD.map : {};
 
+    function shortPole(s) {
+      /* 「人（事在人为）」→「人」；没有括注的原样返回 */
+      return String(s).replace(/（[^）]*）|\([^)]*\)/g, '');
+    }
+
     var rows = AX.map(function (a, i) {
       return '' +
         '<div class="axis-row" data-i="' + i + '">' +
           '<span class="ar-name">' + esc(a.name) + '</span>' +
-          '<span class="ar-pole ar-neg">' + esc(a.neg) + '</span>' +
+          '<span class="ar-pole ar-neg" title="' + esc(a.neg) + '">' + esc(shortPole(a.neg)) + '</span>' +
           '<input type="range" class="ar-range" min="-2" max="2" step="1" value="0" ' +
             'data-i="' + i + '" aria-label="' + esc(a.name) + '">' +
-          '<span class="ar-pole ar-pos">' + esc(a.pos) + '</span>' +
+          '<span class="ar-pole ar-pos" title="' + esc(a.pos) + '">' + esc(shortPole(a.pos)) + '</span>' +
           '<span class="ar-val" data-i="' + i + '">·</span>' +
         '</div>';
     }).join('');
 
+    /* 门类视图：轴说立场，门类说题材 */
+    var FIELD_DEF = window.QJY_FIELDS;
+    var fieldHtml = '';
+    if (FIELD_DEF) {
+      var NUM6 = ['壹', '贰', '叁', '肆', '伍', '陆', '柒'];
+      var fgroups = FIELD_DEF.list.map(function (f) {
+        return {
+          f: f,
+          items: THEMES.filter(function (t) { return FIELD_DEF.map[t.id] === f.id; })
+        };
+      }).filter(function (g) { return g.items.length; });
+
+      fieldHtml = '<p class="field-intro reveal">' +
+        '轴描述立场，门类描述题材——这是两件事。' +
+        '同一门里的两条道理，在轴上可能正相反；那正是它们会互相冲突的原因。' +
+        '</p>' +
+        fgroups.map(function (g, gi) {
+          return '' +
+            '<section class="field-block reveal">' +
+              '<header class="field-head">' +
+                '<span class="field-num">' + NUM6[gi] + '</span>' +
+                '<h2 class="field-name">' + esc(g.f.name) + '</h2>' +
+                '<span class="field-en">' + esc(g.f.en) + '</span>' +
+                '<span class="field-count">' + g.items.length + ' 条</span>' +
+              '</header>' +
+              '<p class="field-ask">' + esc(g.f.ask) + '</p>' +
+              '<p class="field-lineage">' +
+                '<span class="fl-tag">中</span>' + esc(g.f.cn) +
+                '<span class="fl-tag">西</span>' + esc(g.f.west) +
+              '</p>' +
+              '<div class="grid">' +
+                g.items.map(function (t) {
+                  return '<a class="card" href="#/t/' + encodeURIComponent(t.id) + '">' +
+                    '<h2 class="card-name">' + esc(t.name) + '</h2>' +
+                    '<p class="card-gist">' + esc(t.gist) + '</p>' +
+                    '<div class="card-meta">' +
+                      '<span>' + t.canon.length + ' 条引证</span>' +
+                      '<span>中国 ' + t._cn + ' · 域外 ' + (t.canon.length - t._cn) + '</span>' +
+                    '</div>' +
+                  '</a>';
+                }).join('') +
+              '</div>' +
+              '<p class="field-note">' + esc(g.f.note) + '</p>' +
+            '</section>';
+        }).join('');
+    }
+
     app.innerHTML = '' +
       '<header class="all-head reveal">' +
         '<h1>万 理 一 览</h1>' +
-        '<p>十三根轴 · 拨到哪儿，就站起来哪几条道理</p>' +
+        '<p>十三根轴拨出立场 · 六门分定题材</p>' +
       '</header>' +
+      '<div class="view-switch reveal" id="view-switch">' +
+        '<button type="button" class="vs-btn" data-view="atlas">拨 轴</button>' +
+        '<button type="button" class="vs-btn" data-view="field">门 类</button>' +
+      '</div>' +
+      '<div id="view-atlas">' +
       '<p class="atlas-intro reveal">' +
         '拨轴见理：每根轴从 −2 到 +2，0 是「这一根我不挑」。' +
         '拨动的轴越多，站得住的道理越少——拨到你要的那个位置，看还有谁在那儿。' +
@@ -1325,9 +1383,39 @@
             '</a>';
           }).join('') +
         '</div>' +
-      '</details>';
+      '</details>' +
+      '</div>' +
+      '<div id="view-field" hidden>' + fieldHtml + '</div>';
 
     bindAtlas(AX, CO);
+    bindViewSwitch();
+  }
+
+  /* 拨轴 / 门类 两个视图的切换 */
+  function bindViewSwitch() {
+    var sw = document.getElementById('view-switch');
+    var vA = document.getElementById('view-atlas');
+    var vF = document.getElementById('view-field');
+    if (!sw || !vA || !vF) return;
+
+    function apply(v) {
+      var isField = v === 'field';
+      vA.hidden = isField;
+      vF.hidden = !isField;
+      Array.prototype.forEach.call(sw.querySelectorAll('.vs-btn'), function (b) {
+        b.classList.toggle('on', b.getAttribute('data-view') === v);
+      });
+    }
+
+    sw.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.vs-btn') : null;
+      if (!b) return;
+      var v = b.getAttribute('data-view');
+      lsSet(KEY.view, v);
+      apply(v);
+    });
+
+    apply(lsGet(KEY.view, 'atlas') || 'atlas');
   }
 
   /* 轴盘：拨动后即时重算，只重绘结果区 */

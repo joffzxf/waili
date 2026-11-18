@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/data-21.js', 'assets/data-22.js', 'assets/data-23.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/atlas.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/data-21.js', 'assets/data-22.js', 'assets/data-23.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/atlas.js', 'assets/fields.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -853,6 +853,48 @@ if (AT && AX && CO) {
   ok(rAll.every(function (r) { return r.axes === N2; }), '十三根全拨时，每条都应按十三根计');
 
   console.log('  轴盘：空拨、单轴、多轴、排序与不表态惩罚已校验');
+}
+
+/* ---------- 15. 哲学门类 ---------- */
+section('【15】哲学门类');
+
+const FD = sandbox.window.QJY_FIELDS;
+ok(!!FD && Array.isArray(FD.list), 'fields.js 已加载');
+
+if (FD) {
+  const ids = FD.list.map(function (f) { return f.id; });
+  ok(ids.length === 6, '门类应为 6 门', String(ids.length));
+  ok(new Set(ids).size === ids.length, '门类 id 不应重复');
+
+  FD.list.forEach(function (f) {
+    ok(typeof f.name === 'string' && f.name.length >= 2, '门类应有中文名：' + f.id);
+    ok(typeof f.en === 'string' && f.en.length > 0, '门类应有西文名：' + f.id);
+    ok(typeof f.ask === 'string' && f.ask.length >= 4, '门类应有一句话问题：' + f.id);
+    ok(typeof f.cn === 'string' && f.cn.length >= 2, '门类应有中学名目：' + f.id);
+    ok(typeof f.west === 'string' && f.west.length >= 2, '门类应有西学名目：' + f.id);
+  });
+
+  /* 119 条一条不许漏 */
+  const mapped = Object.keys(FD.map);
+  ok(mapped.length === THEMES.length, '归门条数应等于主题数', mapped.length + ' / ' + THEMES.length);
+  THEMES.forEach(function (t) {
+    ok(!!FD.map[t.id], '缺门类归属：' + t.id);
+    ok(ids.indexOf(FD.map[t.id]) !== -1, t.id + ' 的门类不存在：' + FD.map[t.id]);
+  });
+  mapped.forEach(function (id) {
+    ok(THEMES.some(function (t) { return t.id === id; }), '归门表里有不存在的主题：' + id);
+  });
+
+  /* 每门至少 6 条，否则这门撑不起来 */
+  const counts = {};
+  ids.forEach(function (id) { counts[id] = 0; });
+  mapped.forEach(function (id) { counts[FD.map[id]] = (counts[FD.map[id]] || 0) + 1; });
+  ids.forEach(function (id) {
+    ok(counts[id] >= 6, '门类「' + FD.byId(id).name + '」条目不足 6 条', String(counts[id]));
+  });
+
+  console.log('  ' + ids.map(function (id) { return FD.byId(id).name + '·' + counts[id]; }).join(' '));
+  console.log('  合计 ' + mapped.length + ' 条，每门 ≥6');
 }
 
 /* ---------- 汇总 ---------- */

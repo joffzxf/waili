@@ -56,6 +56,7 @@ const ASSETS = [
   'assets/axes.js',
   'assets/coordinates.js',
   'assets/atlas.js',
+  'assets/fields.js',
   'assets/match.js',
   'assets/app.js'
 ];
