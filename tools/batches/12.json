@@ -1,0 +1,34 @@
+{
+  "data": 20,
+  "scene": {
+    "xiangyuan": "待人与相处",
+    "zhongnan": "对己与心性",
+    "dangduan": "做事与决断"
+  },
+  "subject": {
+    "xiangyuan": "伦理与修养",
+    "zhongnan": "伦理与修养",
+    "dangduan": "行动与做事"
+  },
+  "coords": {
+    "xiangyuan": {
+      "v": [0, -1, -1, 0, 0, 0, 0, 1, -2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "mianzi", "when": "怕人看不起：mianzi 是想保住自己的脸，xiangyuan 是想让所有人都挑不出错" },
+        { "with": "zhongnan", "when": "以退为进：zhongnan 退的是位置，xiangyuan 退的是立场" }
+      ]
+    },
+    "zhongnan": {
+      "v": [0, 0, 0, -1, 0, 0, 0, 1, -2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "shoushuo", "when": "退隐：shoushuo 退出来是为了不再被看见，zhongnan 退出来是为了被看见得更高级" }
+      ]
+    },
+    "dangduan": {
+      "v": [0, 0, -1, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0],
+      "vs": [
+        { "with": "jianji", "when": "要不要现在动手：jianji 说看准苗头就做，dangduan 说最怕的是不当场做决定" }
+      ]
+    }
+  }
+}
