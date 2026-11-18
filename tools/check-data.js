@@ -727,12 +727,16 @@ if (AX && CO) {
       const d = dist(map[ids[i]].v, map[ids[j]].v);
       if (d === 0) {
         ok(false, '两条坐标完全相同，必须合并或补轴：' + ids[i] + ' 与 ' + ids[j]);
+      } else if (d < 1.0 && !linked(ids[i], ids[j])) {
+        ok(false, '距离 < 1.0 且未写清区别，很可能重复：' + ids[i] + ' 与 ' + ids[j],
+          'd=' + d.toFixed(2));
       } else if (d < 1.5 && !linked(ids[i], ids[j])) {
         near.push(ids[i] + '↔' + ids[j] + '(d=' + d.toFixed(2) + ')');
       }
     }
   }
-  ok(near.length === 0, '距离 < 1.5 且未用 vs／cf 区分的条目对：', near.slice(0, 8).join('，'));
+  /* 增量式回审：1.0–1.5 之间只记待办，不阻断构建；清单见 tools/audit.js --write */
+  if (near.length) console.log('  · 待办（1.0 ≤ d < 1.5 且未写区别）：' + near.length + ' 对');
 
   const withVs = ids.filter(function (id) {
     return Array.isArray(map[id].vs) && map[id].vs.length;

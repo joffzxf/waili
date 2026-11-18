@@ -124,6 +124,7 @@ tools/
   check-data.js       语料与匹配自检
   stamp.js            计算并写入构建指纹（?v=<hash>）
   serve.js            本地静态服务器
+  audit.js            扩库审计：轴覆盖、交叉空格、增量回审
 docs/
   行动指引.md          产品行动指引：定位、用户旅程、内容规范、迭代路线
 ```
