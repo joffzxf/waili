@@ -30,5 +30,6 @@ window.QJY_RING = [
   /* v2 补裸极这一批：承袭 → 表达 → 名声 → 高标 → 神速 → 当下 → 独立 → 临机 */
   'shuerbuzuo', 'bupingzemin', 'qiuming', 'qufahushang',
   'bingguishensu', 'jinshixingle', 'duliqingshen', 'jiangzaiwai',
-  'shiyandaojun', 'zhichi', 'qiongzedushan', 'jiyulida', 'gongchengshentui', 'lianghaixiangquan'
+  'shiyandaojun', 'zhichi', 'qiongzedushan', 'jiyulida', 'gongchengshentui', 'lianghaixiangquan',
+  'zhiqibuke', 'bushijie', 'buruhuxue', 'suiyueran', 'zeshan'
 ];

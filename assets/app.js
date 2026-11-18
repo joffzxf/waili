@@ -19,7 +19,8 @@
     fav: 'qjy.fav',             // 册子（收藏）
     quiz: 'qjy.quiz',           // 三观坐标（12 题）作答
     quizFull: 'qjy.quizFull',   // 三观坐标（44 题）作答
-    scheme: 'qjy.scheme'        // 册子的分类法（scene / subject / 空＝按主题）
+    scheme: 'qjy.scheme',       // 册子的分类法（scene / subject / 空＝按主题）
+    quizV2: 'qjy.quizV2'        // 三观坐标 v2（40 题）作答
   };
   var lastQuery = '';
 
@@ -832,7 +833,8 @@
         '<span class="quiz-progress" id="quiz-progress">0 / 12</span>' +
         '<button type="button" class="btn btn-primary" id="quiz-go" disabled>看 我 的 坐 标</button>' +
       '</div>' +
-      '<p class="quiz-alt">想把每一根轴都量得更准？<a href="#/quiz/full">做 44 题全版诊断</a>（约 6 分钟）</p>';
+      '<p class="quiz-alt">想把每一根轴都量得更准？<a href="#/quiz/full">做 44 题全版诊断</a>（约 6 分钟）<br>' +
+      '或者用<a href="#/quiz/v2">新版 v2（40 题）</a>——每轴五正五反，题目也更新了</p>';
 
     function refresh() {
       var done = answers.filter(function (a) { return a !== null; }).length;
@@ -1140,6 +1142,141 @@
     });
   }
 
+  /* 三观坐标 v2（40 题，正反严格对齐） */
+  function renderQuizV2() {
+    var Q = window.QJY_QUIZ_V2;
+    var saved = lsGet(KEY.quizV2, null);
+    var answers = (Array.isArray(saved) && saved.length === Q.ITEMS.length)
+      ? saved.slice() : Q.ITEMS.map(function () { return null; });
+
+    var items = Q.ITEMS.map(function (it, i) {
+      return '' +
+        '<li class="q-item" data-i="' + i + '">' +
+          '<p class="q-text"><span class="q-no">' + (i + 1) + '</span>' + esc(it.text) + '</p>' +
+          '<div class="q-scale" role="group" aria-label="第 ' + (i + 1) + ' 题">' +
+            Q.LABELS.map(function (lb, v) {
+              return '<button type="button" class="q-opt' + (answers[i] === v ? ' on' : '') + '" ' +
+                'data-q="' + i + '" data-v="' + v + '" aria-pressed="' + (answers[i] === v ? 'true' : 'false') + '">' +
+                lb + '</button>';
+            }).join('') +
+          '</div>' +
+        '</li>';
+    }).join('');
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>三 观 坐 标 <span class="ver-tag">v2</span></h1>' +
+        '<p>40 句话 · 每根轴五正五反 · 与 v1 不可比</p>' +
+      '</header>' +
+      '<p class="quiz-intro reveal">' +
+        'v2 的两处改动：每根轴的正反题目严格对齐（各五道），' +
+        '并且题目覆盖了 v1 之后新补的对立面——不平则鸣、取法乎上、功成身退、两害相权。' +
+        '正因为题换了，v2 的分数不能与 v1 对照。' +
+      '</p>' +
+      '<ol class="q-list reveal">' + items + '</ol>' +
+      '<div class="quiz-bar">' +
+        '<span class="quiz-progress" id="quiz-progress">0 / ' + Q.ITEMS.length + '</span>' +
+        '<button type="button" class="btn btn-primary" id="quiz-go" disabled>看 我 的 坐 标</button>' +
+      '</div>';
+
+    function refresh() {
+      var done = answers.filter(function (a) { return a !== null; }).length;
+      document.getElementById('quiz-progress').textContent = done + ' / ' + Q.ITEMS.length;
+      var go = document.getElementById('quiz-go');
+      go.disabled = done < Q.ITEMS.length;
+      go.textContent = done < Q.ITEMS.length ? '还差 ' + (Q.ITEMS.length - done) + ' 题' : '看 我 的 坐 标';
+    }
+    refresh();
+
+    app.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.q-opt') : null;
+      if (!b) return;
+      answers[parseInt(b.getAttribute('data-q'), 10)] = parseInt(b.getAttribute('data-v'), 10);
+      lsSet(KEY.quizV2, answers);
+      Array.prototype.forEach.call(b.parentNode.children, function (c) {
+        c.classList.remove('on');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      b.classList.add('on');
+      b.setAttribute('aria-pressed', 'true');
+      refresh();
+    });
+
+    document.getElementById('quiz-go').addEventListener('click', function () {
+      if (answers.indexOf(null) !== -1) return;
+      navigate('#/quiz/v2/r/' + Q.encode(answers));
+    });
+  }
+
+  function renderQuizV2Result(code) {
+    var Q = window.QJY_QUIZ_V2;
+    var answers = Q.decode(code);
+    if (!answers) {
+      app.innerHTML = '<section class="result"><p class="notice">这份结果读不出来。' +
+        '<a href="#/quiz/v2">重新做一次</a></p></section>';
+      return;
+    }
+
+    var scores = Q.score(answers);
+    var lines = Q.summary(scores);
+    var trad = Q.traditions(answers, THEMES);
+
+    var bars = lines.map(function (ln) {
+      var v = ln.value, pct = Math.abs(v) / 2;
+      var ax = Q.AXES.filter(function (a) { return a.id === ln.axis; })[0];
+      var style = v >= 0
+        ? 'left:50%;width:' + pct + '%;background:var(--zhu)'
+        : 'left:' + (50 - pct) + '%;width:' + pct + '%;background:var(--dai)';
+      return '' +
+        '<div class="axis">' +
+          '<div class="axis-head">' +
+            '<span class="axis-neg">' + esc(ax.neg) + '</span>' +
+            '<span class="axis-val">' + (v > 0 ? '+' : '') + v + '</span>' +
+            '<span class="axis-pos">' + esc(ax.pos) + '</span>' +
+          '</div>' +
+          '<div class="axis-track"><span class="axis-mid"></span><span class="axis-fill" style="' + style + '"></span></div>' +
+          '<p class="axis-desc">' + esc(ln.text) + '</p>' +
+        '</div>';
+    }).join('');
+
+    var ranked = Q.ITEMS.map(function (it, i) {
+      return { it: it, i: i, v: Number(answers[i]) };
+    }).sort(function (a, b) { return b.v - a.v; });
+    var top = ranked[0], bottom = ranked[ranked.length - 1];
+
+    function refLine(x, word) {
+      var t = themeById(x.it.theme);
+      return '<p class="pick"><span class="pick-tag">' + word + '</span>' + esc(x.it.text) +
+        (t ? ' <a href="#/t/' + encodeURIComponent(t.id) + '">读这一条 →</a>' : '') + '</p>';
+    }
+
+    app.innerHTML = '' +
+      '<header class="all-head reveal">' +
+        '<h1>你 的 三 观 坐 标 <span class="ver-tag">v2</span></h1>' +
+        '<p>40 题 · 每轴五正五反 · 与其他版本的分数不可比</p>' +
+      '</header>' +
+      '<section class="axes reveal">' + bars + '</section>' +
+      '<section class="trads reveal">' +
+        '<h2 class="side-title">与你最亲近的文明</h2>' +
+        '<div class="trad-row">' +
+          (trad.top.length
+            ? trad.top.map(function (x) { return '<span class="trad-chip">' + esc(x.name) + '</span>'; }).join('')
+            : '<span class="trad-none">没有明显偏向</span>') +
+        '</div>' +
+        (trad.bottom ? '<p class="trad-bottom">最不亲近：' + esc(trad.bottom.name) + '</p>' : '') +
+      '</section>' +
+      '<section class="picks reveal">' + refLine(top, '最认同') + refLine(bottom, '最反对') + '</section>' +
+      '<div class="toolbar">' +
+        '<button type="button" class="btn btn-ghost" id="qv2-share">复制我的链接</button>' +
+        '<button type="button" class="btn btn-ghost" id="qv2-again">重做</button>' +
+      '</div>';
+
+    document.getElementById('qv2-share').addEventListener('click', function () {
+      copyText(location.origin + location.pathname + '#/quiz/v2/r/' + code);
+    });
+    document.getElementById('qv2-again').addEventListener('click', function () { navigate('#/quiz/v2'); });
+  }
+
   function renderAll() {
     app.innerHTML = '' +
       '<header class="all-head reveal">' +
@@ -1373,6 +1510,10 @@
       renderQuiz();
     } else if (h.indexOf('/quiz/r/') === 0) {
       renderQuizResult(decodeURIComponent(h.slice(8)));
+    } else if (h === '/quiz/v2') {
+      renderQuizV2();
+    } else if (h.indexOf('/quiz/v2/r/') === 0) {
+      renderQuizV2Result(decodeURIComponent(h.slice(11)));
     } else if (h === '/quiz/full') {
       renderQuizFull();
     } else if (h.indexOf('/quiz/full/r/') === 0) {

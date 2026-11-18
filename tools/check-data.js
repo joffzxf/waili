@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -747,6 +747,65 @@ if (AX && CO) {
   }).length;
   const withCf = ids.filter(function (id) { return (map[id].cf || []).length; }).length;
   console.log('  ' + ids.length + ' 条全部有坐标与区分情境；' + withCf + ' 条声明了冲突');
+}
+
+/* ---------- 13. 三观坐标 v2（40 题） ---------- */
+section('【13】三观坐标 v2');
+
+const Q3 = sandbox.window.QJY_QUIZ_V2;
+ok(!!Q3 && Array.isArray(Q3.ITEMS), 'quiz-v2.js 已加载');
+
+if (Q3) {
+  ok(Q3.ITEMS.length === 40, 'v2 题量应为 40', String(Q3.ITEMS.length));
+
+  /* v1 的毛病：每轴 6 正 5 反，抵消不干净。v2 必须严格 5 正 5 反 */
+  Q3.AXES.forEach(function (a) {
+    const mine = Q3.ITEMS.filter(function (it) { return it.axis === a.id; });
+    const pos = mine.filter(function (it) { return it.dir > 0; }).length;
+    const neg = mine.filter(function (it) { return it.dir < 0; }).length;
+    ok(pos === 5, '轴 ' + a.id + ' 应有 5 道正向题', String(pos));
+    ok(neg === 5, '轴 ' + a.id + ' 应有 5 道反向题', String(neg));
+  });
+
+  /* 全选「同意」或「不同意」都应得 0——正反完全抵消 */
+  const agree = Q3.score(new Array(40).fill(4));
+  const deny = Q3.score(new Array(40).fill(0));
+  Q3.AXES.forEach(function (a) {
+    ok(agree[a.id] === 0, '全选同意时轴 ' + a.id + ' 应为 0', String(agree[a.id]));
+    ok(deny[a.id] === 0, '全选不同意时轴 ' + a.id + ' 应为 0', String(deny[a.id]));
+  });
+
+  /* 每道题都要挂在真实主题上 */
+  Q3.ITEMS.forEach(function (it, i) {
+    ok(THEMES.some(function (t) { return t.id === it.theme; }),
+      'v2 第 ' + (i + 1) + ' 题指向的主题应存在：' + it.theme);
+    ok(typeof it.text === 'string' && it.text.length >= 8, 'v2 第 ' + (i + 1) + ' 题应有完整断言');
+  });
+
+  /* 必须真的用上了新补的对立面，否则 v2 只是 v1 的删减 */
+  const newThemes = ['duliqingshen', 'jiyulida', 'zhichi', 'lianghaixiangquan',
+                     'zhiqibuke', 'gongchengshentui', 'buruhuxue', 'qiongzedushan'];
+  newThemes.forEach(function (id) {
+    ok(Q3.ITEMS.some(function (it) { return it.theme === id; }),
+      'v2 应包含来自新语料的题：' + id);
+  });
+
+  /* 编码 */
+  const sampleV2 = new Array(40).fill(0).map(function (_, i) { return i % 5; });
+  const c3 = Q3.encode(sampleV2);
+  ok(c3.slice(0, 2) === 'q3' && c3.length === 42, 'v2 编码应为 q3 + 40 位');
+  ok((Q3.decode(c3) || []).join(',') === sampleV2.join(','), 'v2 编码解码应无损');
+  ok(Q3.decode(QZ.encode(new Array(12).fill(2))) === null, 'v2 不应把 12 题编码当自己的');
+  ok(Q3.decode(QF.encode(new Array(44).fill(2))) === null, 'v2 不应把 44 题编码当自己的');
+
+  /* 题序：同一根轴的题不应相邻 */
+  let adjacent = 0;
+  for (let i = 1; i < Q3.ITEMS.length; i++) {
+    if (Q3.ITEMS[i].axis === Q3.ITEMS[i - 1].axis) adjacent++;
+  }
+  ok(adjacent === 0, '同轴题目不应相邻（会诱导作答惯性）', String(adjacent));
+
+  console.log('  40 题，四轴各 5 正 5 反；全选同意/不同意均为 0');
 }
 
 /* ---------- 汇总 ---------- */

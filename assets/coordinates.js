@@ -52,7 +52,7 @@
                 cf: [{ with: 'liuyibu', when: '承诺与处境冲突时，守约还是变通' }, { with: 'jiangzaiwai', when: '承诺与现场情况冲突时' }] },
     liuyibu:  { v: [0, -2, -2, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
                 vs: [{ with: 'yinuo', when: '口头答应但条件变了：liuyibu 主张按新情况办，yinuo 主张先认账' }],
-                cf: [{ with: 'yinuo', when: '承诺与处境冲突时，守约还是变通' }] },
+                cf: [{ with: 'yinuo', when: '承诺与处境冲突时，守约还是变通' }, { with: 'bushijie', when: '尊严与通融冲突时' }] },
     jisuo:    { v: [0, -2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'ziyou', when: '家人反对你的选择：jisuo 让你体谅他们的处境，ziyou 让你自己定' }],
                 cf: [{ with: 'ziyou', when: '个人意愿与家庭期待正面冲突' }] },
@@ -73,7 +73,7 @@
                 cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }] },
     shendu:   { v: [0, 0, 0, -2, 0, 0, 0, 2, 2, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '没有人监督时：shendu 说守住自己就够了，yongqi 说还要替别人出头' }],
-                cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }, { with: 'qiuming', when: '要不要在乎别人怎么评价你' }] },
+                cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }, { with: 'qiuming', when: '要不要在乎别人怎么评价你' }, { with: 'zhiqibuke', when: '与己无关又改不了的事，要不要介入' }] },
     heertong: { v: [0, -1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shendu', when: '看到不对的事：heertong 说要当面说，shendu 说先收着' }],
                 cf: [{ with: 'shenyan', when: '该不该把不同意见说出口' }] },
@@ -217,6 +217,30 @@
     /* 补裸极 / 交叉空格：lianghaixiangquan */
     lianghaixiangquan: { v: [2, 0, -2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'baoyuan', when: '两个选项都糟：baoyuan 说按直回一次，lianghaixiangquan 说算清代价取轻的那个' }] }
+,
+
+    /* 高价值空格：zhiqibuke */
+    zhiqibuke: { v: [-2, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'shendu', when: '明知改不了还要不要做：shendu 说先管好自己就够了，zhiqibuke 说正因改不了才该做' }],
+                cf: [{ with: 'shendu', when: '与己无关又改不了的事，要不要介入' }] },
+
+    /* 高价值空格：bushijie */
+    bushijie: { v: [-1, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'liuyibu', when: '有人给你好处但态度轻蔑：bushijie 说别接，liuyibu 说先留余地' },
+                { with: 'baoyuan', when: '被人轻慢之后：baoyuan 说按直回一次，bushijie 说连这次回应都不必给' }],
+                cf: [{ with: 'liuyibu', when: '尊严与通融冲突时' }] },
+
+    /* 高价值空格：buruhuxue */
+    buruhuxue: { v: [2, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'lianghaixiangquan', when: '两个选项都糟：lianghaixiangquan 说取轻的那个，buruhuxue 说另开一条路' }] },
+
+    /* 高价值空格：suiyueran */
+    suiyueran: { v: [-2, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'qiongzedushan', when: '环境改不了时：qiongzedushan 说退回来守住自己，suiyueran 说就在这里安顿下来' }] },
+
+    /* 高价值空格：zeshan */
+    zeshan: { v: [1, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'shuerbuzuo', when: '该跟谁学：shuerbuzuo 说守住一个传统读透，zeshan 说博采众家各取所长' }, { with: 'shiyandaojun', when: '求学的方式：shiyandaojun 说找一位老师跟到底，zeshan 说同时学好几家' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };
