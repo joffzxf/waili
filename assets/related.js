@@ -45,5 +45,6 @@ window.QJY_RING = [
   'xiaozi', 'buji', 'pofu', 'jianhao', 'shoushuo',
   'xiangyuan', 'zhongnan', 'dangduan',
   'zongfa',
-  'zhenyi', 'wukebuke', 'baowen', 'kuangzhe', 'congxin'
+  'zhenyi', 'wukebuke', 'baowen', 'kuangzhe', 'congxin',
+  'jingyiyou', 'qutuxixin', 'zhinantui'
 ];

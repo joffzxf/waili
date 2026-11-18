@@ -472,6 +472,20 @@
     /* 批次 22：congxin */
     congxin: { v: [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -2, 0, 0],
                 vs: [{ with: 'wukebuke', when: '守不守规矩：wukebuke 说无所谓哪种做法，congxin 说规矩已经练成了本能' }] }
+,
+
+    /* 批次 23：jingyiyou */
+    jingyiyou: { v: [0, 0, 0, 0, 0, 0, -2, 2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'kuangzhe', when: '把命押上去的时候：kuangzhe 说照样痛痛快快，jingyiyou 说越到这时越不能让人看出你在想什么' }] },
+
+    /* 批次 23：qutuxixin */
+    qutuxixin: { v: [0, 0, 0, 0, 0, 0, 2, 0, -1, 0, 0, 0, 0],
+                /* 与百闻不如一见：都避险，但一个先去现场看，一个在没出事前先防 */
+                vs: [{ with: 'jianhao', when: '什么时候收：jianhao 说见好就收（事情已经好了），qutuxixin 说在还没开始时就要防' }, { with: 'baowen', when: '怎么避险：baowen 说亲自去现场看一眼再判断，qutuxixin 说在还没出事时就把隐患挪开' }] },
+
+    /* 批次 23：zhinantui */
+    zhinantui: { v: [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, -2, 0, 0],
+                vs: [{ with: 'qingshan', when: '该不该退：qingshan 退是为了保住本钱再图后计，zhinantui 退是因为算清这仗打不赢' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

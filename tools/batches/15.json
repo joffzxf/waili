@@ -1,0 +1,33 @@
+{
+  "data": 23,
+  "scene": {
+    "jingyiyou": "做事与决断",
+    "qutuxixin": "世事与得失",
+    "zhinantui": "做事与决断"
+  },
+  "subject": {
+    "jingyiyou": "伦理与修养",
+    "qutuxixin": "处境与选择",
+    "zhinantui": "行动与做事"
+  },
+  "coords": {
+    "jingyiyou": {
+      "v": [0, 0, 0, 0, 0, 0, -2, 2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "kuangzhe", "when": "把命押上去的时候：kuangzhe 说照样痛痛快快，jingyiyou 说越到这时越不能让人看出你在想什么" }
+      ]
+    },
+    "qutuxixin": {
+      "v": [0, 0, 0, 0, 0, 0, 2, 0, -1, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jianhao", "when": "什么时候收：jianhao 说见好就收（事情已经好了），qutuxixin 说在还没开始时就要防" }
+      ]
+    },
+    "zhinantui": {
+      "v": [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, -2, 0, 0],
+      "vs": [
+        { "with": "qingshan", "when": "该不该退：qingshan 退是为了保住本钱再图后计，zhinantui 退是因为算清这仗打不赢" }
+      ]
+    }
+  }
+}
