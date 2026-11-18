@@ -263,6 +263,28 @@
     /* 批次 11：dadan */
     dadan: { v: [1, 0, 0, 0, 0, 2, -2, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'jinxin', when: '面对一个新想法：jinxin 说先怀疑它，dadan 说先大胆假设再小心求证' }] }
+,
+
+    /* 批次 12：ziqiuduofu */
+    ziqiuduofu: { v: [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'qiuzhuji', when: '遇到难处：qiuzhuji 说先查自己哪里不对，ziqiuduofu 说自己去找出路' }] },
+
+    /* 批次 12：qiongtu */
+    qiongtu: { v: [-1, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'bupingzemin', when: '憋着一口气：bupingzemin 说要说出来，qiongtu 说走到真尽头就哭一场' }] },
+
+    /* 批次 12：buyiwuxi */
+    buyiwuxi: { v: [2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'xiaoburen', when: '被人激怒：xiaoburen 说为大局忍下来，buyiwuxi 说这件事根本不值得动心' }] },
+
+    /* 批次 12：shijufei */
+    shijufei: { v: [-1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+                vs: [{ with: 'shendu', when: '外界都在否定你：shendu 说守住自己就够，shijufei 说毁誉都不该改变你的标准' },
+                     { with: 'zizhi', when: '评价标准向内：zizhi 让你向内看清自己，shijufei 让你在众人的誉与非里不动摇' }] },
+
+    /* 批次 12：jianji */
+    jianji: { v: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+                vs: [{ with: 'jiangzaiwai', when: '计划遇到变化：jiangzaiwai 说把决定权交给现场，jianji 说看到苗头立刻动手别等' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

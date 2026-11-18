@@ -66,10 +66,11 @@ edit('tools/check-data.js', function (s) {
 /* 4) 主题之环 */
 edit('assets/related.js', function (s) {
   if (s.indexOf("'" + IDS[0] + "'") !== -1) return s;
-  const m = s.match(/(\n\s*'[a-z0-9]+'(?:,\s*'[a-z0-9]+')*\s*\n\s*\];)/);
-  if (!m) throw new Error('找不到环的结尾');
-  const add = ",\n  " + IDS.map(function (id) { return "'" + id + "'"; }).join(', ');
-  return s.replace(m[1], add + m[1]);
+  /* 直接找最后的 "];"，在其前追加——不要用正则匹配多行 id 组，容易咬错位置 */
+  const at = s.lastIndexOf('\n];');
+  if (at === -1) throw new Error('找不到环的结尾');
+  const head = s.slice(0, at).replace(/,?\s*$/, '');
+  return head + ',\n  ' + IDS.map(function (id) { return "'" + id + "'"; }).join(', ') + s.slice(at);
 });
 
 /* 5) 两套分类法 */

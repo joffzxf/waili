@@ -1,0 +1,49 @@
+{
+  "data": 12,
+  "scene": {
+    "ziqiuduofu": "对己与心性",
+    "qiongtu": "对己与心性",
+    "buyiwuxi": "对己与心性",
+    "shijufei": "对己与心性",
+    "jianji": "做事与决断"
+  },
+  "subject": {
+    "ziqiuduofu": "处境与选择",
+    "qiongtu": "处境与选择",
+    "buyiwuxi": "伦理与修养",
+    "shijufei": "伦理与修养",
+    "jianji": "行动与做事"
+  },
+  "coords": {
+    "ziqiuduofu": {
+      "v": [2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "qiuzhuji", "when": "遇到难处：qiuzhuji 说先查自己哪里不对，ziqiuduofu 说自己去找出路" }
+      ]
+    },
+    "qiongtu": {
+      "v": [-1, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "bupingzemin", "when": "憋着一口气：bupingzemin 说要说出来，qiongtu 说走到真尽头就哭一场" }
+      ]
+    },
+    "buyiwuxi": {
+      "v": [2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "xiaoburen", "when": "被人激怒：xiaoburen 说为大局忍下来，buyiwuxi 说这件事根本不值得动心" }
+      ]
+    },
+    "shijufei": {
+      "v": [-1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "shendu", "when": "外界都在否定你：shendu 说守住自己就够，shijufei 说毁誉都不该改变你的标准" }
+      ]
+    },
+    "jianji": {
+      "v": [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+      "vs": [
+        { "with": "jiangzaiwai", "when": "计划遇到变化：jiangzaiwai 说把决定权交给现场，jianji 说看到苗头立刻动手别等" }
+      ]
+    }
+  }
+}
