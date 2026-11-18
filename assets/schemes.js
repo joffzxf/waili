@@ -17,7 +17,7 @@
         { name: '做事与决断', ids: ['yusu', 'jibu', 'zhuanzhu', 'xiguan', 'qianshi', 'xuesi', 'zhixing', 'qifa', 'buxiawen', 'jingwa', 'qufahushang', 'bingguishensu', 'jiangzaiwai', 'lianghaixiangquan', 'buruhuxue', 'zeshan', 'dadan', 'jianji', 'daqiwancheng', 'jiaoxue', 'duxue', 'jingye', 'weixue', 'boxue', 'jinri', 'daxing', 'pofu', 'dangduan'] },
         { name: '待人与相处', ids: ['jisuo', 'heertong', 'liuyibu', 'bianjie', 'jinzhu', 'daiji', 'yinuo', 'shenyan', 'bupingzemin', 'qiuming', 'jiyulida', 'qinyudai', 'huannan', 'buzaizhiwei', 'chengrenzhimei', 'weisheng', 'bufucong', 'zhongkou', 'shizhiji', 'lujian', 'mianzhe', 'xiaozi', 'xiangyuan'] },
         { name: '对己与心性', ids: ['qiuzhuji', 'manzhao', 'zizhi', 'shendu', 'gudu', 'jiyi', 'sisheng', 'buqu', 'ziyou', 'xiwang', 'yongqi', 'duliqingshen', 'shiyandaojun', 'zhichi', 'qiongzedushan', 'bushijie', 'xiaoburen', 'ziqiuduofu', 'qiongtu', 'buyiwuxi', 'shijufei', 'junzibuli', 'kuji', 'sizhi', 'mingzhe', 'kuaile', 'jingguishen', 'ningming', 'gupen', 'mianzi', 'buji', 'shoushuo', 'zhongnan'] },
-        { name: '世事与得失', ids: ['yuhuan', 'huoxi', 'zhizu', 'jinqian', 'yixue', 'fengzhong', 'dake', 'wuzhu', 'chengzhang', 'jinxin', 'shenti', 'ruoshui', 'baoyuan', 'zhinu', 'xishi', 'shuerbuzuo', 'jinshixingle', 'gongchengshentui', 'zhiqibuke', 'suiyueran', 'gaiguan', 'xiannanzhihou', 'qingshan', 'shishiwu', 'liangqin', 'jianhao'] }
+        { name: '世事与得失', ids: ['yuhuan', 'huoxi', 'zhizu', 'jinqian', 'yixue', 'fengzhong', 'dake', 'wuzhu', 'chengzhang', 'jinxin', 'shenti', 'ruoshui', 'baoyuan', 'zhinu', 'xishi', 'shuerbuzuo', 'jinshixingle', 'gongchengshentui', 'zhiqibuke', 'suiyueran', 'gaiguan', 'xiannanzhihou', 'qingshan', 'shishiwu', 'liangqin', 'jianhao', 'zongfa'] }
       ]
     },
     {
@@ -29,7 +29,7 @@
         { name: '认识与方法', ids: ['dake', 'jinxin', 'jingwa', 'xuesi', 'qifa', 'buxiawen', 'qianshi', 'jiyi', 'shuerbuzuo', 'shiyandaojun', 'zeshan', 'dadan', 'jiaoxue', 'duxue', 'jingguishen', 'weixue', 'boxue'] },
         { name: '行动与做事', ids: ['zhixing', 'zhuanzhu', 'xiguan', 'jibu', 'yusu', 'yixue', 'xishi', 'fengzhong', 'bingguishensu', 'jiangzaiwai', 'buruhuxue', 'jianji', 'daqiwancheng', 'jingye', 'jinri', 'daxing', 'pofu', 'dangduan'] },
         { name: '人与关系', ids: ['heertong', 'jinzhu', 'daiji', 'gudu', 'shenyan', 'zhinu', 'jinqian', 'bupingzemin', 'duliqingshen', 'jiyulida', 'qinyudai', 'huannan', 'chengrenzhimei', 'zhongkou', 'shizhiji', 'mianzhe', 'xiaozi'] },
-        { name: '处境与选择', ids: ['yuhuan', 'huoxi', 'zhizu', 'ruoshui', 'baoyuan', 'qiuzhuji', 'xiwang', 'sisheng', 'ziyou', 'yongqi', 'chengzhang', 'wuzhu', 'shenti', 'qiuming', 'qufahushang', 'jinshixingle', 'qiongzedushan', 'gongchengshentui', 'lianghaixiangquan', 'zhiqibuke', 'suiyueran', 'gaiguan', 'ziqiuduofu', 'qiongtu', 'junzibuli', 'qingshan', 'mingzhe', 'shishiwu', 'liangqin', 'jianhao'] }
+        { name: '处境与选择', ids: ['yuhuan', 'huoxi', 'zhizu', 'ruoshui', 'baoyuan', 'qiuzhuji', 'xiwang', 'sisheng', 'ziyou', 'yongqi', 'chengzhang', 'wuzhu', 'shenti', 'qiuming', 'qufahushang', 'jinshixingle', 'qiongzedushan', 'gongchengshentui', 'lianghaixiangquan', 'zhiqibuke', 'suiyueran', 'gaiguan', 'ziqiuduofu', 'qiongtu', 'junzibuli', 'qingshan', 'mingzhe', 'shishiwu', 'liangqin', 'jianhao', 'zongfa'] }
       ]
     }
   ];

@@ -1,0 +1,13 @@
+{
+  "data": 21,
+  "scene": { "zongfa": "世事与得失" },
+  "subject": { "zongfa": "处境与选择" },
+  "coords": {
+    "zongfa": {
+      "v": [0, 0, 0, 0, 0, -1, 2, 0, 0, 0, 1, 0, 0],
+      "vs": [
+        { "with": "mingzhe", "when": "面对变动：mingzhe 说先避开危险，zongfa 说干脆不要动制度本身" }
+      ]
+    }
+  }
+}

@@ -446,6 +446,11 @@
     /* 批次 20：dangduan */
     dangduan: { v: [0, 0, -1, 0, -1, 0, 0, 0, 0, 0, -1, 0, 0],
                 vs: [{ with: 'jianji', when: '要不要现在动手：jianji 说看准苗头就做，dangduan 说最怕的是不当场做决定' }, { with: 'qifa', when: '面对一个人还没想通：qifa 说不愤不启，等他自己有劲儿了再推；dangduan 说该做的决定不能等他' }, { with: 'liangqin', when: '要不要换环境：liangqin 说先看哪棵树合适，dangduan 说看准了就别犹豫' }] }
+,
+
+    /* 批次 21：zongfa */
+    zongfa: { v: [0, 0, 0, 0, 0, -1, 2, 0, 0, 0, 1, 0, 0],
+                vs: [{ with: 'mingzhe', when: '面对变动：mingzhe 说先避开危险，zongfa 说干脆不要动制度本身' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

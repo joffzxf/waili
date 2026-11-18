@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/data-9.js', 'assets/data-10.js', 'assets/data-11.js', 'assets/data-12.js', 'assets/data-13.js', 'assets/data-14.js', 'assets/data-15.js', 'assets/data-16.js', 'assets/data-17.js', 'assets/data-18.js', 'assets/data-19.js', 'assets/data-20.js', 'assets/data-21.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/quiz-v2.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });

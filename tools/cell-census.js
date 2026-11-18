@@ -24,18 +24,15 @@ const tgt = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs', 'high-value-cells
 const byId = {};
 AX.forEach(function (a, i) { byId[a.name] = i; });
 
-/* 已想过的候选方向 / 无法成立的理由（键为格子标签） */
-const NOTES = {
-  '归因·境（顺势） × 认识·亲自验证': '待考：既认命又亲自求证，可用「尽人事听天命」这一类，但现有一句常被用作反向，须找到明确原典',
-  '归因·境（顺势） × 执行·临机权变': '待考：顺势而行 + 见机而作，两者其实相邻，缺的是一位明确写过「因势而动」的人',
-  '关系·个体自主 × 时间·当下兑现': '待考：为自己活且趁现在，容易写成享乐主义；需要与「及时行乐」区分开的原典',
-  '规范·后果优先 × 姿态·出世': '较难：看后果的人通常想改变结果，与「退开」张力大；庄子「无用之用」可能是唯一入口',
-  '规范·原则优先 × 情绪·外放': '待考：守原则且外放，正是谏臣一类；可由「面折廷争」拆分出不同坐标',
-  '时间·当下兑现 × 认识·承袭权威': '较难：珍惜当下的人多半反传统；传统主义者多半看长远。这一格可能真的空',
-  '姿态·入世 × 风险·避险': '待考：入世又要避险，近似「明哲保身」，但那条在坐标上 D=0',
-  '姿态·出世 × 风险·冒险': '较难：退开的人不冒险；冒险的人不退开',
-  '姿态·入世 × 执行·临机权变': '待考：入世 + 见机，接近「识时务」，但那条 C=−1 D=+1，缺 K'
-};
+
+/* 人工判断放在 docs/cell-notes.json，生成器只负责合并与排版 */
+const NOTES_FILE = path.join(ROOT, 'docs', 'cell-notes.json');
+let NOTES = {};
+try {
+  NOTES = JSON.parse(fs.readFileSync(NOTES_FILE, 'utf8')).notes || {};
+} catch (e) {
+  NOTES = {};
+}
 
 const rows = [];
 tgt.cells.forEach(function (c, n) {
@@ -48,10 +45,12 @@ tgt.cells.forEach(function (c, n) {
     return (si > 0 ? a >= 1 : a <= -1) && (sj > 0 ? b >= 1 : b <= -1);
   });
   if (has) return;
+  const note = NOTES[c.label];
   rows.push({
     n: n + 1,
     label: c.label,
-    note: NOTES[c.label] || '未逐一检索'
+    status: note ? note.status : '未逐一检索',
+    why: note ? note.why : '还没看'
   });
 });
 
@@ -76,9 +75,7 @@ lines.push('');
 lines.push('| # | 格子 | 状态 | 备注 |');
 lines.push('|---|---|---|---|');
 rows.forEach(function (r) {
-  const st = r.note.indexOf('较难') === 0 ? '较难' :
-    (r.note.indexOf('待考') === 0 ? '待考' : '未逐一检索');
-  lines.push('| ' + r.n + ' | ' + r.label + ' | ' + st + ' | ' + r.note + ' |');
+  lines.push('| ' + r.n + ' | ' + r.label + ' | ' + r.status + ' | ' + r.why + ' |');
 });
 lines.push('');
 lines.push('## 为什么会有「较难」');
