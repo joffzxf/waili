@@ -1,0 +1,58 @@
+{
+  "data": 13,
+  "scene": {
+    "junzibuli": "对己与心性",
+    "buzaizhiwei": "待人与相处",
+    "daqiwancheng": "做事与决断",
+    "chengrenzhimei": "待人与相处",
+    "xiannanzhihou": "世事与得失"
+  },
+  "subject": {
+    "junzibuli": "处境与选择",
+    "buzaizhiwei": "伦理与修养",
+    "daqiwancheng": "行动与做事",
+    "chengrenzhimei": "人与关系",
+    "xiannanzhihou": "伦理与修养"
+  },
+  "coords": {
+    "junzibuli": {
+      "v": [0, 1, -1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "yongqi", "when": "明知有危险：yongqi 说该上就上，junzibuli 说先看看这堵墙会不会倒" }
+      ],
+      "cf": [
+        { "with": "yongqi", "when": "面对明显危险时，上还是避" }
+      ]
+    },
+    "buzaizhiwei": {
+      "v": [0, -1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "heertong", "when": "看到一件不对的事：heertong 说该说，buzaizhiwei 说那不在你的位置上" }
+      ],
+      "cf": [
+        { "with": "heertong", "when": "看到不对的事，该不该开口" }
+      ]
+    },
+    "daqiwancheng": {
+      "v": [0, 0, 0, -1, 2, 0, 0, 1, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "bingguishensu", "when": "时间很紧：bingguishensu 说快，daqiwancheng 说值钱的东西造得都慢" }
+      ]
+    },
+    "chengrenzhimei": {
+      "v": [0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "baoyuan", "when": "被人得罪：baoyuan 说按直回一次，chengrenzhimei 说帮他把事做成" }
+      ]
+    },
+    "xiannanzhihou": {
+      "v": [0, 0, -1, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jinshixingle", "when": "有件好事可享：jinshixingle 说现在就享，xiannanzhihou 说先把难的做完" }
+      ],
+      "cf": [
+        { "with": "jinshixingle", "when": "有好处时，先拿还是先做" }
+      ]
+    }
+  }
+}

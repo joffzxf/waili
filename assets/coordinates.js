@@ -70,13 +70,13 @@
     /* —— D 姿态 / H 情绪 —— */
     yongqi:   { v: [0, 0, 1, 2, 0, 0, -2, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shendu', when: '目睹不公而自己并不相干：yongqi 说站出来，shendu 说先管好自己' }],
-                cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }] },
+                cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }, { with: 'junzibuli', when: '面对明显危险时，上还是避' }] },
     shendu:   { v: [0, 0, 0, -2, 0, 0, 0, 2, 2, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '没有人监督时：shendu 说守住自己就够了，yongqi 说还要替别人出头' }],
                 cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }, { with: 'qiuming', when: '要不要在乎别人怎么评价你' }, { with: 'zhiqibuke', when: '与己无关又改不了的事，要不要介入' }] },
     heertong: { v: [0, -1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shendu', when: '看到不对的事：heertong 说要当面说，shendu 说先收着' }],
-                cf: [{ with: 'shenyan', when: '该不该把不同意见说出口' }] },
+                cf: [{ with: 'shenyan', when: '该不该把不同意见说出口' }, { with: 'buzaizhiwei', when: '看到不对的事，该不该开口' }] },
     shenyan:  { v: [0, 0, 0, -1, 0, 0, 0, 2, 0, 0, 0, 0, 0],
                 vs: [{ with: 'heertong', when: '有些真话可能伤人：shenyan 说烂在肚子里，heertong 说讲出来才算和' }],
                 cf: [{ with: 'heertong', when: '该不该把不同意见说出口' }, { with: 'bupingzemin', when: '有情绪时该不该说出口' }] },
@@ -182,7 +182,7 @@
     /* v2 补裸极：jinshixingle */
     jinshixingle: { v: [0, 0, 0, 0, -2, 0, 0, -1, 0, -1, 0, 0, 0],
                 vs: [{ with: 'xishi', when: '今晚就能高兴一下：xishi 说改天，jinshixingle 说就今晚' }],
-                cf: [{ with: 'xishi', when: '该把时间存起来，还是现在就花掉' }] },
+                cf: [{ with: 'xishi', when: '该把时间存起来，还是现在就花掉' }, { with: 'xiannanzhihou', when: '有好处时，先拿还是先做' }] },
 
     /* v2 补裸极：duliqingshen */
     duliqingshen: { v: [0, 2, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0],
@@ -285,6 +285,30 @@
     /* 批次 12：jianji */
     jianji: { v: [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
                 vs: [{ with: 'jiangzaiwai', when: '计划遇到变化：jiangzaiwai 说把决定权交给现场，jianji 说看到苗头立刻动手别等' }] }
+,
+
+    /* 批次 13：junzibuli */
+    junzibuli: { v: [0, 1, -1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'yongqi', when: '明知有危险：yongqi 说该上就上，junzibuli 说先看看这堵墙会不会倒' }],
+                cf: [{ with: 'yongqi', when: '面对明显危险时，上还是避' }] },
+
+    /* 批次 13：buzaizhiwei */
+    buzaizhiwei: { v: [0, -1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'heertong', when: '看到一件不对的事：heertong 说该说，buzaizhiwei 说那不在你的位置上' }, { with: 'jisuo', when: '别人来求你办事：jisuo 说别把你不要的推给他，buzaizhiwei 说先看这事归不归你' }, { with: 'huannan', when: '同伴出了事：huannan 说这时候你该在，buzaizhiwei 说那是他的位置不是你的' }],
+                cf: [{ with: 'heertong', when: '看到不对的事，该不该开口' }] },
+
+    /* 批次 13：daqiwancheng */
+    daqiwancheng: { v: [0, 0, 0, -1, 2, 0, 0, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'bingguishensu', when: '时间很紧：bingguishensu 说快，daqiwancheng 说值钱的东西造得都慢' }, { with: 'sisheng', when: '时间有限：sisheng 说先想清楚意义，daqiwancheng 说值钱的东西本来就得慢慢磨' }, { with: 'xiannanzhihou', when: '要不要先做难的：xiannanzhihou 说先苦后甜，daqiwancheng 说别急，慢工才出活' }] },
+
+    /* 批次 13：chengrenzhimei */
+    chengrenzhimei: { v: [0, -1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'baoyuan', when: '被人得罪：baoyuan 说按直回一次，chengrenzhimei 说帮他把事做成' }, { with: 'jisuo', when: '别人向你开口：jisuo 说别把你不想要的推给他，chengrenzhimei 说看他想要什么就给他' }, { with: 'heertong', when: '观点与人不同：heertong 说保留分歧也要相处，chengrenzhimei 说先帮他把事做成' }, { with: 'bianjie', when: '朋友来求你：bianjie 说保持距离别越界，chengrenzhimei 说能帮就帮一把' }, { with: 'daiji', when: '家人和朋友同时要你出力：daiji 说先家人，chengrenzhimei 说谁的事更紧就先帮谁' }, { with: 'huannan', when: '朋友落难：huannan 说留下来陪他，chengrenzhimei 说帮他把事情做成' }, { with: 'buzaizhiwei', when: '别人正在做一件事：buzaizhiwei 说别插手，chengrenzhimei 说能补一块就补一块' }] },
+
+    /* 批次 13：xiannanzhihou */
+    xiannanzhihou: { v: [0, 0, -1, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jinshixingle', when: '有件好事可享：jinshixingle 说现在就享，xiannanzhihou 说先把难的做完' }],
+                cf: [{ with: 'jinshixingle', when: '有好处时，先拿还是先做' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };
