@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -623,6 +623,122 @@ if (SCH) {
 
     console.log('  ' + s.name + '：' + s.groups.length + ' 组，覆盖 ' + set.size + ' 条');
   });
+}
+
+/* ---------- 12. 坐标与独立性与冲突 ---------- */
+section('【12】坐标 · 独立性 · 冲突');
+
+const AX = sandbox.window.QJY_AXES;
+const CO = sandbox.window.QJY_COORD;
+
+ok(!!AX && Array.isArray(AX.list), 'axes.js 已加载');
+ok(!!CO && CO.map, 'coordinates.js 已加载');
+
+if (AX && CO) {
+  const N = AX.list.length;
+  ok(N >= 11, '轴表至少 11 根', String(N));
+  console.log('  轴表 ' + AX.version + '：' + AX.list.map(function (a) { return a.name; }).join(' / '));
+
+  const map = CO.map;
+  const ids = Object.keys(map);
+
+  /* 12.1 每条道理都必须有坐标 */
+  ok(ids.length === THEMES.length, '坐标条目数应等于主题数', ids.length + ' / ' + THEMES.length);
+  THEMES.forEach(function (t) {
+    ok(!!map[t.id], '缺坐标：' + t.id);
+  });
+  ids.forEach(function (id) {
+    ok(THEMES.some(function (t) { return t.id === id; }), '坐标指向不存在的主题：' + id);
+  });
+
+  /* 12.2 坐标合法：长度、整数、范围、非全零 */
+  let allZero = [];
+  ids.forEach(function (id) {
+    const c = map[id];
+    ok(Array.isArray(c.v) && c.v.length === N, id + ' 的坐标长度应为 ' + N);
+    let sum = 0;
+    (c.v || []).forEach(function (x, i) {
+      ok(Number.isInteger(x), id + ' 坐标第 ' + (i + 1) + ' 位应为整数', String(x));
+      ok(x >= -2 && x <= 2, id + ' 坐标越界（' + AX.list[i].name + '）', String(x));
+      sum += Math.abs(x);
+    });
+    if (!sum) allZero.push(id);
+  });
+  ok(allZero.length === 0, '每条道理至少要被一根轴描述（不允许全零）', allZero.join('、'));
+
+  /* 12.3 每根轴都得真的被用到，否则是死轴 */
+  const usage = {};
+  AX.list.forEach(function (a) { usage[a.id] = 0; });
+  ids.forEach(function (id) {
+    map[id].v.forEach(function (x, i) {
+      if (Math.abs(x) >= 1) usage[AX.list[i].id] += 1;
+    });
+  });
+  AX.list.forEach(function (a) {
+    ok(usage[a.id] >= 3, '轴「' + a.name + '」使用不足（' + usage[a.id] + ' 条），可能是死轴');
+  });
+  console.log('  轴使用：' + AX.list.map(function (a) { return a.name + '·' + usage[a.id]; }).join(' '));
+
+  /* 12.4 独立性：每条都要有一个能与最近邻分开的具体情境 */
+  ids.forEach(function (id) {
+    const vs = map[id].vs;
+    ok(Array.isArray(vs) && vs.length >= 1, id + ' 缺 vs（区分情境数组）');
+    if (!Array.isArray(vs)) return;
+    vs.forEach(function (one, k) {
+      ok(one.with !== id, id + ' 的 vs[' + k + '] 不应指向自己');
+      ok(THEMES.some(function (t) { return t.id === one.with; }),
+        id + ' 的 vs[' + k + '] 指向不存在的主题：' + one.with);
+      ok(typeof one.when === 'string' && one.when.length >= 10,
+        id + ' 的 vs[' + k + '].when 太短或为空');
+    });
+  });
+
+  /* 12.5 冲突必须对称声明 */
+  ids.forEach(function (id) {
+    (map[id].cf || []).forEach(function (c) {
+      ok(THEMES.some(function (t) { return t.id === c.with; }), id + ' 的冲突指向不存在的主题：' + c.with);
+      const back = (map[c.with] && map[c.with].cf) || [];
+      const found = back.some(function (b) { return b.with === id; });
+      ok(found, '冲突必须对称：' + id + ' 声明了与 ' + c.with + ' 冲突，对方却没有');
+    });
+  });
+
+  /* 12.6 近邻检测：向量太近的两条，必须已被 vs 或 cf 明确处理 */
+  function dist(a, b) {
+    let s = 0;
+    for (let i = 0; i < N; i++) s += Math.pow((a[i] || 0) - (b[i] || 0), 2);
+    return Math.sqrt(s);
+  }
+  function linked(a, b) {
+    const ma = map[a], mb = map[b];
+    const hasVs = function (m, target) {
+      return (Array.isArray(m.vs) ? m.vs : []).some(function (x) { return x.with === target; });
+    };
+    if (hasVs(ma, b)) return true;
+    if (hasVs(mb, a)) return true;
+    if ((ma.cf || []).some(function (c) { return c.with === b; })) return true;
+    if ((mb.cf || []).some(function (c) { return c.with === a; })) return true;
+    return false;
+  }
+
+  const near = [];
+  for (let i = 0; i < ids.length; i++) {
+    for (let j = i + 1; j < ids.length; j++) {
+      const d = dist(map[ids[i]].v, map[ids[j]].v);
+      if (d === 0) {
+        ok(false, '两条坐标完全相同，必须合并或补轴：' + ids[i] + ' 与 ' + ids[j]);
+      } else if (d < 1.5 && !linked(ids[i], ids[j])) {
+        near.push(ids[i] + '↔' + ids[j] + '(d=' + d.toFixed(2) + ')');
+      }
+    }
+  }
+  ok(near.length === 0, '距离 < 1.5 且未用 vs／cf 区分的条目对：', near.slice(0, 8).join('，'));
+
+  const withVs = ids.filter(function (id) {
+    return Array.isArray(map[id].vs) && map[id].vs.length;
+  }).length;
+  const withCf = ids.filter(function (id) { return (map[id].cf || []).length; }).length;
+  console.log('  ' + ids.length + ' 条全部有坐标与区分情境；' + withCf + ' 条声明了冲突');
 }
 
 /* ---------- 汇总 ---------- */

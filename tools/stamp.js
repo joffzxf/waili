@@ -36,6 +36,8 @@ const ASSETS = [
   'assets/quiz.js',
   'assets/quiz-full.js',
   'assets/schemes.js',
+  'assets/axes.js',
+  'assets/coordinates.js',
   'assets/match.js',
   'assets/app.js'
 ];
