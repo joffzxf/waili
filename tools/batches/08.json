@@ -1,0 +1,52 @@
+{
+  "data": 16,
+  "scene": {
+    "bufucong": "待人与相处",
+    "kuaile": "对己与心性",
+    "jingguishen": "对己与心性",
+    "weixue": "做事与决断",
+    "boxue": "做事与决断"
+  },
+  "subject": {
+    "bufucong": "伦理与修养",
+    "kuaile": "伦理与修养",
+    "jingguishen": "认识与方法",
+    "weixue": "认识与方法",
+    "boxue": "认识与方法"
+  },
+  "coords": {
+    "bufucong": {
+      "v": [0, 1, 2, 1, 0, 0, -2, 0, 2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "buqu", "when": "面对不义：buqu 说个人宁折不弯，bufucong 说指出这条规矩本身不合法" }
+      ],
+      "cf": [
+        { "with": "mingzhe", "when": "面对一个不义的政权，抗命还是避开" }
+      ]
+    },
+    "kuaile": {
+      "v": [0, 0, 0, -1, -1, 0, 0, 1, 0, 1, 0, 0, 0],
+      "vs": [
+        { "with": "jinshixingle", "when": "今晚就能高兴：jinshixingle 说就去享乐，kuaile 说先问这是不是只是「没有痛苦」" }
+      ]
+    },
+    "jingguishen": {
+      "v": [0, 0, 0, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "mingzhe", "when": "遇到说不清的力量：mingzhe 说避开危险，jingguishen 说保持敬意但不必亲近" }
+      ]
+    },
+    "weixue": {
+      "v": [0, 0, 0, -1, 0, -1, 0, 0, 0, 2, 0, 0, 0],
+      "vs": [
+        { "with": "jinxin", "when": "面对一堆知识：jinxin 说逐条验证，weixue 说先减掉大半再说" }
+      ]
+    },
+    "boxue": {
+      "v": [0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 2, 0, 0],
+      "vs": [
+        { "with": "zhixing", "when": "学了做不到：zhixing 说先去做，boxue 说五步是一整条链，缺哪步补哪步" }
+      ]
+    }
+  }
+}

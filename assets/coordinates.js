@@ -330,7 +330,7 @@
     /* 批次 14：mingzhe */
     mingzhe: { v: [0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '局面明显不利：yongqi 说该上就上，mingzhe 说危邦不入' }],
-                cf: [{ with: 'yongqi', when: '局面不利时，是上还是避' }] }
+                cf: [{ with: 'yongqi', when: '局面不利时，是上还是避' }, { with: 'bufucong', when: '面对一个不义的政权，抗命还是避开' }] }
 ,
 
     /* 批次 15：jiaoxue */
@@ -352,6 +352,28 @@
     /* 批次 15：liangqin */
     liangqin: { v: [0, 1, -1, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
                 vs: [{ with: 'jinzhu', when: '环境不好：jinzhu 说人是被身边人塑造的，liangqin 说那就换一棵树' }] }
+,
+
+    /* 批次 16：bufucong */
+    bufucong: { v: [0, 1, 2, 1, 0, 0, -2, 0, 2, 0, 0, 0, 0],
+                vs: [{ with: 'buqu', when: '面对不义：buqu 说个人宁折不弯，bufucong 说指出这条规矩本身不合法' }],
+                cf: [{ with: 'mingzhe', when: '面对一个不义的政权，抗命还是避开' }] },
+
+    /* 批次 16：kuaile */
+    kuaile: { v: [0, 0, 0, -1, -1, 0, 0, 1, 0, 1, 0, 0, 0],
+                vs: [{ with: 'jinshixingle', when: '今晚就能高兴：jinshixingle 说就去享乐，kuaile 说先问这是不是只是「没有痛苦」' }] },
+
+    /* 批次 16：jingguishen */
+    jingguishen: { v: [0, 0, 0, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'mingzhe', when: '遇到说不清的力量：mingzhe 说避开危险，jingguishen 说保持敬意但不必亲近' }, { with: 'shenyan', when: '面对说不清的事：shenyan 说干脆少说，jingguishen 说可以敬着，只是别靠近' }, { with: 'zhinu', when: '遇到让人害怕的东西：zhinu 说先把火压住，jingguishen 说保持距离而非压住情绪' }] },
+
+    /* 批次 16：weixue */
+    weixue: { v: [0, 0, 0, -1, 0, -1, 0, 0, 0, 2, 0, 0, 0],
+                vs: [{ with: 'jinxin', when: '面对一堆知识：jinxin 说逐条验证，weixue 说先减掉大半再说' }] },
+
+    /* 批次 16：boxue */
+    boxue: { v: [0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 2, 0, 0],
+                vs: [{ with: 'zhixing', when: '学了做不到：zhixing 说先去做，boxue 说五步是一整条链，缺哪步补哪步' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };
