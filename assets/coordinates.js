@@ -451,6 +451,27 @@
     /* 批次 21：zongfa */
     zongfa: { v: [0, 0, 0, 0, 0, -1, 2, 0, 0, 0, 1, 0, 0],
                 vs: [{ with: 'mingzhe', when: '面对变动：mingzhe 说先避开危险，zongfa 说干脆不要动制度本身' }] }
+,
+
+    /* 批次 22：zhenyi */
+    zhenyi: { v: [0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'yongqi', when: '看到了却说不出：yongqi 说要站出来讲，zhenyi 说有些东西先别说，说了就散了' }, { with: 'jingwa', when: '看不懂一件事：jingwa 说你视野太窄，zhenyi 说有些东西本来就不是看宽就能懂的' }, { with: 'jiyi', when: '回忆一段经历：jiyi 说记忆会被改写，zhenyi 说那一刻的领会本身是可靠的' }, { with: 'xuesi', when: '想不明白：xuesi 让你停下来想清楚，zhenyi 说有些事想清楚了反而说没了' }] },
+
+    /* 批次 22：wukebuke */
+    wukebuke: { v: [0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+                vs: [{ with: 'shoushuo', when: '要不要坚持一种做法：shoushuo 说守拙不换，wukebuke 说换一种做法也还是我' }] },
+
+    /* 批次 22：baowen */
+    baowen: { v: [0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jianhao', when: '拿不准的时候：jianhao 说见好就收，baowen 说先亲自去看一眼再决定' }] },
+
+    /* 批次 22：kuangzhe */
+    kuangzhe: { v: [0, 0, 0, 0, 0, 0, 0, -2, 1, 0, 0, 0, 0],
+                vs: [{ with: 'ningming', when: '有话直说：ningming 说的是非说不可的压抑，kuangzhe 说的是把标准定得比现实高' }, { with: 'bupingzemin', when: '有不平：bupingzemin 说的是把不公平说出来，kuangzhe 说的是把标准定得比现实高' }, { with: 'qiongtu', when: '走投无路：qiongtu 说哭一场承认尽头，kuangzhe 说照样按古人的标准要求自己' }] },
+
+    /* 批次 22：congxin */
+    congxin: { v: [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -2, 0, 0],
+                vs: [{ with: 'wukebuke', when: '守不守规矩：wukebuke 说无所谓哪种做法，congxin 说规矩已经练成了本能' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

@@ -1,0 +1,49 @@
+{
+  "data": 22,
+  "scene": {
+    "zhenyi": "对己与心性",
+    "wukebuke": "世事与得失",
+    "baowen": "做事与决断",
+    "kuangzhe": "对己与心性",
+    "congxin": "做事与决断"
+  },
+  "subject": {
+    "zhenyi": "认识与方法",
+    "wukebuke": "伦理与修养",
+    "baowen": "认识与方法",
+    "kuangzhe": "伦理与修养",
+    "congxin": "认识与方法"
+  },
+  "coords": {
+    "zhenyi": {
+      "v": [0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "yongqi", "when": "看到了却说不出：yongqi 说要站出来讲，zhenyi 说有些东西先别说，说了就散了" }
+      ]
+    },
+    "wukebuke": {
+      "v": [0, 0, 0, -1, 0, 0, 0, 0, 0, 0, -2, 0, 0],
+      "vs": [
+        { "with": "shoushuo", "when": "要不要坚持一种做法：shoushuo 说守拙不换，wukebuke 说换一种做法也还是我" }
+      ]
+    },
+    "baowen": {
+      "v": [0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "jianhao", "when": "拿不准的时候：jianhao 说见好就收，baowen 说先亲自去看一眼再决定" }
+      ]
+    },
+    "kuangzhe": {
+      "v": [0, 0, 0, 0, 0, 0, 0, -2, 1, 0, 0, 0, 0],
+      "vs": [
+        { "with": "ningming", "when": "有话直说：ningming 说的是非说不可的压抑，kuangzhe 说的是把标准定得比现实高" }
+      ]
+    },
+    "congxin": {
+      "v": [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -2, 0, 0],
+      "vs": [
+        { "with": "wukebuke", "when": "守不守规矩：wukebuke 说无所谓哪种做法，congxin 说规矩已经练成了本能" }
+      ]
+    }
+  }
+}
