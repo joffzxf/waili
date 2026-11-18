@@ -412,6 +412,27 @@
     /* 批次 18：daxing */
     daxing: { v: [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0],
                 vs: [{ with: 'jianji', when: '要不要临时改主意：jianji 说看准苗头就动，daxing 说为了大事可以不守小节' }] }
+,
+
+    /* 批次 19：xiaozi */
+    xiaozi: { v: [0, -2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'junzibuli', when: '要不要冒一个险：junzibuli 说自己判断这堵墙会不会倒，xiaozi 说先想谁在等你回去' }] },
+
+    /* 批次 19：buji */
+    buji: { v: [0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                vs: [{ with: 'chengrenzhimei', when: '被误解时：chengrenzhimei 说去帮对方把事做成，buji 说别人不了解你那件事根本不归你管' }, { with: 'jisuo', when: '怎么对待别人：jisuo 说别把你不要的推给他，buji 说先去了解他到底要什么' }, { with: 'huannan', when: '与朋友相处：huannan 说看他落难时在不在，buji 说平时就得真正了解这个人' }, { with: 'buzaizhiwei', when: '别人做错事：buzaizhiwei 说那不在你的位置上别管，buji 说先弄清他那件事的实情再说' }] },
+
+    /* 批次 19：pofu */
+    pofu: { v: [0, 0, 0, 0, -1, 0, -2, 0, 0, 0, -1, 0, 0],
+                vs: [{ with: 'buruhuxue', when: '要不要冒险：buruhuxue 说想清楚对方不知道什么再动手，pofu 说先把自己的退路烧掉' }] },
+
+    /* 批次 19：jianhao */
+    jianhao: { v: [0, 0, 0, 0, -1, 0, 2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'zhizu', when: '已经得到不少：zhizu 说知道够就够了，jianhao 说还要看什么时候该收手，晚了就收不住' }] },
+
+    /* 批次 19：shoushuo */
+    shoushuo: { v: [0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+                vs: [{ with: 'daqiwancheng', when: '要不要慢慢磨：daqiwancheng 说慢慢磨才出好东西，shoushuo 说干脆退出来，不在别人的场子里磨' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

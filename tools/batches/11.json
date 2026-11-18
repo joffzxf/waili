@@ -1,0 +1,49 @@
+{
+  "data": 19,
+  "scene": {
+    "xiaozi": "待人与相处",
+    "buji": "对己与心性",
+    "pofu": "做事与决断",
+    "jianhao": "世事与得失",
+    "shoushuo": "对己与心性"
+  },
+  "subject": {
+    "xiaozi": "人与关系",
+    "buji": "伦理与修养",
+    "pofu": "行动与做事",
+    "jianhao": "处境与选择",
+    "shoushuo": "伦理与修养"
+  },
+  "coords": {
+    "xiaozi": {
+      "v": [0, -2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "junzibuli", "when": "要不要冒一个险：junzibuli 说自己判断这堵墙会不会倒，xiaozi 说先想谁在等你回去" }
+      ]
+    },
+    "buji": {
+      "v": [0, -1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+      "vs": [
+        { "with": "chengrenzhimei", "when": "被误解时：chengrenzhimei 说去帮对方把事做成，buji 说别人不了解你那件事根本不归你管" }
+      ]
+    },
+    "pofu": {
+      "v": [0, 0, 0, 0, -1, 0, -2, 0, 0, 0, -1, 0, 0],
+      "vs": [
+        { "with": "buruhuxue", "when": "要不要冒险：buruhuxue 说想清楚对方不知道什么再动手，pofu 说先把自己的退路烧掉" }
+      ]
+    },
+    "jianhao": {
+      "v": [0, 0, 0, 0, -1, 0, 2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "zhizu", "when": "已经得到不少：zhizu 说知道够就够了，jianhao 说还要看什么时候该收手，晚了就收不住" }
+      ]
+    },
+    "shoushuo": {
+      "v": [0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+      "vs": [
+        { "with": "daqiwancheng", "when": "要不要慢慢磨：daqiwancheng 说慢慢磨才出好东西，shoushuo 说干脆退出来，不在别人的场子里磨" }
+      ]
+    }
+  }
+}
