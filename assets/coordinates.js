@@ -70,7 +70,7 @@
     /* —— D 姿态 / H 情绪 —— */
     yongqi:   { v: [0, 0, 1, 2, 0, 0, -2, 0, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shendu', when: '目睹不公而自己并不相干：yongqi 说站出来，shendu 说先管好自己' }],
-                cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }, { with: 'junzibuli', when: '面对明显危险时，上还是避' }] },
+                cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }, { with: 'junzibuli', when: '面对明显危险时，上还是避' }, { with: 'mingzhe', when: '局面不利时，是上还是避' }] },
     shendu:   { v: [0, 0, 0, -2, 0, 0, 0, 2, 2, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '没有人监督时：shendu 说守住自己就够了，yongqi 说还要替别人出头' }],
                 cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }, { with: 'qiuming', when: '要不要在乎别人怎么评价你' }, { with: 'zhiqibuke', when: '与己无关又改不了的事，要不要介入' }] },
@@ -309,6 +309,28 @@
     xiannanzhihou: { v: [0, 0, -1, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0],
                 vs: [{ with: 'jinshixingle', when: '有件好事可享：jinshixingle 说现在就享，xiannanzhihou 说先把难的做完' }],
                 cf: [{ with: 'jinshixingle', when: '有好处时，先拿还是先做' }] }
+,
+
+    /* 批次 14：kuji */
+    kuji: { v: [0, 1, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'yinuo', when: '答应别人一件事：yinuo 说守信到底，kuji 说先看这件事该不该做' }] },
+
+    /* 批次 14：sizhi */
+    sizhi: { v: [0, 1, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+                vs: [{ with: 'shendu', when: '没人看见时：shendu 说守住自己就够，sizhi 说假设有四双眼睛在看着你' }] },
+
+    /* 批次 14：weisheng */
+    weisheng: { v: [0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+                vs: [{ with: 'yinuo', when: '约定之后情况变了：yinuo 说守约，weisheng 说守到死也不改口' }] },
+
+    /* 批次 14：qingshan */
+    qingshan: { v: [0, 1, -1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'xiannanzhihou', when: '眼前有个大代价：xiannanzhihou 说先苦后甜扛过去，qingshan 说先保住本钱再图后计' }] },
+
+    /* 批次 14：mingzhe */
+    mingzhe: { v: [0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'yongqi', when: '局面明显不利：yongqi 说该上就上，mingzhe 说危邦不入' }],
+                cf: [{ with: 'yongqi', when: '局面不利时，是上还是避' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };

@@ -1,0 +1,52 @@
+{
+  "data": 14,
+  "scene": {
+    "kuji": "对己与心性",
+    "sizhi": "对己与心性",
+    "weisheng": "待人与相处",
+    "qingshan": "世事与得失",
+    "mingzhe": "对己与心性"
+  },
+  "subject": {
+    "kuji": "伦理与修养",
+    "sizhi": "伦理与修养",
+    "weisheng": "伦理与修养",
+    "qingshan": "处境与选择",
+    "mingzhe": "处境与选择"
+  },
+  "coords": {
+    "kuji": {
+      "v": [0, 1, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "yinuo", "when": "答应别人一件事：yinuo 说守信到底，kuji 说先看这件事该不该做" }
+      ]
+    },
+    "sizhi": {
+      "v": [0, 1, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+      "vs": [
+        { "with": "shendu", "when": "没人看见时：shendu 说守住自己就够，sizhi 说假设有四双眼睛在看着你" }
+      ]
+    },
+    "weisheng": {
+      "v": [0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+      "vs": [
+        { "with": "yinuo", "when": "约定之后情况变了：yinuo 说守约，weisheng 说守到死也不改口" }
+      ]
+    },
+    "qingshan": {
+      "v": [0, 1, -1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "xiannanzhihou", "when": "眼前有个大代价：xiannanzhihou 说先苦后甜扛过去，qingshan 说先保住本钱再图后计" }
+      ]
+    },
+    "mingzhe": {
+      "v": [0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+      "vs": [
+        { "with": "yongqi", "when": "局面明显不利：yongqi 说该上就上，mingzhe 说危邦不入" }
+      ],
+      "cf": [
+        { "with": "yongqi", "when": "局面不利时，是上还是避" }
+      ]
+    }
+  }
+}
