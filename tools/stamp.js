@@ -30,6 +30,7 @@ const ASSETS = [
   'assets/data-6.js',
   'assets/data-7.js',
   'assets/data-8.js',
+  'assets/data-9.js',
   'assets/related.js',
   'assets/poster.js',
   'assets/shelf.js',

@@ -29,5 +29,6 @@ window.QJY_RING = [
   'jinqian', 'shenti', 'bianjie', 'daiji',
   /* v2 补裸极这一批：承袭 → 表达 → 名声 → 高标 → 神速 → 当下 → 独立 → 临机 */
   'shuerbuzuo', 'bupingzemin', 'qiuming', 'qufahushang',
-  'bingguishensu', 'jinshixingle', 'duliqingshen', 'jiangzaiwai'
+  'bingguishensu', 'jinshixingle', 'duliqingshen', 'jiangzaiwai',
+  'shiyandaojun', 'zhichi', 'qiongzedushan', 'jiyulida', 'gongchengshentui', 'lianghaixiangquan'
 ];

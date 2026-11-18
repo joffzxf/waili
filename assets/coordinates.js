@@ -192,6 +192,31 @@
     jiangzaiwai: { v: [0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -2, 0, 0],
                 vs: [{ with: 'yinuo', when: '当初答应的条件已经变了：yinuo 说守，jiangzaiwai 说改' }],
                 cf: [{ with: 'yinuo', when: '承诺与现场情况冲突时' }] }
+,
+
+    /* 补裸极 / 交叉空格：shiyandaojun */
+    shiyandaojun: { v: [0, 0, 0, 0, 1, -2, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'shuerbuzuo', when: '想学一门手艺：shuerbuzuo 让你读传世的文本，shiyandaojun 让你找那个还活着的人当面学' }] },
+
+    /* 补裸极 / 交叉空格：zhichi */
+    zhichi: { v: [0, 0, 1, 0, 0, 0, 0, 1, -2, 0, 0, 0, 0],
+                vs: [{ with: 'qiuming', when: '没人看见的时候：qiuming 说名声正是由这些时刻攒起来的，zhichi 说先问问自己惭不惭愧' }] },
+
+    /* 补裸极 / 交叉空格：qiongzedushan */
+    qiongzedushan: { v: [-2, 2, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'duliqingshen', when: '大势已去时：duliqingshen 说还要公开说出来，qiongzedushan 说退回来守住自己' }] },
+
+    /* 补裸极 / 交叉空格：jiyulida */
+    jiyulida: { v: [2, -2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'jisuo', when: '想让人先得利时：jisuo 说别把你不要的推给别人，jiyulida 说先帮他把想要的拿到' }] },
+
+    /* 补裸极 / 交叉空格：gongchengshentui */
+    gongchengshentui: { v: [2, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'shendu', when: '功成之后：shendu 说继续守着自己，gongchengshentui 说这时候该走了' }] },
+
+    /* 补裸极 / 交叉空格：lianghaixiangquan */
+    lianghaixiangquan: { v: [2, 0, -2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                vs: [{ with: 'baoyuan', when: '两个选项都糟：baoyuan 说按直回一次，lianghaixiangquan 说算清代价取轻的那个' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };
