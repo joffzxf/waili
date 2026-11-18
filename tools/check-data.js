@@ -17,7 +17,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
+['assets/data.js', 'assets/data-2.js', 'assets/data-3.js', 'assets/data-4.js', 'assets/data-5.js', 'assets/data-6.js', 'assets/data-7.js', 'assets/data-8.js', 'assets/related.js', 'assets/poster.js', 'assets/shelf.js', 'assets/quiz.js', 'assets/quiz-full.js', 'assets/schemes.js', 'assets/axes.js', 'assets/coordinates.js', 'assets/match.js'].forEach(function (f) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
   vm.runInContext(src, sandbox, { filename: f });
 });
@@ -560,10 +560,14 @@ if (QF) {
   const used = QF.ITEMS.map(function (it) { return it.theme; });
   const uniq = new Set(used);
   ok(uniq.size === used.length, '同一主题不应被出两道题');
-  ok(uniq.size === THEMES.length, '应覆盖全部主题', uniq.size + ' / ' + THEMES.length);
-  THEMES.forEach(function (t) {
-    ok(uniq.has(t.id), '主题应在诊断题中出现：' + t.id);
+  /* 量表冻结：诊断版固定 44 题，用来做跨时间比较。
+     新入库的道理不自动进量表——否则去年和今年的分数不可比。 */
+  ok(uniq.size === 44, '诊断版应固定为 44 题（量表冻结）', String(uniq.size));
+  QF.ITEMS.forEach(function (it) {
+    ok(THEMES.some(function (t) { return t.id === it.theme; }),
+      '题目应指向存在的主题：' + it.theme);
   });
+  console.log('  量表冻结在 44 题；题库现 ' + THEMES.length + ' 条，新增条目暂不进量表');
 
   /* 每轴 11 题只能是 6:5，方向不可能完全抵消——
      所以判据不是「正负并存」，而是「一刀切同意不能得出极端分」 */

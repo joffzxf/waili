@@ -14,10 +14,10 @@
       name: '按场景',
       hint: '我遇到的是什么事',
       groups: [
-        { name: '做事与决断', ids: ['yusu', 'jibu', 'zhuanzhu', 'xiguan', 'qianshi', 'xuesi', 'zhixing', 'qifa', 'buxiawen', 'jingwa'] },
-        { name: '待人与相处', ids: ['jisuo', 'heertong', 'liuyibu', 'bianjie', 'jinzhu', 'daiji', 'yinuo', 'shenyan'] },
-        { name: '对己与心性', ids: ['qiuzhuji', 'manzhao', 'zizhi', 'shendu', 'gudu', 'jiyi', 'sisheng', 'buqu', 'ziyou', 'xiwang', 'yongqi'] },
-        { name: '世事与得失', ids: ['yuhuan', 'huoxi', 'zhizu', 'jinqian', 'yixue', 'fengzhong', 'dake', 'wuzhu', 'chengzhang', 'jinxin', 'shenti', 'ruoshui', 'baoyuan', 'zhinu', 'xishi'] }
+        { name: '做事与决断', ids: ['yusu', 'jibu', 'zhuanzhu', 'xiguan', 'qianshi', 'xuesi', 'zhixing', 'qifa', 'buxiawen', 'jingwa', 'qufahushang', 'bingguishensu', 'jiangzaiwai'] },
+        { name: '待人与相处', ids: ['jisuo', 'heertong', 'liuyibu', 'bianjie', 'jinzhu', 'daiji', 'yinuo', 'shenyan', 'bupingzemin', 'qiuming'] },
+        { name: '对己与心性', ids: ['qiuzhuji', 'manzhao', 'zizhi', 'shendu', 'gudu', 'jiyi', 'sisheng', 'buqu', 'ziyou', 'xiwang', 'yongqi', 'duliqingshen'] },
+        { name: '世事与得失', ids: ['yuhuan', 'huoxi', 'zhizu', 'jinqian', 'yixue', 'fengzhong', 'dake', 'wuzhu', 'chengzhang', 'jinxin', 'shenti', 'ruoshui', 'baoyuan', 'zhinu', 'xishi', 'shuerbuzuo', 'jinshixingle'] }
       ]
     },
     {
@@ -26,10 +26,10 @@
       hint: '它属于哪一门',
       groups: [
         { name: '伦理与修养', ids: ['jisuo', 'yinuo', 'manzhao', 'shendu', 'zizhi', 'buqu', 'bianjie', 'liuyibu'] },
-        { name: '认识与方法', ids: ['dake', 'jinxin', 'jingwa', 'xuesi', 'qifa', 'buxiawen', 'qianshi', 'jiyi'] },
-        { name: '行动与做事', ids: ['zhixing', 'zhuanzhu', 'xiguan', 'jibu', 'yusu', 'yixue', 'xishi', 'fengzhong'] },
-        { name: '人与关系', ids: ['heertong', 'jinzhu', 'daiji', 'gudu', 'shenyan', 'zhinu', 'jinqian'] },
-        { name: '处境与选择', ids: ['yuhuan', 'huoxi', 'zhizu', 'ruoshui', 'baoyuan', 'qiuzhuji', 'xiwang', 'sisheng', 'ziyou', 'yongqi', 'chengzhang', 'wuzhu', 'shenti'] }
+        { name: '认识与方法', ids: ['dake', 'jinxin', 'jingwa', 'xuesi', 'qifa', 'buxiawen', 'qianshi', 'jiyi', 'shuerbuzuo'] },
+        { name: '行动与做事', ids: ['zhixing', 'zhuanzhu', 'xiguan', 'jibu', 'yusu', 'yixue', 'xishi', 'fengzhong', 'bingguishensu', 'jiangzaiwai'] },
+        { name: '人与关系', ids: ['heertong', 'jinzhu', 'daiji', 'gudu', 'shenyan', 'zhinu', 'jinqian', 'bupingzemin', 'duliqingshen'] },
+        { name: '处境与选择', ids: ['yuhuan', 'huoxi', 'zhizu', 'ruoshui', 'baoyuan', 'qiuzhuji', 'xiwang', 'sisheng', 'ziyou', 'yongqi', 'chengzhang', 'wuzhu', 'shenti', 'qiuming', 'qufahushang', 'jinshixingle'] }
       ]
     }
   ];

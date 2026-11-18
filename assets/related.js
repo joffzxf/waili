@@ -26,5 +26,8 @@ window.QJY_RING = [
      记忆 → 认知偏差 → 无助 → 峰终 → 成长，再绕回「欲速则不达」。 */
   'dake', 'wuzhu', 'fengzhong', 'chengzhang',
   /* 生活四题接在「成长」之后：钱的取舍 → 身体的账 → 关系的边界 → 代际，再绕回「欲速则不达」 */
-  'jinqian', 'shenti', 'bianjie', 'daiji'
+  'jinqian', 'shenti', 'bianjie', 'daiji',
+  /* v2 补裸极这一批：承袭 → 表达 → 名声 → 高标 → 神速 → 当下 → 独立 → 临机 */
+  'shuerbuzuo', 'bupingzemin', 'qiuming', 'qufahushang',
+  'bingguishensu', 'jinshixingle', 'duliqingshen', 'jiangzaiwai'
 ];

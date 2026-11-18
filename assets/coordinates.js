@@ -14,11 +14,11 @@
   var COORD = {
     /* —— A 归因 / E 时间 / K 执行 一线 —— */
     yusu:     { v: [1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 2, 0],
-                vs: [{ with: 'jibu', when: '只剩三天、机会只开一次：jibu 仍主张继续攒，yusu 主张先别赶' }] },
+                vs: [{ with: 'jibu', when: '只剩三天、机会只开一次：jibu 仍主张继续攒，yusu 主张先别赶' }] , cf: [{ with: 'bingguishensu', when: '时间紧、机会只开一次，该快还是该稳' }] },
     jibu:     { v: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2],
                 vs: [{ with: 'xiwang', when: '长期看不到结果时：jibu 让你继续攒量，xiwang 让你相信还在走' }] },
     xishi:    { v: [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, -2, 0],
-                vs: [{ with: 'jiyi', when: '回忆与当下冲突时：xishi 让你往前走，jiyi 让你留下来记住' }] },
+                vs: [{ with: 'jiyi', when: '回忆与当下冲突时：xishi 让你往前走，jiyi 让你留下来记住' }] , cf: [{ with: 'jinshixingle', when: '该把时间存起来，还是现在就花掉' }] },
     shenti:   { v: [0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 1, 2, 0],
                 vs: [{ with: 'yuhuan', when: '日子过得很舒服时：shenti 说去保养，yuhuan 说去吃苦' },
                 { with: 'yusu', when: '项目临近截止而身体已经报警：yusu 让你慢下来做完，shenti 让你先停' }] },
@@ -49,7 +49,7 @@
     /* —— C 规范 —— */
     yinuo:    { v: [0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0],
                 vs: [{ with: 'liuyibu', when: '答应的事后来极难做到：yinuo 让你守，liuyibu 让你通融' }],
-                cf: [{ with: 'liuyibu', when: '承诺与处境冲突时，守约还是变通' }] },
+                cf: [{ with: 'liuyibu', when: '承诺与处境冲突时，守约还是变通' }, { with: 'jiangzaiwai', when: '承诺与现场情况冲突时' }] },
     liuyibu:  { v: [0, -2, -2, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0],
                 vs: [{ with: 'yinuo', when: '口头答应但条件变了：liuyibu 主张按新情况办，yinuo 主张先认账' }],
                 cf: [{ with: 'yinuo', when: '承诺与处境冲突时，守约还是变通' }] },
@@ -73,13 +73,13 @@
                 cf: [{ with: 'shendu', when: '与己无关的不公，要不要开口' }] },
     shendu:   { v: [0, 0, 0, -2, 0, 0, 0, 2, 2, 0, 0, 0, 0],
                 vs: [{ with: 'yongqi', when: '没有人监督时：shendu 说守住自己就够了，yongqi 说还要替别人出头' }],
-                cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }] },
+                cf: [{ with: 'yongqi', when: '与己无关的不公，要不要开口' }, { with: 'qiuming', when: '要不要在乎别人怎么评价你' }] },
     heertong: { v: [0, -1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
                 vs: [{ with: 'shendu', when: '看到不对的事：heertong 说要当面说，shendu 说先收着' }],
                 cf: [{ with: 'shenyan', when: '该不该把不同意见说出口' }] },
     shenyan:  { v: [0, 0, 0, -1, 0, 0, 0, 2, 0, 0, 0, 0, 0],
                 vs: [{ with: 'heertong', when: '有些真话可能伤人：shenyan 说烂在肚子里，heertong 说讲出来才算和' }],
-                cf: [{ with: 'heertong', when: '该不该把不同意见说出口' }] },
+                cf: [{ with: 'heertong', when: '该不该把不同意见说出口' }, { with: 'bupingzemin', when: '有情绪时该不该说出口' }] },
     gudu:     { v: [0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0],
                 vs: [{ with: 'heertong', when: '周末有人约你但你只想独处：gudu 说留下，heertong 说去见面' }] },
     zhinu:    { v: [0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0],
@@ -128,7 +128,7 @@
     /* —— J 欲望 / C 规范 —— */
     zhizu:    { v: [0, 0, 0, 0, 0, 0, 1, 0, 2, 2, 0, 0, 0],
                 vs: [{ with: 'jinqian', when: '收入可以翻倍但要换城市：zhizu 问够不够，jinqian 问这钱该不该挣' }],
-                cf: [{ with: 'jinqian', when: '有一个明显更好的赚钱机会，要不要追' }] },
+                cf: [{ with: 'jinqian', when: '有一个明显更好的赚钱机会，要不要追' }, { with: 'qufahushang', when: '已经够用，还要不要再往上走' }] },
     jinqian:  { v: [0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0],
                 vs: [{ with: 'zhizu', when: '多赚一倍的代价是多花一半时间：jinqian 说先看这笔钱干净不干净，zhizu 说先问你够不够' },
                 { with: 'baoyuan', when: '有人用不光彩的方式赚了钱：baoyuan 说按直回一次，jinqian 说先看这钱干不干净' }],
@@ -153,6 +153,45 @@
     ruoshui:  { v: [-2, 0, -1, 0, 0, 0, 1, 2, 0, 0, 0, 0, 0],
                 vs: [{ with: 'qiuzhuji', when: '遇到不公：ruoshui 让你顺着水走，qiuzhuji 让你先改自己那一段' }],
                 cf: [{ with: 'buqu', when: '面对一个更强的对手，硬扛还是绕开' }] }
+,
+
+    /* v2 补裸极：shuerbuzuo */
+    shuerbuzuo: { v: [0, 0, 0, 0, 1, -2, 0, 0, 0, 0, 1, 0, 0],
+                vs: [{ with: 'jinxin', when: '读一本经典：shuerbuzuo 说先把注疏读通，jinxin 说先怀疑它' }] },
+
+    /* v2 补裸极：bupingzemin */
+    bupingzemin: { v: [0, 0, 0, 1, 0, 0, 0, -2, 0, 0, 0, 0, 0],
+                vs: [{ with: 'shenyan', when: '心里堵着一句话：shenyan 说咽下去，bupingzemin 说必须说出来' }],
+                cf: [{ with: 'shenyan', when: '有情绪时该不该说出口' }] },
+
+    /* v2 补裸极：qiuming */
+    qiuming: { v: [0, 0, 0, 1, 0, 0, 0, 0, -2, 0, 0, 0, 0],
+                vs: [{ with: 'shendu', when: '没人看见的时候：shendu 说守住自己就够，qiuming 说名声正是由这些时刻攒起来的' }],
+                cf: [{ with: 'shendu', when: '要不要在乎别人怎么评价你' }] },
+
+    /* v2 补裸极：qufahushang */
+    qufahushang: { v: [0, 0, 0, 0, 2, 0, -1, 0, 0, -2, 0, 0, 0],
+                vs: [{ with: 'zhizu', when: '已经够用之后：zhizu 说停，qufahushang 说再上一层' }],
+                cf: [{ with: 'zhizu', when: '已经够用，还要不要再往上走' }] },
+
+    /* v2 补裸极：bingguishensu */
+    bingguishensu: { v: [0, 0, 0, 0, 0, 0, -2, 0, 0, 0, -1, -2, 0],
+                vs: [{ with: 'yusu', when: '机会只剩三天：yusu 说别赶，bingguishensu 说立刻动手' }],
+                cf: [{ with: 'yusu', when: '时间紧、机会只开一次，该快还是该稳' }] },
+
+    /* v2 补裸极：jinshixingle */
+    jinshixingle: { v: [0, 0, 0, 0, -2, 0, 0, -1, 0, -1, 0, 0, 0],
+                vs: [{ with: 'xishi', when: '今晚就能高兴一下：xishi 说改天，jinshixingle 说就今晚' }],
+                cf: [{ with: 'xishi', when: '该把时间存起来，还是现在就花掉' }] },
+
+    /* v2 补裸极：duliqingshen */
+    duliqingshen: { v: [0, 2, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0],
+                vs: [{ with: 'ziyou', when: '所有人都不认同你：ziyou 说自己定义就够了，duliqingshen 说还要公开说出来' }] },
+
+    /* v2 补裸极：jiangzaiwai */
+    jiangzaiwai: { v: [0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -2, 0, 0],
+                vs: [{ with: 'yinuo', when: '当初答应的条件已经变了：yinuo 说守，jiangzaiwai 说改' }],
+                cf: [{ with: 'yinuo', when: '承诺与现场情况冲突时' }] }
   };
 
   root.QJY_COORD = { version: 'v2', map: COORD, axisOrder: ['A','B','C','D','E','F','G','H','I','J','K','L','M'] };
